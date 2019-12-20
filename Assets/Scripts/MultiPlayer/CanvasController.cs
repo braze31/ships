@@ -60,7 +60,10 @@ public class CanvasController : MonoBehaviour, IOnEventCallback
 
         foreach (var player in players.OrderBy(p=>p.photonView.Owner.ActorNumber))
         {
-            player.InstEnemyShipCanvas();
+            //if (PlayerControls.StartEventInst)
+            //{
+            //    player.InstEnemyShipCanvas();
+            //}
         }
 
         lastTickTime = PhotonNetwork.Time;

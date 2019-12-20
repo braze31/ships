@@ -686,7 +686,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8382082086794655118}
-  - {fileID: 8382082085789752232}
+  - {fileID: 4817303668425895949}
   m_Father: {fileID: 8382082086818819437}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2994,6 +2994,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8382082085249531813}
     m_Modifications:
+    - target: {fileID: 2246598245213701401, guid: 9f6336a4f0539864282c89a83a5e1331,
+        type: 3}
+      propertyPath: m_Name
+      value: NextCardPrefab
+      objectReference: {fileID: 0}
     - target: {fileID: 3310170442304273122, guid: 9f6336a4f0539864282c89a83a5e1331,
         type: 3}
       propertyPath: playerInfo
@@ -3008,11 +3013,6 @@ PrefabInstance:
         type: 3}
       propertyPath: cardInfo.cost
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2246598245213701401, guid: 9f6336a4f0539864282c89a83a5e1331,
-        type: 3}
-      propertyPath: m_Name
-      value: NextCardPrefab
       objectReference: {fileID: 0}
     - target: {fileID: 3469859137304598332, guid: 9f6336a4f0539864282c89a83a5e1331,
         type: 3}
@@ -3256,7 +3256,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9f6336a4f0539864282c89a83a5e1331, type: 3}
---- !u!224 &8382082085789752232 stripped
+--- !u!224 &4817303668425895949 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3929851468938472367, guid: 9f6336a4f0539864282c89a83a5e1331,
     type: 3}

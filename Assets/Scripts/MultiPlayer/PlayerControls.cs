@@ -22,11 +22,29 @@ public class PlayerControls : MonoBehaviour, IPunObservable
     public Transform EnemyShip;
     public Vector2Int Position;
 
+    private GameObject Target;
+
     // need sync this function for all players =/
+
+    [PunRPC]
     public void InstEnemyShipCanvas()
     {
-        var myNewS = Instantiate(Rocket, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
-        myNewS.transform.parent = PlayerCanvasP1.transform;
+        GameObject go = GameManager.FindObjectInChilds(gameObject, "HUD");
+
+        Image[] fALL = go.GetComponentsInChildren<Image>();
+
+        
+        foreach (var item in fALL)
+        {
+            if (item.name == Target.name)
+            {
+                Vector3 pointToTravel = item.GetComponent<RectTransform>().localPosition;
+                //Debug.Log(pointToTravel);
+                GameObject myNewS = Instantiate(Rocket, pointToTravel, Quaternion.Euler(0f, 0f, -180f));
+                //myNewS.GetComponent<RectTransform>().anchoredPosition = new Vector3(pointToTravel.x,pointToTravel.y,pointToTravel.z);
+                myNewS.transform.SetParent(go.transform, false);
+            }
+        }
     }
 
     
@@ -49,10 +67,9 @@ public class PlayerControls : MonoBehaviour, IPunObservable
     void Start()
     {
         photonView = GetComponent<PhotonView>();
-        // why 2 player doesn't have this name???
         PrefabCanvas.name = $"ID# {photonView.ViewID} - CanvasForEnemyPlayerName";
         GameObject playerCanvas = Instantiate(PrefabCanvas);
-
+        gameObject.name = $"{photonView.ViewID} - PlayerName";
         //example find
         //var taggedObjects = Resources.FindObjectsOfTypeAll(typeof(GameObject)).Cast<GameObject>().Where(g => g.tag == "PlayerCanvas").ToList();
         //shipEnemy = taggedObjects[0].GetComponent<RawImage>();
@@ -62,17 +79,21 @@ public class PlayerControls : MonoBehaviour, IPunObservable
         {
             playerCanvas.GetComponentInChildren<Canvas>().GetComponent<Canvas>().enabled = true;
         }
+        if (!photonView.IsMine)
+        {
+            gameObject.GetComponentInChildren<Canvas>().GetComponent<Canvas>().enabled = true;
+        }
 
-        if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
-        {
-            Debug.Log(CanvasP1.name + $" {photonView.ViewID}");
-            PlayerCanvasP1 = gameObject.GetComponentInChildren<Canvas>();
-        }
-        if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
-        {
-            Debug.Log(CanvasP1.name + $" {photonView.ViewID}");
-            PlayerCanvasP2 = gameObject.GetComponentInChildren<Canvas>(); 
-        }
+        //if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
+        //{
+        //    Debug.Log(CanvasP1.name + $" {photonView.ViewID}");
+        //    PlayerCanvasP1 = gameObject.GetComponentInChildren<Canvas>();
+        //}
+        //if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
+        //{
+        //    Debug.Log(CanvasP1.name + $" {photonView.ViewID}");
+        //    PlayerCanvasP2 = gameObject.GetComponentInChildren<Canvas>(); 
+        //}
 
         // add to canvascontroller all players which connected this room.
         FindObjectOfType<CanvasController>().AddPlayer(this);
@@ -99,14 +120,19 @@ public class PlayerControls : MonoBehaviour, IPunObservable
     // Update is called once per frame
     void Update()
     {
-        if (!photonView.IsMine)
+        if(photonView.IsMine && image != null)
         {
-            PlayerCanvasP1.GetComponent<Canvas>().enabled = true;
+            InstEnemyShipCanvas();
+            image = null;
         }
-        if (photonView.IsMine)
-        {
-            PlayerCanvasP2.GetComponent<Canvas>().enabled = false;
-        }
+        //if (!photonView.IsMine)
+        //{
+        //    PlayerCanvasP1.GetComponent<Canvas>().enabled = true;
+        //}
+        //if (photonView.IsMine)
+        //{
+        //    PlayerCanvasP2.GetComponent<Canvas>().enabled = false;
+        //}
     }
 
     void OnEnable()
@@ -122,10 +148,12 @@ public class PlayerControls : MonoBehaviour, IPunObservable
     }
 
     //This will be called when invoked
+    //This method sync object card which droped on table with OTHER player.
     void SelectAction(GameObject target)
     {
         image = target.GetComponent<Image>().sprite.texture;
-        Debug.Log(image.name);
+        photonView.RPC("InstEnemyShipCanvas", RpcTarget.Others);
+        Target = target;
     }
 
 }

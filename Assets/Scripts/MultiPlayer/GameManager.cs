@@ -18,15 +18,11 @@ public class GameManager : MonoBehaviourPunCallbacks
     //[SerializeField]
     //public static GameObject PlayerCanvasP2;
 
-    private new PhotonView photonView;
-
     private void Start()
     {
         Vector3 pos = new Vector3(0, 0);
 
         GameObject player = PhotonNetwork.Instantiate(PlayerPrefab.name, pos, Quaternion.identity);
-        photonView = player.GetComponent<PhotonView>();
-        player.name = $"{photonView.ViewID} - PlayerName";
         //GameObject CanvasP1 = FindObjectInChilds(player, "HUD - Canvas");
         //GameObject found = new List<GameObject>(GameObject.FindGameObjectsWithTag("Enemy")).Find(g => g.transform.IsChildOf(this.transform));
 
@@ -103,7 +99,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     }
     private static byte[] SerializeImage(object obj)
     {
-        Texture2D tex = new Texture2D(30, 30, TextureFormat.RGB24, false);
+        Texture2D tex = (Texture2D)obj;
         tex.Apply();
         tex.Compress(false);
 

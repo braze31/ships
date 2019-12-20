@@ -36,6 +36,8 @@ ScriptsOnlyBuild:
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
     - UnityEditor.TestTools.TestRunner.TestListCacheData
+    UnityEditor.UI.dll:
+    - UnityEditor.UI.CanvasScalerEditor
     UnityEngine.UI.dll:
     - UnityEngine.EventSystems.EventSystem
     - UnityEngine.EventSystems.StandaloneInputModule
@@ -135,17 +137,17 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 12728}
     - Class: 114
-      Script: {instanceID: 12990}
+      Script: {instanceID: 12992}
     - Class: 114
-      Script: {instanceID: 13098}
+      Script: {instanceID: 13100}
     - Class: 114
-      Script: {instanceID: 13166}
+      Script: {instanceID: 13168}
     - Class: 114
-      Script: {instanceID: 13180}
+      Script: {instanceID: 13182}
     - Class: 114
-      Script: {instanceID: 13218}
+      Script: {instanceID: 13220}
     - Class: 114
-      Script: {instanceID: 13226}
+      Script: {instanceID: 13228}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -218,17 +220,17 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 12728}
     - Class: 114
-      Script: {instanceID: 12990}
+      Script: {instanceID: 12876}
     - Class: 114
-      Script: {instanceID: 13080}
+      Script: {instanceID: 12992}
     - Class: 114
-      Script: {instanceID: 13098}
+      Script: {instanceID: 13082}
     - Class: 114
-      Script: {instanceID: 13166}
+      Script: {instanceID: 13100}
     - Class: 114
-      Script: {instanceID: 13180}
+      Script: {instanceID: 13168}
     - Class: 114
-      Script: {instanceID: 29424}
+      Script: {instanceID: 13182}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -1288,6 +1290,12 @@ ScriptsOnlyBuild:
     className: OnStartDelete
   - hash:
       serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: CanvasController
+  - hash:
+      serializedVersion: 2
       Hash: c656dcc13ae391b68d594cc8f9c590b0
     assemblyName: PhotonUnityNetworking.Demos.dll
     namespaceName: Photon.Pun.Demo.Cockpit
@@ -1568,12 +1576,6 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
     className: PlayableTrack
-  - hash:
-      serializedVersion: 2
-      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: CanvasController
   platform: 13
   scenePathNames:
   - Assets/Scenes/Lobby.unity
