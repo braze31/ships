@@ -48,7 +48,7 @@ public class CanvasController : MonoBehaviour, IOnEventCallback
 
         switch (photonEvent.Code)
         {
-            case 40:
+            case 41:
                 Vector2Int[] pos = (Vector2Int[])photonEvent.CustomData;
                 PerformTick(pos);
                 break;

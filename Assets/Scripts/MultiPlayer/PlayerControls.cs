@@ -26,6 +26,11 @@ public class PlayerControls : MonoBehaviour, IPunObservable
 
     // need sync this function for all players =/
 
+    public void takeThisNumberAndLOG(int numb)
+    {
+        Debug.Log($"user id#{photonView.ViewID} take this int {numb} from room");
+    }
+
     [PunRPC]
     public void InstEnemyShipCanvas()
     {
@@ -97,6 +102,7 @@ public class PlayerControls : MonoBehaviour, IPunObservable
 
         // add to canvascontroller all players which connected this room.
         FindObjectOfType<CanvasController>().AddPlayer(this);
+        FindObjectOfType<Wolrd>().AddPlayer(this);
     }
 
     public GameObject GetAllObjectsInScene()
@@ -125,6 +131,7 @@ public class PlayerControls : MonoBehaviour, IPunObservable
             InstEnemyShipCanvas();
             image = null;
         }
+
         //if (!photonView.IsMine)
         //{
         //    PlayerCanvasP1.GetComponent<Canvas>().enabled = true;
@@ -134,6 +141,7 @@ public class PlayerControls : MonoBehaviour, IPunObservable
         //    PlayerCanvasP2.GetComponent<Canvas>().enabled = false;
         //}
     }
+
 
     void OnEnable()
     {
@@ -147,6 +155,8 @@ public class PlayerControls : MonoBehaviour, IPunObservable
         DropZone.OnSelectedEvent -= SelectAction;
     }
 
+
+
     //This will be called when invoked
     //This method sync object card which droped on table with OTHER player.
     void SelectAction(GameObject target)
@@ -154,6 +164,7 @@ public class PlayerControls : MonoBehaviour, IPunObservable
         image = target.GetComponent<Image>().sprite.texture;
         photonView.RPC("InstEnemyShipCanvas", RpcTarget.Others);
         Target = target;
+        
     }
 
 }

@@ -1,0 +1,2 @@
+C:\Users\braze\ProtoType3\obj\Debug\Assembly-CSharp.csprojAssemblyReference.cache
+C:\Users\braze\ProtoType3\obj\Debug\Assembly-CSharp.csproj.CoreCompileInputs.cache

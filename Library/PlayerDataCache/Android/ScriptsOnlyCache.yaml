@@ -8,6 +8,7 @@ ScriptsOnlyBuild:
     - LobbyManager
     - PlayerControls
     - PlayerStats
+    - Wolrd
     - quit
     PhotonUnityNetworking.Demos.dll:
     - Photon.Pun.Demo.Asteroids.Asteroid
@@ -36,8 +37,6 @@ ScriptsOnlyBuild:
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
     - UnityEditor.TestTools.TestRunner.TestListCacheData
-    UnityEditor.UI.dll:
-    - UnityEditor.UI.CanvasScalerEditor
     UnityEngine.UI.dll:
     - UnityEngine.EventSystems.EventSystem
     - UnityEngine.EventSystems.StandaloneInputModule
@@ -231,6 +230,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 13168}
     - Class: 114
       Script: {instanceID: 13182}
+    - Class: 114
+      Script: {instanceID: 13242}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -1540,6 +1541,12 @@ ScriptsOnlyBuild:
     assemblyName: PhotonUnityNetworking.Demos.dll
     namespaceName: Photon.Pun.Demo.Cockpit
     className: BoolInputField
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Wolrd
   - hash:
       serializedVersion: 2
       Hash: 0fd6822f6177297bd0eb4d83cc7a9030
