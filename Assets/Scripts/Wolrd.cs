@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Realtime;
-using ExitGames.Client.Photon;
 using Random = UnityEngine.Random;
 using Photon.Pun;
 using System.Linq;
+using ExitGames.Client.Photon;
+using System.Text;
+using System;
 
 public class Wolrd : MonoBehaviour, IOnEventCallback
 {
@@ -47,16 +49,20 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
         {
             case 40:
                 Debug.Log("HAPPEN");
-                giveMeINT();
+
+                var p = photonEvent.Parameters;
+                ExitGames.Client.Photon.Hashtable a = (ExitGames.Client.Photon.Hashtable)p[245];
+                var t = a["my"];
+                giveMeINT((int)t);
                 break;
         }
     }
 
-    private void giveMeINT()
+    private void giveMeINT(int x)
     {
         foreach (var player in players.OrderBy(p => p.photonView.Owner.ActorNumber))
         {
-            player.takeThisNumberAndLOG(randomG);
+            player.takeThisNumberAndLOG(x);
         }
     }
     public void OnEnable()
@@ -78,7 +84,9 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
                 StartCoroutine(PerformTick());
                 RaiseEventOptions options = new RaiseEventOptions { Receivers = ReceiverGroup.All };
                 SendOptions sendOptions = new SendOptions { Reliability = true };
-                PhotonNetwork.RaiseEvent(40, randomG, options, sendOptions);
+                ExitGames.Client.Photon.Hashtable evData = new ExitGames.Client.Photon.Hashtable();
+                evData["my"] = Random.Range(0, 10);
+                PhotonNetwork.RaiseEvent(40, evData, options, sendOptions);
             }
             
         }
@@ -89,7 +97,7 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
     {
         ready = true;
         yield return new WaitForSeconds(4f);
-        randomG = Random.Range(0, 10);
+        //randomG = Random.Range(0, 10);
         //Debug.Log(randomG);
         ready = false;
     }
