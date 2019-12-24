@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4290899092340744400
 RectTransform:
   m_ObjectHideFlags: 0
@@ -427,7 +427,6 @@ MonoBehaviour:
     type: 3}
   Rocket: {fileID: 5682475894612962608, guid: da35c085e72e3f842aebb44c7ec179e5, type: 3}
   Trans: {fileID: 4290899093232644219}
-  EnemyShip: {fileID: 4290899093232644219}
   Position: {x: 0, y: 0}
 --- !u!114 &-5823034476444878804
 MonoBehaviour:

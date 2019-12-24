@@ -1,7 +1,6 @@
 ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
-    - CanvasController
     - Card
     - DropZone
     - GameManager
@@ -37,6 +36,8 @@ ScriptsOnlyBuild:
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
     - UnityEditor.TestTools.TestRunner.TestListCacheData
+    UnityEditor.UI.dll:
+    - UnityEditor.UI.CanvasScalerEditor
     UnityEngine.UI.dll:
     - UnityEngine.EventSystems.EventSystem
     - UnityEngine.EventSystems.StandaloneInputModule
@@ -88,21 +89,21 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 10942}
     - Class: 114
-      Script: {instanceID: 11068}
+      Script: {instanceID: 11066}
     - Class: 114
-      Script: {instanceID: 11104}
+      Script: {instanceID: 11102}
     - Class: 114
-      Script: {instanceID: 11120}
+      Script: {instanceID: 11118}
     - Class: 114
-      Script: {instanceID: 11128}
+      Script: {instanceID: 11126}
     - Class: 114
-      Script: {instanceID: 11166}
+      Script: {instanceID: 11164}
     - Class: 114
-      Script: {instanceID: 11210}
+      Script: {instanceID: 11208}
     - Class: 114
-      Script: {instanceID: 11602}
+      Script: {instanceID: 11600}
     - Class: 114
-      Script: {instanceID: 11686}
+      Script: {instanceID: 11684}
     - Class: 114
       Script: {instanceID: 11752}
     - Class: 114
@@ -138,15 +139,15 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 12992}
     - Class: 114
-      Script: {instanceID: 13100}
+      Script: {instanceID: 13102}
     - Class: 114
-      Script: {instanceID: 13168}
+      Script: {instanceID: 13170}
     - Class: 114
-      Script: {instanceID: 13182}
+      Script: {instanceID: 13184}
     - Class: 114
-      Script: {instanceID: 13220}
+      Script: {instanceID: 13222}
     - Class: 114
-      Script: {instanceID: 13228}
+      Script: {instanceID: 13230}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -164,8 +165,6 @@ ScriptsOnlyBuild:
     - Class: 198
       Script: {instanceID: 0}
     - Class: 199
-      Script: {instanceID: 0}
-    - Class: 212
       Script: {instanceID: 0}
     - Class: 213
       Script: {instanceID: 0}
@@ -197,13 +196,13 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 10942}
     - Class: 114
-      Script: {instanceID: 11068}
+      Script: {instanceID: 11066}
     - Class: 114
-      Script: {instanceID: 11166}
+      Script: {instanceID: 11164}
     - Class: 114
-      Script: {instanceID: 11210}
+      Script: {instanceID: 11208}
     - Class: 114
-      Script: {instanceID: 11686}
+      Script: {instanceID: 11684}
     - Class: 114
       Script: {instanceID: 12020}
     - Class: 114
@@ -219,19 +218,17 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 12728}
     - Class: 114
-      Script: {instanceID: 12876}
-    - Class: 114
       Script: {instanceID: 12992}
     - Class: 114
-      Script: {instanceID: 13082}
+      Script: {instanceID: 13084}
     - Class: 114
-      Script: {instanceID: 13100}
+      Script: {instanceID: 13102}
     - Class: 114
-      Script: {instanceID: 13168}
+      Script: {instanceID: 13170}
     - Class: 114
-      Script: {instanceID: 13182}
+      Script: {instanceID: 13184}
     - Class: 114
-      Script: {instanceID: 13242}
+      Script: {instanceID: 13244}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -287,12 +284,6 @@ ScriptsOnlyBuild:
     assemblyName: Unity.TextMeshPro.dll
     namespaceName: TMPro
     className: TMP_SelectionCaret
-  - hash:
-      serializedVersion: 2
-      Hash: 234f149ff8a8d38c29c5d2dec1f476d6
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: Test
   - hash:
       serializedVersion: 2
       Hash: 4f417ca0a3b31b376eb402726c240bde
@@ -1021,7 +1012,7 @@ ScriptsOnlyBuild:
     className: PlayerUI
   - hash:
       serializedVersion: 2
-      Hash: 999cec669fb50f713e441343d53288f6
+      Hash: bddd96f6d31728055dadb3f5e721b8b5
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PlayerControls
@@ -1351,6 +1342,12 @@ ScriptsOnlyBuild:
     className: OnlineDocButton
   - hash:
       serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: WorldDrawer
+  - hash:
+      serializedVersion: 2
       Hash: ea4e73561703f90fbdc820af646becad
     assemblyName: PhotonUnityNetworking.Demos.dll
     namespaceName: Photon.Pun.Demo.SlotRacer
@@ -1543,7 +1540,7 @@ ScriptsOnlyBuild:
     className: BoolInputField
   - hash:
       serializedVersion: 2
-      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+      Hash: e63f7e23e27d188bfe74e945d9083241
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Wolrd

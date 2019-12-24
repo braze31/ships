@@ -78,8 +78,8 @@
     <Compile Include="Assets\Scripts\Player\DropZone.cs" />
     <Compile Include="Assets\Scripts\Player\GameConstants.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerStats.cs" />
-    <Compile Include="Assets\Scripts\Test.cs" />
     <Compile Include="Assets\Scripts\Wolrd.cs" />
+    <Compile Include="Assets\Scripts\WorldDrawer.cs" />
     <Compile Include="Assets\Scripts\quit.cs" />
     <None Include="Assets\Photon\PhotonUnityNetworking\changelog.txt" />
     <None Include="Assets\Photon\PhotonLibs\changes-library.txt" />

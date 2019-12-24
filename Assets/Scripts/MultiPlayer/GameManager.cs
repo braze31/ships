@@ -12,43 +12,15 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviourPunCallbacks
 {
     public GameObject PlayerPrefab;
-    //public GameObject PrefabCanvas;
-    //[SerializeField]
-    //public static GameObject PlayerCanvasP1;
-    //[SerializeField]
-    //public static GameObject PlayerCanvasP2;
 
     private void Start()
     {
         Vector3 pos = new Vector3(0, 0);
 
         GameObject player = PhotonNetwork.Instantiate(PlayerPrefab.name, pos, Quaternion.identity);
-        //GameObject CanvasP1 = FindObjectInChilds(player, "HUD - Canvas");
-        //GameObject found = new List<GameObject>(GameObject.FindGameObjectsWithTag("Enemy")).Find(g => g.transform.IsChildOf(this.transform));
-
-        //var CanvasP1 = GetAllObjectsInScene();
         PhotonPeer.RegisterType(typeof(Vector2Int), 242, SerializeVector2Int, DeserializeVector2Int);
         PhotonPeer.RegisterType(typeof(Texture2D), 242, SerializeImage, DeserializeImage);
     }
-
-    //public GameObject GetAllObjectsInScene()
-    //{
-    //    foreach (GameObject go in Resources.FindObjectsOfTypeAll(typeof(GameObject)) as GameObject[])
-    //    {
-    //        if (go.hideFlags == HideFlags.NotEditable || go.hideFlags == HideFlags.HideAndDontSave)
-    //            continue;
-
-    //        //if (!EditorUtility.IsPersistent(go.transform.root.gameObject))
-    //        //    continue;
-
-    //        if (go.tag == "PlayerCanvas")
-    //        {
-    //            return go;
-    //        }
-    //    }
-    //    return null;
-    //}
-
 
     public static GameObject FindObjectInChilds(GameObject gameObject, string gameObjectName)
     {
@@ -108,9 +80,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         var bytes = decopmpresseTex.EncodeToPNG();
         return bytes;
     }
-
-
-
 
     public void Leave()
     {

@@ -1,4 +1,6 @@
-﻿using Photon.Pun;
+﻿using ExitGames.Client.Photon;
+using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,52 +10,40 @@ using UnityEngine.UI;
 public class PlayerControls : MonoBehaviour, IPunObservable
 {
     public PhotonView photonView;
-    private RawImage shipEnemy;
     private Texture2D image;
     public GameObject PrefabCanvas;
     public GameObject Rocket;
     public Transform Trans;
-
-    [SerializeField]
-    public static Canvas PlayerCanvasP1;
-    [SerializeField]
-    public static Canvas PlayerCanvasP2;
-
-    public Transform EnemyShip;
     public Vector2Int Position;
 
     private GameObject Target;
 
-    // need sync this function for all players =/
+    // Start is called before the first frame update
 
-    public void takeThisNumberAndLOG(int numb)
+    public void ChangeEnemyShipContent(string guns, string targetName)
     {
-        Debug.Log($"user id#{photonView.ViewID} take this int {numb} from room");
-    }
-
-    [PunRPC]
-    public void InstEnemyShipCanvas()
-    {
-        GameObject go = GameManager.FindObjectInChilds(gameObject, "HUD");
-
-        Image[] fALL = go.GetComponentsInChildren<Image>();
-
-        
-        foreach (var item in fALL)
+        if (photonView.IsMine)
         {
-            if (item.name == Target.name)
+            if (guns == Rocket.name)
             {
-                Vector3 pointToTravel = item.GetComponent<RectTransform>().localPosition;
-                //Debug.Log(pointToTravel);
-                GameObject myNewS = Instantiate(Rocket, pointToTravel, Quaternion.Euler(0f, 0f, -180f));
-                //myNewS.GetComponent<RectTransform>().anchoredPosition = new Vector3(pointToTravel.x,pointToTravel.y,pointToTravel.z);
-                myNewS.transform.SetParent(go.transform, false);
+                GameObject enemyShip = GameObject.FindGameObjectWithTag("Enemy");
+                Image[] fALL = enemyShip.GetComponentsInChildren<Image>();
+                foreach (var item in fALL)
+                {
+                    if (targetName == item.name)
+                    {
+                        // create Content for EnemyShip, Card event
+                        Vector3 pointToTravel = item.GetComponent<RectTransform>().localPosition;
+                        GameObject myNewS = Instantiate(Rocket, pointToTravel, Quaternion.Euler(0f, 0f, 0f));
+                        // need anchor?
+                        //myNewS.GetComponent<RectTransform>().anchoredPosition = new Vector3(pointToTravel.x,pointToTravel.y,pointToTravel.z);
+                        myNewS.transform.SetParent(enemyShip.transform, false);
+                        myNewS.GetComponent<Image>().SetNativeSize();
+                    }
+                }
             }
         }
     }
-
-    
-    // Start is called before the first frame update
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
@@ -84,24 +74,7 @@ public class PlayerControls : MonoBehaviour, IPunObservable
         {
             playerCanvas.GetComponentInChildren<Canvas>().GetComponent<Canvas>().enabled = true;
         }
-        if (!photonView.IsMine)
-        {
-            gameObject.GetComponentInChildren<Canvas>().GetComponent<Canvas>().enabled = true;
-        }
-
-        //if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
-        //{
-        //    Debug.Log(CanvasP1.name + $" {photonView.ViewID}");
-        //    PlayerCanvasP1 = gameObject.GetComponentInChildren<Canvas>();
-        //}
-        //if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
-        //{
-        //    Debug.Log(CanvasP1.name + $" {photonView.ViewID}");
-        //    PlayerCanvasP2 = gameObject.GetComponentInChildren<Canvas>(); 
-        //}
-
         // add to canvascontroller all players which connected this room.
-        FindObjectOfType<CanvasController>().AddPlayer(this);
         FindObjectOfType<Wolrd>().AddPlayer(this);
     }
 
@@ -111,9 +84,6 @@ public class PlayerControls : MonoBehaviour, IPunObservable
         {
             if (go.hideFlags == HideFlags.NotEditable || go.hideFlags == HideFlags.HideAndDontSave)
                 continue;
-
-            //if (!EditorUtility.IsPersistent(go.transform.root.gameObject))
-            //    continue;
 
             if (go.tag == "PlayerCanvas")
             {
@@ -128,18 +98,15 @@ public class PlayerControls : MonoBehaviour, IPunObservable
     {
         if(photonView.IsMine && image != null)
         {
-            InstEnemyShipCanvas();
+            RaiseEventOptions options = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+            SendOptions sendOptions = new SendOptions { Reliability = true };
+            ExitGames.Client.Photon.Hashtable evData = new ExitGames.Client.Photon.Hashtable();
+            evData["guns"] = "Rocket";
+            evData["playerID"] = photonView.ViewID;
+            evData["slot"] = Target.name;
+            PhotonNetwork.RaiseEvent(1, evData, options, sendOptions);
             image = null;
         }
-
-        //if (!photonView.IsMine)
-        //{
-        //    PlayerCanvasP1.GetComponent<Canvas>().enabled = true;
-        //}
-        //if (photonView.IsMine)
-        //{
-        //    PlayerCanvasP2.GetComponent<Canvas>().enabled = false;
-        //}
     }
 
 
@@ -158,13 +125,11 @@ public class PlayerControls : MonoBehaviour, IPunObservable
 
 
     //This will be called when invoked
-    //This method sync object card which droped on table with OTHER player.
+    //This method event for object card which droped on table.
     void SelectAction(GameObject target)
     {
         image = target.GetComponent<Image>().sprite.texture;
         photonView.RPC("InstEnemyShipCanvas", RpcTarget.Others);
         Target = target;
-        
     }
-
 }

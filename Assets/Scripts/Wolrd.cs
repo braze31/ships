@@ -12,10 +12,7 @@ using System;
 public class Wolrd : MonoBehaviour, IOnEventCallback
 {
     private LoadBalancingClient loadBalancingClient;
-    private int randomG = 0;
-    private double lastTickTime;
     private List<PlayerControls> players = new List<PlayerControls>();
-    private bool ready;
 
     public void AddPlayer(PlayerControls player)
     {
@@ -47,24 +44,40 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
     {
         switch (photonEvent.Code)
         {
-            case 40:
-                Debug.Log("HAPPEN");
+            case 1:
+                Debug.Log("1 HAPPEN");
+                var p1 = photonEvent.Parameters;
 
-                var p = photonEvent.Parameters;
-                ExitGames.Client.Photon.Hashtable a = (ExitGames.Client.Photon.Hashtable)p[245];
-                var t = a["my"];
-                giveMeINT((int)t);
+                //comment for check parametrs
+                //var lines1 = p1.Select(kvp => kvp.Key + ": " + kvp.Value.ToString());
+                //string a1 = string.Join(Environment.NewLine, lines1);
+
+                //Debug.Log(a1);
+
+                ExitGames.Client.Photon.Hashtable parametrsEventShip = (ExitGames.Client.Photon.Hashtable)p1[245];
+                ApplyCommand(parametrsEventShip);
+
                 break;
         }
     }
 
-    private void giveMeINT(int x)
+    public void ApplyCommand(ExitGames.Client.Photon.Hashtable hashPlayer)
     {
+        // parametrs ships
+        var pID = hashPlayer["playerID"];
+        var g = hashPlayer["guns"];
+        var slot = hashPlayer["slot"];
+
         foreach (var player in players.OrderBy(p => p.photonView.Owner.ActorNumber))
         {
-            player.takeThisNumberAndLOG(x);
+            if (player.photonView.ViewID != (int)pID)
+            {
+                player.ChangeEnemyShipContent((string)g, (string)slot);
+            }
         }
+
     }
+
     public void OnEnable()
     {
         PhotonNetwork.AddCallbackTarget(this);
@@ -79,26 +92,9 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            if (!ready)
-            {
-                StartCoroutine(PerformTick());
-                RaiseEventOptions options = new RaiseEventOptions { Receivers = ReceiverGroup.All };
-                SendOptions sendOptions = new SendOptions { Reliability = true };
-                ExitGames.Client.Photon.Hashtable evData = new ExitGames.Client.Photon.Hashtable();
-                evData["my"] = Random.Range(0, 10);
-                PhotonNetwork.RaiseEvent(40, evData, options, sendOptions);
-            }
+            //do some event for players 
             
         }
 
-    }
-
-    private IEnumerator PerformTick()
-    {
-        ready = true;
-        yield return new WaitForSeconds(4f);
-        //randomG = Random.Range(0, 10);
-        //Debug.Log(randomG);
-        ready = false;
     }
 }
