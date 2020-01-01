@@ -36,8 +36,6 @@ ScriptsOnlyBuild:
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
     - UnityEditor.TestTools.TestRunner.TestListCacheData
-    UnityEditor.UI.dll:
-    - UnityEditor.UI.CanvasScalerEditor
     UnityEngine.UI.dll:
     - UnityEngine.EventSystems.EventSystem
     - UnityEngine.EventSystems.StandaloneInputModule
@@ -105,49 +103,49 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 11684}
     - Class: 114
-      Script: {instanceID: 11752}
+      Script: {instanceID: 11750}
     - Class: 114
-      Script: {instanceID: 11950}
+      Script: {instanceID: 11948}
     - Class: 114
-      Script: {instanceID: 12020}
+      Script: {instanceID: 12018}
     - Class: 114
-      Script: {instanceID: 12028}
+      Script: {instanceID: 12026}
     - Class: 114
-      Script: {instanceID: 12146}
+      Script: {instanceID: 12144}
     - Class: 114
-      Script: {instanceID: 12168}
+      Script: {instanceID: 12166}
     - Class: 114
-      Script: {instanceID: 12198}
+      Script: {instanceID: 12196}
     - Class: 114
-      Script: {instanceID: 12278}
+      Script: {instanceID: 12276}
     - Class: 114
-      Script: {instanceID: 12344}
+      Script: {instanceID: 12342}
     - Class: 114
-      Script: {instanceID: 12364}
+      Script: {instanceID: 12362}
     - Class: 114
-      Script: {instanceID: 12372}
+      Script: {instanceID: 12370}
     - Class: 114
-      Script: {instanceID: 12412}
+      Script: {instanceID: 12410}
     - Class: 114
-      Script: {instanceID: 12578}
+      Script: {instanceID: 12576}
     - Class: 114
-      Script: {instanceID: 12586}
+      Script: {instanceID: 12584}
     - Class: 114
-      Script: {instanceID: 12592}
+      Script: {instanceID: 12590}
     - Class: 114
-      Script: {instanceID: 12728}
+      Script: {instanceID: 12726}
     - Class: 114
-      Script: {instanceID: 12992}
+      Script: {instanceID: 12990}
     - Class: 114
-      Script: {instanceID: 13102}
+      Script: {instanceID: 13100}
     - Class: 114
-      Script: {instanceID: 13170}
+      Script: {instanceID: 13168}
     - Class: 114
-      Script: {instanceID: 13184}
+      Script: {instanceID: 13182}
     - Class: 114
-      Script: {instanceID: 13222}
+      Script: {instanceID: 13220}
     - Class: 114
-      Script: {instanceID: 13230}
+      Script: {instanceID: 13228}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -204,31 +202,31 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 11684}
     - Class: 114
-      Script: {instanceID: 12020}
+      Script: {instanceID: 12018}
     - Class: 114
-      Script: {instanceID: 12028}
+      Script: {instanceID: 12026}
     - Class: 114
-      Script: {instanceID: 12146}
+      Script: {instanceID: 12144}
     - Class: 114
-      Script: {instanceID: 12168}
+      Script: {instanceID: 12166}
     - Class: 114
-      Script: {instanceID: 12344}
+      Script: {instanceID: 12342}
     - Class: 114
-      Script: {instanceID: 12412}
+      Script: {instanceID: 12410}
     - Class: 114
-      Script: {instanceID: 12728}
+      Script: {instanceID: 12726}
     - Class: 114
-      Script: {instanceID: 12992}
+      Script: {instanceID: 12990}
     - Class: 114
-      Script: {instanceID: 13084}
+      Script: {instanceID: 13082}
     - Class: 114
-      Script: {instanceID: 13102}
+      Script: {instanceID: 13100}
     - Class: 114
-      Script: {instanceID: 13170}
+      Script: {instanceID: 13168}
     - Class: 114
-      Script: {instanceID: 13184}
+      Script: {instanceID: 13182}
     - Class: 114
-      Script: {instanceID: 13244}
+      Script: {instanceID: 13242}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -1012,7 +1010,7 @@ ScriptsOnlyBuild:
     className: PlayerUI
   - hash:
       serializedVersion: 2
-      Hash: bddd96f6d31728055dadb3f5e721b8b5
+      Hash: 7be8aba6eb84d7338f31006c547fc072
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PlayerControls
@@ -1396,7 +1394,7 @@ ScriptsOnlyBuild:
     className: PlayModeRunnerCallback
   - hash:
       serializedVersion: 2
-      Hash: d2e890fa595d33c5b63b34cd1b1aa6b5
+      Hash: 2974933e55edbacd8e776dc3e6446f52
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GameManager
@@ -1540,7 +1538,7 @@ ScriptsOnlyBuild:
     className: BoolInputField
   - hash:
       serializedVersion: 2
-      Hash: e63f7e23e27d188bfe74e945d9083241
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Wolrd

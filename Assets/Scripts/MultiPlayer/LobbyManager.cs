@@ -7,13 +7,15 @@ using UnityEngine.UI;
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
     public Text LogText;
+
     void Start()
     {
         PhotonNetwork.NickName = "Player " + Random.Range(1000, 9999);
         Log("Player's name is set to " + PhotonNetwork.NickName);
-
+        
         PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.GameVersion = "1";
+        PhotonNetwork.SendRate = 40;
         PhotonNetwork.ConnectUsingSettings();
     }
 
@@ -25,7 +27,6 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public void CreateRoom()
     {
         PhotonNetwork.CreateRoom(null, new Photon.Realtime.RoomOptions { MaxPlayers = 2 });
-
     }
 
     public void JoinRoom()
@@ -39,6 +40,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         PhotonNetwork.LoadLevel("MainScene");
     }
 
+
+
     // Update is called once per frame
     private void Log(string message)
     {
@@ -46,4 +49,5 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         LogText.text += "\n";
         LogText.text += message;
     }
+
 }

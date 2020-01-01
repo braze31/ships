@@ -1,6 +1,7 @@
 ﻿using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,14 @@ public class PlayerControls : MonoBehaviour, IPunObservable
     public Transform Trans;
     public Vector2Int Position;
 
+    private GameObject playerCanvas;
     private GameObject Target;
+    private float currResPlayer;
+    private int costCardEvent;
+
+    private GameObject testRocketMove;
+    public static int movespeed = 300;
+    public Vector3 userDirection = Vector3.right;
 
     // Start is called before the first frame update
 
@@ -39,6 +47,7 @@ public class PlayerControls : MonoBehaviour, IPunObservable
                         //myNewS.GetComponent<RectTransform>().anchoredPosition = new Vector3(pointToTravel.x,pointToTravel.y,pointToTravel.z);
                         myNewS.transform.SetParent(enemyShip.transform, false);
                         myNewS.GetComponent<Image>().SetNativeSize();
+                        testRocketMove = myNewS;
                     }
                 }
             }
@@ -63,13 +72,9 @@ public class PlayerControls : MonoBehaviour, IPunObservable
     {
         photonView = GetComponent<PhotonView>();
         PrefabCanvas.name = $"ID# {photonView.ViewID} - CanvasForEnemyPlayerName";
-        GameObject playerCanvas = Instantiate(PrefabCanvas);
+        playerCanvas = Instantiate(PrefabCanvas);
         gameObject.name = $"{photonView.ViewID} - PlayerName";
-        //example find
-        //var taggedObjects = Resources.FindObjectsOfTypeAll(typeof(GameObject)).Cast<GameObject>().Where(g => g.tag == "PlayerCanvas").ToList();
-        //shipEnemy = taggedObjects[0].GetComponent<RawImage>();
 
-        var CanvasP1 = GetAllObjectsInScene();
         if (photonView.IsMine)
         {
             playerCanvas.GetComponentInChildren<Canvas>().GetComponent<Canvas>().enabled = true;
@@ -78,37 +83,26 @@ public class PlayerControls : MonoBehaviour, IPunObservable
         FindObjectOfType<Wolrd>().AddPlayer(this);
     }
 
-    public GameObject GetAllObjectsInScene()
-    {
-        foreach (GameObject go in Resources.FindObjectsOfTypeAll(typeof(GameObject)) as GameObject[])
-        {
-            if (go.hideFlags == HideFlags.NotEditable || go.hideFlags == HideFlags.HideAndDontSave)
-                continue;
-
-            if (go.tag == "PlayerCanvas")
-            {
-                return go;
-            }
-        }
-        return null;
-    }
-
     // Update is called once per frame
     void Update()
     {
         if(photonView.IsMine && image != null)
         {
-            RaiseEventOptions options = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+            RaiseEventOptions options = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
             SendOptions sendOptions = new SendOptions { Reliability = true };
             ExitGames.Client.Photon.Hashtable evData = new ExitGames.Client.Photon.Hashtable();
             evData["guns"] = "Rocket";
             evData["playerID"] = photonView.ViewID;
             evData["slot"] = Target.name;
+            evData["resources"] = currResPlayer;
             PhotonNetwork.RaiseEvent(1, evData, options, sendOptions);
             image = null;
         }
+        if (testRocketMove != null)
+        {
+            testRocketMove.transform.Translate(userDirection * movespeed * Time.deltaTime);
+        }
     }
-
 
     void OnEnable()
     {
@@ -122,14 +116,16 @@ public class PlayerControls : MonoBehaviour, IPunObservable
         DropZone.OnSelectedEvent -= SelectAction;
     }
 
-
-
     //This will be called when invoked
     //This method event for object card which droped on table.
-    void SelectAction(GameObject target)
+    void SelectAction(GameObject target, GameObject cardStats, float currRes)
     {
         image = target.GetComponent<Image>().sprite.texture;
-        photonView.RPC("InstEnemyShipCanvas", RpcTarget.Others);
         Target = target;
+        currResPlayer = currRes;
+        Card d = cardStats.GetComponent<Card>();
+        int t = d.CardInfo.Index;
+        costCardEvent = Convert.ToInt32(d.Cost.text);
+        playerCanvas.GetComponent<PlayerStats>().RemoveResources((float)costCardEvent, t);
     }
 }

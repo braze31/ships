@@ -428,6 +428,7 @@ MonoBehaviour:
   Rocket: {fileID: 5682475894612962608, guid: da35c085e72e3f842aebb44c7ec179e5, type: 3}
   Trans: {fileID: 4290899093232644219}
   Position: {x: 0, y: 0}
+  userDirection: {x: 1, y: 0, z: 0}
 --- !u!114 &-5823034476444878804
 MonoBehaviour:
   m_ObjectHideFlags: 0

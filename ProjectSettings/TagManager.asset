@@ -10,6 +10,7 @@ TagManager:
   - Card
   - Player1
   - Player2
+  - TextPause
   layers:
   - Default
   - TransparentFX

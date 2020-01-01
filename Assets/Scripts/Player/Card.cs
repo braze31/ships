@@ -48,7 +48,7 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
         get { return cost; }
     }
 
-    public enum Slot { WEAPON, SUPPLY};
+    public enum Slot { WEAPON, SUPPLY };
     public Slot typeOfItem = Slot.WEAPON;
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -71,7 +71,6 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
     {
         if (playerInfo.OnDragging)
         {
-            //transform.position = Input.mousePosition;
             transform.position = eventData.position;
         }
     }
@@ -79,12 +78,6 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
     public void OnEndDrag(PointerEventData eventData)
     {
         this.transform.SetParent(parentToReturnTo);
-        //Debug.Log(parentToReturnTo.name);
-        //GameObject go = eventData.pointerCurrentRaycast.gameObject;
-        //if (go != null)
-        //{
-        //    GameFunctions.SpawnUI(cardInfo.PreFab, playerInfo.UnitTransform, Input.mousePosition);
-        //}
         GetComponent<CanvasGroup>().blocksRaycasts = true;
         playerInfo.OnDragging = false;
     }

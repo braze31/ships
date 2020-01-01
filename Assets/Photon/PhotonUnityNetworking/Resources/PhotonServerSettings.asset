@@ -35,5 +35,6 @@ MonoBehaviour:
   - Fire
   - RespawnSpaceship
   - InstEnemyShipCanvas
+  - Unpause
   DisableAutoOpenWizard: 1
   ShowSettings: 0

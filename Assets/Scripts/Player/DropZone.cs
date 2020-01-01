@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System;
 
 public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
 {
@@ -10,14 +11,23 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
     public Card.Slot typeOfItem = Card.Slot.WEAPON;
     [SerializeField]
     private bool SlotForCardEmpty = true;
-    public delegate void SelectAction(GameObject target);
+    public delegate void SelectAction(GameObject target, GameObject cardStats, float currRes);
     public static event SelectAction OnSelectedEvent;
+
+    GameObject ParentCanvas;
+
     public void OnDrop(PointerEventData eventData)
     {
         //Debug.Log(eventData.pointerDrag.name + "was drop to " + gameObject.name);
         Card d = eventData.pointerDrag.GetComponent<Card>();
+        GameObject p = eventData.pointerDrag;
+        ParentCanvas = gameObject.transform.root.gameObject;
+        float GetCurRes = ParentCanvas.GetComponent<PlayerStats>().GetCurrResource;
+        float EnoughResForCardDrop = GetCurRes - Convert.ToInt32(d.Cost.text);
 
-        if (gameObject.tag == "SlotGun")
+        // check res and slot
+        // need add later event if not enough res for card drop event
+        if (gameObject.tag == "SlotGun" && EnoughResForCardDrop >= 0)
         {
             if (d != null && SlotForCardEmpty)
             {
@@ -37,9 +47,17 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
                 //Invoke Event check in playerControls script
                 if (OnSelectedEvent != null)
                 {
-                    OnSelectedEvent(this.gameObject);
+                    OnSelectedEvent(this.gameObject, eventData.pointerDrag, EnoughResForCardDrop);
                 }
             }
+        }
+    }
+
+    void Update()
+    {
+        if (image != null)
+        {
+            image.transform.Translate(Vector3.right * 300 * Time.deltaTime);
         }
     }
 
