@@ -25,9 +25,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
         float GetCurRes = ParentCanvas.GetComponent<PlayerStats>().GetCurrResource;
         float EnoughResForCardDrop = GetCurRes - Convert.ToInt32(d.Cost.text);
 
-        // check res and slot
-        // need add later event if not enough res for card drop event
-        if (gameObject.tag == "SlotGun" && EnoughResForCardDrop >= 0)
+        if (gameObject.tag == "SlotGun")
         {
             if (d != null && SlotForCardEmpty)
             {
@@ -39,11 +37,13 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
                 // this bad solution
                 // something wrong on this eventData? Can't do set point parentToReturn correct
                 // object Card exist, but not delete
+                iconGun.SetNativeSize();
                 Destroy(d.Icon);
                 Destroy(d.Cost);
                 Destroy(d.CardName);
                 Destroy(d.GetComponent<Image>());
                 SlotForCardEmpty = false;
+                StartCoroutine(ResetSlotDeleteIcon(iconGun));
                 //Invoke Event check in playerControls script
                 if (OnSelectedEvent != null)
                 {
@@ -53,12 +53,12 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
         }
     }
 
-    void Update()
+    IEnumerator ResetSlotDeleteIcon(Image icon)
     {
-        if (image != null)
-        {
-            image.transform.Translate(Vector3.right * 300 * Time.deltaTime);
-        }
+        yield return new WaitForSeconds(4);
+        SlotForCardEmpty = true;
+        image.color = new Color(image.color.r, image.color.g, image.color.b, 0f);
+        Debug.Log("destroy icon");
     }
 
     public void OnPointerEnter(PointerEventData eventData)

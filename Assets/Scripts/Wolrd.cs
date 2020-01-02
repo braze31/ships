@@ -8,12 +8,13 @@ using System.Linq;
 using ExitGames.Client.Photon;
 using System.Text;
 using System;
+using UnityEngine.UI;
 
 public class Wolrd : MonoBehaviour, IOnEventCallback
 {
     private LoadBalancingClient loadBalancingClient;
     private List<PlayerControls> players = new List<PlayerControls>();
-
+    public Canvas waitCanvas;
     public void AddPlayer(PlayerControls player)
     {
         players.Add(player);
@@ -67,7 +68,6 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
         var pID = hashPlayer["playerID"];
         var g = hashPlayer["guns"];
         var slot = hashPlayer["slot"];
-        var resPlayer = hashPlayer["resources"];
 
         foreach (var player in players.OrderBy(p => p.photonView.Owner.ActorNumber))
         {
@@ -76,7 +76,6 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
                 player.ChangeEnemyShipContent((string)g, (string)slot);
             }
         }
-
     }
 
     public void OnEnable()
@@ -93,9 +92,11 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            //do some event for players 
-            
+            // do something master
         }
-
+        if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
+        {
+            waitCanvas.GetComponentInChildren<Text>().text = "";
+        }
     }
 }

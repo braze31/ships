@@ -17,15 +17,13 @@ public class PlayerControls : MonoBehaviour, IPunObservable
     public Transform Trans;
     public Vector2Int Position;
 
-    private GameObject playerCanvas;
     private GameObject Target;
+    GameObject playerCanvas;
     private float currResPlayer;
     private int costCardEvent;
-
     private GameObject testRocketMove;
     public static int movespeed = 300;
     public Vector3 userDirection = Vector3.right;
-
     // Start is called before the first frame update
 
     public void ChangeEnemyShipContent(string guns, string targetName)
@@ -75,10 +73,6 @@ public class PlayerControls : MonoBehaviour, IPunObservable
         playerCanvas = Instantiate(PrefabCanvas);
         gameObject.name = $"{photonView.ViewID} - PlayerName";
 
-        if (photonView.IsMine)
-        {
-            playerCanvas.GetComponentInChildren<Canvas>().GetComponent<Canvas>().enabled = true;
-        }
         // add to canvascontroller all players which connected this room.
         FindObjectOfType<Wolrd>().AddPlayer(this);
     }
@@ -88,21 +82,28 @@ public class PlayerControls : MonoBehaviour, IPunObservable
     {
         if(photonView.IsMine && image != null)
         {
-            RaiseEventOptions options = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+            RaiseEventOptions options = new RaiseEventOptions { Receivers = ReceiverGroup.All };
             SendOptions sendOptions = new SendOptions { Reliability = true };
             ExitGames.Client.Photon.Hashtable evData = new ExitGames.Client.Photon.Hashtable();
             evData["guns"] = "Rocket";
             evData["playerID"] = photonView.ViewID;
             evData["slot"] = Target.name;
-            evData["resources"] = currResPlayer;
+            evData["resor"] = currResPlayer;
             PhotonNetwork.RaiseEvent(1, evData, options, sendOptions);
             image = null;
+        }
+
+        if (photonView.IsMine && PhotonNetwork.CurrentRoom.PlayerCount == 2)
+        {
+            playerCanvas.GetComponentInChildren<Canvas>().GetComponent<Canvas>().enabled = true;
+            playerCanvas.GetComponent<PlayerStats>().enabled = true;
         }
         if (testRocketMove != null)
         {
             testRocketMove.transform.Translate(userDirection * movespeed * Time.deltaTime);
         }
     }
+
 
     void OnEnable()
     {
@@ -116,16 +117,18 @@ public class PlayerControls : MonoBehaviour, IPunObservable
         DropZone.OnSelectedEvent -= SelectAction;
     }
 
+
+
     //This will be called when invoked
     //This method event for object card which droped on table.
     void SelectAction(GameObject target, GameObject cardStats, float currRes)
     {
-        image = target.GetComponent<Image>().sprite.texture;
         Target = target;
         currResPlayer = currRes;
         Card d = cardStats.GetComponent<Card>();
         int t = d.CardInfo.Index;
         costCardEvent = Convert.ToInt32(d.Cost.text);
         playerCanvas.GetComponent<PlayerStats>().RemoveResources((float)costCardEvent, t);
+        image = target.GetComponent<Image>().sprite.texture;
     }
 }

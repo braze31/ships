@@ -12,29 +12,33 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviourPunCallbacks
 {
     public GameObject PlayerPrefab;
-    [SerializeField]
-    private static Texture2D tex;
-    private bool checkPlayerbool = true;
-    public Canvas waitCanvas;
 
     private void Start()
     {
+        Vector3 pos = new Vector3(0, 0);
+
+        GameObject player = PhotonNetwork.Instantiate(PlayerPrefab.name, pos, Quaternion.identity);
         PhotonPeer.RegisterType(typeof(Vector2Int), 242, SerializeVector2Int, DeserializeVector2Int);
         PhotonPeer.RegisterType(typeof(Texture2D), 242, SerializeImage, DeserializeImage);
     }
 
-    void Update()
+    public static GameObject FindObjectInChilds(GameObject gameObject, string gameObjectName)
     {
-        if (checkPlayerbool)
+        Canvas[] children = gameObject.GetComponentsInChildren<Canvas>(true);
+        foreach (Canvas item in children)
         {
-            if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
+            if (item.name == gameObjectName)
             {
-                checkPlayerbool = false;
-                Vector3 pos = new Vector3(0, 0);
-                GameObject player = PhotonNetwork.Instantiate(PlayerPrefab.name, pos, Quaternion.identity);
-                waitCanvas.GetComponentInChildren<Text>().text = "";
+                return item.gameObject;
             }
         }
+
+        return null;
+    }
+
+    void Update()
+    {
+
     }
 
     public static object DeserializeVector2Int(byte[] data)
@@ -57,6 +61,9 @@ public class GameManager : MonoBehaviourPunCallbacks
         return res;
     }
 
+
+    [SerializeField]
+    private static Texture2D tex;
     private static Texture2D DeserializeImage(byte[] data)
     {
         tex.LoadImage(data);
@@ -74,15 +81,15 @@ public class GameManager : MonoBehaviourPunCallbacks
         return bytes;
     }
 
-    //public void Leave()
-    //{
-    //    PhotonNetwork.LeaveRoom();
-    //}
+    public void Leave()
+    {
+        PhotonNetwork.LeaveRoom();
+    }
 
-    //public override void OnLeftRoom()
-    //{
-    //    SceneManager.LoadScene(0);
-    //}
+    public override void OnLeftRoom()
+    {
+        SceneManager.LoadScene(0);
+    }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {

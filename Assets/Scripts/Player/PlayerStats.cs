@@ -35,15 +35,20 @@ public class PlayerStats : MonoBehaviour
         get { return unitTransform; }
         set { unitTransform = value; }
     }
+
+
     public bool OnDragging
     {
         get { return onDragging; }
         set { onDragging = value; }
     }
+
+
     public Deck PlayerDeck 
     {
         get { return playerDeck; }
     }
+
     public List<Image> Resources
     {
         get { return resources; }
@@ -86,6 +91,7 @@ public class PlayerStats : MonoBehaviour
             return (int)currResource;
         }
     }
+
     private void Start()
     {
         playerDeck.Start();
@@ -96,7 +102,7 @@ public class PlayerStats : MonoBehaviour
         if (GetCurrResource < GameConstants.RESOURCE_MAX +1)
         {
             resources[GetCurrResource].fillAmount = currResource - GetCurrResource;
-            currResource += Time.deltaTime * GameConstants.RESOURCE_SPEED; 
+            currResource += Time.deltaTime * GameConstants.RESOURCE_SPEED;
         }
 
         UpdateText();
@@ -114,10 +120,7 @@ public class PlayerStats : MonoBehaviour
                 resources[i].fillAmount = 1;
             }
         }
-        //Debug.Log(target);
         PlayerDeck.RemoveCard((int)target);
-        //Debug.Log(playerDeck.Hand.Count);
-        
     }
 
     void UpdateText()
@@ -129,7 +132,6 @@ public class PlayerStats : MonoBehaviour
 
     void UpdateDeck()
     {
-        //Debug.Log(playerDeck.Hand.Count);
         if(playerDeck.Hand.Count < GameConstants.MAX_HAND_SIZE)
         {
             CardStats cs = playerDeck.DrawCard();
