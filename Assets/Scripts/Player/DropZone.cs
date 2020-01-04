@@ -11,7 +11,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
     public Card.Slot typeOfItem = Card.Slot.WEAPON;
     [SerializeField]
     private bool SlotForCardEmpty = true;
-    public delegate void SelectAction(GameObject target, GameObject cardStats, float currRes);
+    public delegate void SelectAction(GameObject target, GameObject cardStats, float currRes, Image iconCard);
     public static event SelectAction OnSelectedEvent;
 
     GameObject ParentCanvas;
@@ -45,9 +45,10 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
                 SlotForCardEmpty = false;
                 StartCoroutine(ResetSlotDeleteIcon(iconGun));
                 //Invoke Event check in playerControls script
+
                 if (OnSelectedEvent != null)
                 {
-                    OnSelectedEvent(this.gameObject, eventData.pointerDrag, EnoughResForCardDrop);
+                    OnSelectedEvent(this.gameObject, eventData.pointerDrag, EnoughResForCardDrop, gameObject.GetComponent<Image>());
                 }
             }
         }
@@ -58,7 +59,6 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
         yield return new WaitForSeconds(4);
         SlotForCardEmpty = true;
         image.color = new Color(image.color.r, image.color.g, image.color.b, 0f);
-        Debug.Log("destroy icon");
     }
 
     public void OnPointerEnter(PointerEventData eventData)

@@ -20,13 +20,14 @@ public class PlayerControls : MonoBehaviour, IPunObservable
     private GameObject Target;
     GameObject playerCanvas;
     private float currResPlayer;
+    private Image iconCard;
     private int costCardEvent;
     private GameObject testRocketMove;
     public static int movespeed = 300;
     public Vector3 userDirection = Vector3.right;
     // Start is called before the first frame update
 
-    public void ChangeEnemyShipContent(string guns, string targetName)
+    public void ChangeEnemyShipContent(string guns, string targetName, string nameCard)
     {
         if (photonView.IsMine)
         {
@@ -38,19 +39,55 @@ public class PlayerControls : MonoBehaviour, IPunObservable
                 {
                     if (targetName == item.name)
                     {
-                        // create Content for EnemyShip, Card event
                         Vector3 pointToTravel = item.GetComponent<RectTransform>().localPosition;
                         GameObject myNewS = Instantiate(Rocket, pointToTravel, Quaternion.Euler(0f, 0f, 0f));
+                        Image i = myNewS.GetComponentInChildren<Image>().GetComponent<Image>();
+                        Debug.Log(i.sprite.name);
+                        Debug.Log(nameCard);
+                        // create Content for EnemyShip, Card event
+                        if (nameCard == i.sprite.name)
+                        {
+                            item.color = new Color(item.color.r, item.color.g, item.color.b, 255f);
+                            item.sprite = i.sprite;
+                            StartCoroutine(ResetSlotDeleteIcon(item));
+                        }
+
+
                         // need anchor?
                         //myNewS.GetComponent<RectTransform>().anchoredPosition = new Vector3(pointToTravel.x,pointToTravel.y,pointToTravel.z);
                         myNewS.transform.SetParent(enemyShip.transform, false);
-                        myNewS.GetComponent<Image>().SetNativeSize();
-                        testRocketMove = myNewS;
                     }
                 }
             }
         }
     }
+    IEnumerator ResetSlotDeleteIcon(Image icon)
+    {
+        yield return new WaitForSeconds(4);
+        icon.color = new Color(icon.color.r, icon.color.g, icon.color.b, 0f);
+    }
+
+    public void CreatePreFab(string targetName)
+    {
+        if (photonView.IsMine)
+        {
+            GameObject pShip = GameObject.FindGameObjectWithTag("Player1");
+            Image[] fALL = pShip.GetComponentsInChildren<Image>();
+            foreach (var item in fALL)
+            {
+                if (targetName == item.name)
+                {
+                    // create Content for EnemyShip, Card event
+                    Vector3 pointToTravel = item.GetComponent<RectTransform>().localPosition;
+                    GameObject myNewS = Instantiate(Rocket, pointToTravel, Quaternion.Euler(0f, 0f, 0f));
+                    // need anchor?
+                    //myNewS.GetComponent<RectTransform>().anchoredPosition = new Vector3(pointToTravel.x,pointToTravel.y,pointToTravel.z);
+                    myNewS.transform.SetParent(pShip.transform, false);
+                }
+            }
+        }
+    }
+
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
@@ -85,7 +122,11 @@ public class PlayerControls : MonoBehaviour, IPunObservable
             RaiseEventOptions options = new RaiseEventOptions { Receivers = ReceiverGroup.All };
             SendOptions sendOptions = new SendOptions { Reliability = true };
             ExitGames.Client.Photon.Hashtable evData = new ExitGames.Client.Photon.Hashtable();
+
             evData["guns"] = "Rocket";
+            evData["iconCard"] = iconCard.sprite.name;
+
+
             evData["playerID"] = photonView.ViewID;
             evData["slot"] = Target.name;
             evData["resor"] = currResPlayer;
@@ -97,10 +138,6 @@ public class PlayerControls : MonoBehaviour, IPunObservable
         {
             playerCanvas.GetComponentInChildren<Canvas>().GetComponent<Canvas>().enabled = true;
             playerCanvas.GetComponent<PlayerStats>().enabled = true;
-        }
-        if (testRocketMove != null)
-        {
-            testRocketMove.transform.Translate(userDirection * movespeed * Time.deltaTime);
         }
     }
 
@@ -121,10 +158,13 @@ public class PlayerControls : MonoBehaviour, IPunObservable
 
     //This will be called when invoked
     //This method event for object card which droped on table.
-    void SelectAction(GameObject target, GameObject cardStats, float currRes)
+    void SelectAction(GameObject target, GameObject cardStats, float currRes, Image iconGun)
     {
+        CreatePreFab(target.name);
         Target = target;
         currResPlayer = currRes;
+        iconCard = iconGun;
+        //Debug.Log(iconCard);
         Card d = cardStats.GetComponent<Card>();
         int t = d.CardInfo.Index;
         costCardEvent = Convert.ToInt32(d.Cost.text);

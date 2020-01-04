@@ -17,7 +17,7 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
     [SerializeField]
     private Text cost;
     [SerializeField]
-    private bool canDrag;
+    private bool canDrag = false;
     public Transform parentToReturnTo = null;
 
     public bool CanDrag
@@ -47,9 +47,18 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
     {
         get { return cost; }
     }
+    private GameObject playerCanvas;
+    private CanvasGroup checkForDrag;
+    public Image blockImage;
 
     public enum Slot { WEAPON, SUPPLY};
     public Slot typeOfItem = Slot.WEAPON;
+
+    void Start()
+    {
+        playerCanvas = gameObject.transform.parent.root.gameObject;
+        checkForDrag = gameObject.GetComponent<CanvasGroup>();
+    }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -61,7 +70,7 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
                 parentToReturnTo = this.transform.parent;
                 this.transform.SetParent(GameFunctions.GetCanvas());
                 GetComponent<CanvasGroup>().blocksRaycasts = false;
-
+                blockImage.gameObject.GetComponent<Image>().enabled = false;
                 //this.transform.SetParent(GameFunctions.GetCanvas());
             }
         }
@@ -94,5 +103,21 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
         icon.sprite = cardInfo.Icon;
         cardName.text = cardInfo.Name;
         cost.text = cardInfo.Cost.ToString();
+        if (playerCanvas.GetComponent<PlayerStats>().CurrResource >= CardInfo.Cost)
+        {
+            canDrag = true;
+            checkForDrag.blocksRaycasts = true;
+            blockImage.gameObject.SetActive(false);
+        }
+        if (playerCanvas.GetComponent<PlayerStats>().CurrResource < CardInfo.Cost)
+        {
+            blockImage.gameObject.SetActive(true);
+        }
+
+        // ?? need fix after drag and drop red zone on card
+        // this fix simple code to delete problem, but !
+        // bug, again show if i drag card
+
+
     }
 }

@@ -68,12 +68,12 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
         var pID = hashPlayer["playerID"];
         var g = hashPlayer["guns"];
         var slot = hashPlayer["slot"];
-
+        var icon = hashPlayer["iconCard"];
         foreach (var player in players.OrderBy(p => p.photonView.Owner.ActorNumber))
         {
             if (player.photonView.ViewID != (int)pID)
             {
-                player.ChangeEnemyShipContent((string)g, (string)slot);
+                player.ChangeEnemyShipContent((string)g, (string)slot, (string)icon);
             }
         }
     }

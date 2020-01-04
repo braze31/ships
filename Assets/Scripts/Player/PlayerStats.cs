@@ -35,20 +35,15 @@ public class PlayerStats : MonoBehaviour
         get { return unitTransform; }
         set { unitTransform = value; }
     }
-
-
     public bool OnDragging
     {
         get { return onDragging; }
         set { onDragging = value; }
     }
-
-
     public Deck PlayerDeck 
     {
         get { return playerDeck; }
     }
-
     public List<Image> Resources
     {
         get { return resources; }
@@ -91,6 +86,7 @@ public class PlayerStats : MonoBehaviour
             return (int)currResource;
         }
     }
+    public GameObject FullRes;
 
     private void Start()
     {
@@ -104,7 +100,14 @@ public class PlayerStats : MonoBehaviour
             resources[GetCurrResource].fillAmount = currResource - GetCurrResource;
             currResource += Time.deltaTime * GameConstants.RESOURCE_SPEED;
         }
-
+        if (currResource >= GameConstants.RESOURCE_MAX)
+        {
+            FullRes.SetActive(true);
+        }
+        if (currResource < GameConstants.RESOURCE_MAX)
+        {
+            FullRes.SetActive(false);
+        }
         UpdateText();
         UpdateDeck();
     }
