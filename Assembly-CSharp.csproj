@@ -64,6 +64,7 @@
      <Compile Include="Assets\Photon\PhotonChat\Demos\DemoChat\IgnoreUiRaycastWhenInactive.cs" />
      <Compile Include="Assets\Photon\PhotonChat\Demos\DemoChat\NamePickGui.cs" />
      <Compile Include="Assets\Photon\PhotonRealtime\Demos\DemoLoadBalancing\ConnectAndJoinRandomLb.cs" />
+     <Compile Include="Assets\Rocket.cs" />
      <Compile Include="Assets\Scripts\Managers\GameFunctions.cs" />
      <Compile Include="Assets\Scripts\MultiPlayer\CanvasController.cs" />
      <Compile Include="Assets\Scripts\MultiPlayer\ExtensionMethod.cs" />

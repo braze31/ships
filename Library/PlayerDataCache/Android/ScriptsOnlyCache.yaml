@@ -7,6 +7,7 @@ ScriptsOnlyBuild:
     - LobbyManager
     - PlayerControls
     - PlayerStats
+    - Rocket
     - Wolrd
     - quit
     PhotonUnityNetworking.Demos.dll:
@@ -113,39 +114,41 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 12144}
     - Class: 114
-      Script: {instanceID: 12166}
+      Script: {instanceID: 12156}
     - Class: 114
-      Script: {instanceID: 12196}
+      Script: {instanceID: 12168}
     - Class: 114
-      Script: {instanceID: 12276}
+      Script: {instanceID: 12198}
     - Class: 114
-      Script: {instanceID: 12342}
+      Script: {instanceID: 12278}
     - Class: 114
-      Script: {instanceID: 12362}
+      Script: {instanceID: 12344}
     - Class: 114
-      Script: {instanceID: 12370}
+      Script: {instanceID: 12364}
     - Class: 114
-      Script: {instanceID: 12410}
+      Script: {instanceID: 12372}
     - Class: 114
-      Script: {instanceID: 12576}
+      Script: {instanceID: 12412}
     - Class: 114
-      Script: {instanceID: 12584}
+      Script: {instanceID: 12578}
     - Class: 114
-      Script: {instanceID: 12590}
+      Script: {instanceID: 12586}
     - Class: 114
-      Script: {instanceID: 12726}
+      Script: {instanceID: 12592}
     - Class: 114
-      Script: {instanceID: 12990}
+      Script: {instanceID: 12728}
     - Class: 114
-      Script: {instanceID: 13100}
+      Script: {instanceID: 12992}
     - Class: 114
-      Script: {instanceID: 13168}
+      Script: {instanceID: 13102}
     - Class: 114
-      Script: {instanceID: 13182}
+      Script: {instanceID: 13170}
     - Class: 114
-      Script: {instanceID: 13220}
+      Script: {instanceID: 13184}
     - Class: 114
-      Script: {instanceID: 13228}
+      Script: {instanceID: 13222}
+    - Class: 114
+      Script: {instanceID: 13230}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -208,25 +211,27 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 12144}
     - Class: 114
-      Script: {instanceID: 12166}
+      Script: {instanceID: 12156}
     - Class: 114
-      Script: {instanceID: 12342}
+      Script: {instanceID: 12168}
     - Class: 114
-      Script: {instanceID: 12410}
+      Script: {instanceID: 12344}
     - Class: 114
-      Script: {instanceID: 12726}
+      Script: {instanceID: 12412}
     - Class: 114
-      Script: {instanceID: 12990}
+      Script: {instanceID: 12728}
     - Class: 114
-      Script: {instanceID: 13082}
+      Script: {instanceID: 12992}
     - Class: 114
-      Script: {instanceID: 13100}
+      Script: {instanceID: 13084}
     - Class: 114
-      Script: {instanceID: 13168}
+      Script: {instanceID: 13102}
     - Class: 114
-      Script: {instanceID: 13182}
+      Script: {instanceID: 13170}
     - Class: 114
-      Script: {instanceID: 13242}
+      Script: {instanceID: 13184}
+    - Class: 114
+      Script: {instanceID: 13244}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -932,6 +937,12 @@ ScriptsOnlyBuild:
     className: Button
   - hash:
       serializedVersion: 2
+      Hash: 9e8f93f9542e927e45f3f6a73ad3d01b
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Rocket
+  - hash:
+      serializedVersion: 2
       Hash: 92da9881aed190e8bb74661bcd74aa2c
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.UI
@@ -1328,7 +1339,7 @@ ScriptsOnlyBuild:
     className: CurrentRoomMasterClientIdProperty
   - hash:
       serializedVersion: 2
-      Hash: b4a0be9b2aa8cff089e6e60edefee018
+      Hash: 9d12b65b9ceeaa755abbf84c8ae5e951
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Card
@@ -1394,7 +1405,7 @@ ScriptsOnlyBuild:
     className: PlayModeRunnerCallback
   - hash:
       serializedVersion: 2
-      Hash: 2974933e55edbacd8e776dc3e6446f52
+      Hash: d2e890fa595d33c5b63b34cd1b1aa6b5
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GameManager
@@ -1478,7 +1489,7 @@ ScriptsOnlyBuild:
     className: CurrentRoomExpectedUsersProperty
   - hash:
       serializedVersion: 2
-      Hash: 9b92df323cc71e0ec0a287263ed052e3
+      Hash: de4bb545eb34c711c32e9d812441472c
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PlayerStats
@@ -1538,7 +1549,7 @@ ScriptsOnlyBuild:
     className: BoolInputField
   - hash:
       serializedVersion: 2
-      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+      Hash: 8613b950395aff7d38dceeab158a2af6
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Wolrd
