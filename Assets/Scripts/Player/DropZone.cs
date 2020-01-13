@@ -25,8 +25,9 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
         float GetCurRes = ParentCanvas.GetComponent<PlayerStats>().GetCurrResource;
         float EnoughResForCardDrop = GetCurRes - Convert.ToInt32(d.Cost.text);
 
-        if (gameObject.tag == "SlotGun")
+        if (gameObject.tag == "SlotGun" || gameObject.tag == "SlotGunFull")
         {
+            gameObject.tag = "SlotGunFull";
             if (d != null && SlotForCardEmpty)
             {
                 Image iconGun = d.Icon;
@@ -48,17 +49,19 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 
                 if (OnSelectedEvent != null)
                 {
-                    OnSelectedEvent(this.gameObject, eventData.pointerDrag, EnoughResForCardDrop, gameObject.GetComponent<Image>());
+                    OnSelectedEvent(gameObject, eventData.pointerDrag, EnoughResForCardDrop, gameObject.GetComponent<Image>());
                 }
             }
         }
+        
     }
 
     IEnumerator ResetSlotDeleteIcon(Image icon)
     {
-        yield return new WaitForSeconds(4);
+        yield return new WaitForSeconds(3);
         SlotForCardEmpty = true;
-        image.color = new Color(image.color.r, image.color.g, image.color.b, 0f);
+        //image.color = new Color(image.color.r, image.color.g, image.color.b, 0f);
+        gameObject.tag = "SlotGun";
     }
 
     public void OnPointerEnter(PointerEventData eventData)

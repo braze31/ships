@@ -11,6 +11,9 @@ TagManager:
   - Player1
   - Player2
   - TextPause
+  - SlotGunFull
+  - Lose
+  - Win
   layers:
   - Default
   - TransparentFX

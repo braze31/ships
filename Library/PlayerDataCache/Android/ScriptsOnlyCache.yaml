@@ -1,13 +1,17 @@
 ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
+    - AnimPoofDeleteObject
     - Card
+    - CodeMonkey.Assets
     - DropZone
     - GameManager
+    - HealthBar
     - LobbyManager
     - PlayerControls
     - PlayerStats
     - Rocket
+    - Ship
     - Wolrd
     - quit
     PhotonUnityNetworking.Demos.dll:
@@ -34,6 +38,12 @@ ScriptsOnlyBuild:
     - UnityEditor.Tilemaps.GridPalettes
     - UnityEditor.Tilemaps.SceneViewGridManager
     - UnityEditor.Tilemaps.TileDragAndDropManager
+    UnityEditor.Graphs.dll:
+    - UnityEditor.Graphs.AnimationBlendTree.Graph
+    - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.Graph
+    - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
+    - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
     - UnityEditor.TestTools.TestRunner.TestListCacheData
@@ -69,7 +79,11 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 48
       Script: {instanceID: 0}
+    - Class: 50
+      Script: {instanceID: 0}
     - Class: 54
+      Script: {instanceID: 0}
+    - Class: 61
       Script: {instanceID: 0}
     - Class: 65
       Script: {instanceID: 0}
@@ -100,55 +114,63 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 11208}
     - Class: 114
-      Script: {instanceID: 11600}
+      Script: {instanceID: 11610}
     - Class: 114
-      Script: {instanceID: 11684}
+      Script: {instanceID: 11694}
     - Class: 114
-      Script: {instanceID: 11750}
+      Script: {instanceID: 11756}
     - Class: 114
-      Script: {instanceID: 11948}
+      Script: {instanceID: 11762}
     - Class: 114
-      Script: {instanceID: 12018}
+      Script: {instanceID: 11964}
     - Class: 114
-      Script: {instanceID: 12026}
+      Script: {instanceID: 12034}
     - Class: 114
-      Script: {instanceID: 12144}
+      Script: {instanceID: 12044}
     - Class: 114
-      Script: {instanceID: 12156}
+      Script: {instanceID: 12166}
     - Class: 114
-      Script: {instanceID: 12168}
+      Script: {instanceID: 12188}
     - Class: 114
-      Script: {instanceID: 12198}
+      Script: {instanceID: 12218}
     - Class: 114
-      Script: {instanceID: 12278}
+      Script: {instanceID: 12298}
     - Class: 114
-      Script: {instanceID: 12344}
+      Script: {instanceID: 12354}
     - Class: 114
-      Script: {instanceID: 12364}
+      Script: {instanceID: 12366}
     - Class: 114
-      Script: {instanceID: 12372}
+      Script: {instanceID: 12386}
     - Class: 114
-      Script: {instanceID: 12412}
+      Script: {instanceID: 12394}
     - Class: 114
-      Script: {instanceID: 12578}
+      Script: {instanceID: 12434}
     - Class: 114
-      Script: {instanceID: 12586}
+      Script: {instanceID: 12564}
     - Class: 114
-      Script: {instanceID: 12592}
+      Script: {instanceID: 12604}
     - Class: 114
-      Script: {instanceID: 12728}
+      Script: {instanceID: 12612}
     - Class: 114
-      Script: {instanceID: 12992}
+      Script: {instanceID: 12618}
     - Class: 114
-      Script: {instanceID: 13102}
+      Script: {instanceID: 12760}
     - Class: 114
-      Script: {instanceID: 13170}
+      Script: {instanceID: 13024}
     - Class: 114
-      Script: {instanceID: 13184}
+      Script: {instanceID: 13136}
+    - Class: 114
+      Script: {instanceID: 13198}
+    - Class: 114
+      Script: {instanceID: 13208}
     - Class: 114
       Script: {instanceID: 13222}
     - Class: 114
-      Script: {instanceID: 13230}
+      Script: {instanceID: 13238}
+    - Class: 114
+      Script: {instanceID: 13266}
+    - Class: 114
+      Script: {instanceID: 13276}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -190,7 +212,17 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 48
       Script: {instanceID: 0}
+    - Class: 50
+      Script: {instanceID: 0}
+    - Class: 61
+      Script: {instanceID: 0}
+    - Class: 74
+      Script: {instanceID: 0}
     - Class: 81
+      Script: {instanceID: 0}
+    - Class: 91
+      Script: {instanceID: 0}
+    - Class: 95
       Script: {instanceID: 0}
     - Class: 104
       Script: {instanceID: 0}
@@ -203,35 +235,41 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 11208}
     - Class: 114
-      Script: {instanceID: 11684}
+      Script: {instanceID: 11694}
     - Class: 114
-      Script: {instanceID: 12018}
+      Script: {instanceID: 11756}
     - Class: 114
-      Script: {instanceID: 12026}
+      Script: {instanceID: 12034}
     - Class: 114
-      Script: {instanceID: 12144}
+      Script: {instanceID: 12044}
     - Class: 114
-      Script: {instanceID: 12156}
+      Script: {instanceID: 12166}
     - Class: 114
-      Script: {instanceID: 12168}
+      Script: {instanceID: 12188}
     - Class: 114
-      Script: {instanceID: 12344}
+      Script: {instanceID: 12354}
     - Class: 114
-      Script: {instanceID: 12412}
+      Script: {instanceID: 12366}
     - Class: 114
-      Script: {instanceID: 12728}
+      Script: {instanceID: 12434}
     - Class: 114
-      Script: {instanceID: 12992}
+      Script: {instanceID: 12564}
     - Class: 114
-      Script: {instanceID: 13084}
+      Script: {instanceID: 12760}
     - Class: 114
-      Script: {instanceID: 13102}
+      Script: {instanceID: 13024}
     - Class: 114
-      Script: {instanceID: 13170}
+      Script: {instanceID: 13118}
     - Class: 114
-      Script: {instanceID: 13184}
+      Script: {instanceID: 13136}
     - Class: 114
-      Script: {instanceID: 13244}
+      Script: {instanceID: 13198}
+    - Class: 114
+      Script: {instanceID: 13208}
+    - Class: 114
+      Script: {instanceID: 13222}
+    - Class: 114
+      Script: {instanceID: 13290}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -461,6 +499,12 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.TestRunner.dll
     namespaceName: UnityEngine.TestTools.TestRunner.Callbacks
     className: TestResultRendererCallback
+  - hash:
+      serializedVersion: 2
+      Hash: 05cede3f915399cac147f9e5eea79328
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: CodeMonkey.MonoBehaviours
+    className: PositionRendererSorter
   - hash:
       serializedVersion: 2
       Hash: 9e70ecf91466f07d9bd649be625cae52
@@ -727,6 +771,12 @@ ScriptsOnlyBuild:
     className: Selectable
   - hash:
       serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: AnimPoofDeleteObject
+  - hash:
+      serializedVersion: 2
       Hash: f8f5c34557f4103b6547d8f956cec6ea
     assemblyName: PhotonUnityNetworking.Demos.dll
     namespaceName: Photon.Pun.Demo.SlotRacer
@@ -877,6 +927,12 @@ ScriptsOnlyBuild:
     className: quit
   - hash:
       serializedVersion: 2
+      Hash: 5b1d3232bdaba52e260d32a9eb24296b
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: CodeMonkey.MonoBehaviours
+    className: CameraFollowSetup
+  - hash:
+      serializedVersion: 2
       Hash: d329540117e6b6c523bded68046af505
     assemblyName: PhotonUnityNetworking.Demos.dll
     namespaceName: Photon.Pun.Demo.Cockpit
@@ -935,12 +991,6 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.UI
     className: Button
-  - hash:
-      serializedVersion: 2
-      Hash: 9e8f93f9542e927e45f3f6a73ad3d01b
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: Rocket
   - hash:
       serializedVersion: 2
       Hash: 92da9881aed190e8bb74661bcd74aa2c
@@ -1021,7 +1071,13 @@ ScriptsOnlyBuild:
     className: PlayerUI
   - hash:
       serializedVersion: 2
-      Hash: 7be8aba6eb84d7338f31006c547fc072
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: HealthBar
+  - hash:
+      serializedVersion: 2
+      Hash: bddd96f6d31728055dadb3f5e721b8b5
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PlayerControls
@@ -1141,6 +1197,12 @@ ScriptsOnlyBuild:
     className: ServerProperty
   - hash:
       serializedVersion: 2
+      Hash: 108a4d6219105ecf515586293cc75dac
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Ship
+  - hash:
+      serializedVersion: 2
       Hash: d2a2698b314a20912af1eb2b1758dc90
     assemblyName: PhotonUnityNetworking.Demos.dll
     namespaceName: Photon.Pun.Demo.Cockpit
@@ -1181,6 +1243,18 @@ ScriptsOnlyBuild:
     assemblyName: PhotonUnityNetworking.Demos.dll
     namespaceName: Photon.Pun.Demo.Asteroids
     className: Asteroid
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: CodeMonkey.MonoBehaviours
+    className: CameraFollow
+  - hash:
+      serializedVersion: 2
+      Hash: a2b249e27e25a975ba9d3c9b8e130910
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: CodeMonkey.Utils
+    className: Button_UI
   - hash:
       serializedVersion: 2
       Hash: 9db963832ef7feebd35f44e6ad6f646c
@@ -1369,6 +1443,12 @@ ScriptsOnlyBuild:
     className: GameManager
   - hash:
       serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: CodeMonkey.MonoBehaviours
+    className: ComponentActions
+  - hash:
+      serializedVersion: 2
       Hash: 4c0ebd9e77f5bc0558d19d8313e54bb9
     assemblyName: PhotonUnityNetworking.Demos.dll
     namespaceName: Photon.Pun.Demo.SlotRacer.Utils
@@ -1465,10 +1545,22 @@ ScriptsOnlyBuild:
     className: PlayerListEntry
   - hash:
       serializedVersion: 2
+      Hash: fa653120b8e2e20f2e5fa15091afeb95
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: CodeMonkey.Utils
+    className: Button_Sprite
+  - hash:
+      serializedVersion: 2
       Hash: 87207d40b89ca632396b05b3cb1e69b0
     assemblyName: PhotonUnityNetworking.Utilities.dll
     namespaceName: Photon.Pun.UtilityScripts
     className: PlayerNumbering
+  - hash:
+      serializedVersion: 2
+      Hash: ab72a871df2bcb4817fca29a22bc5738
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Rocket
   - hash:
       serializedVersion: 2
       Hash: 7090bc1e5ccaec2a9d0d1335ed8cee99
@@ -1505,6 +1597,12 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.EventSystems
     className: StandaloneInputModule
+  - hash:
+      serializedVersion: 2
+      Hash: 8a2193d36589610b9a9a816079abc21d
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: CodeMonkey
+    className: Assets
   - hash:
       serializedVersion: 2
       Hash: 3ab7272a8b7d3ea5a142e0c9b6aae63b

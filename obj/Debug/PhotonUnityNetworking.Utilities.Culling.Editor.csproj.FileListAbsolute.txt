@@ -195,7 +195,6 @@ C:\Users\braze\ProtoType3\Temp\bin\Debug\Unity.Cecil.dll
 C:\Users\braze\ProtoType3\Temp\bin\Debug\Unity.SerializationLogic.dll
 C:\Users\braze\ProtoType3\Temp\bin\Debug\Unity.Legacy.NRefactory.dll
 C:\Users\braze\ProtoType3\Temp\bin\Debug\ExCSS.Unity.dll
-C:\Users\braze\ProtoType3\Temp\bin\Debug\System.Diagnostics.Tracing.dll
 C:\Users\braze\ProtoType3\Temp\bin\Debug\Boo.Lang.Compiler.dll
 C:\Users\braze\ProtoType3\Temp\bin\Debug\Boo.Lang.PatternMatching.dll
 C:\Users\braze\ProtoType3\Temp\bin\Debug\Boo.Lang.Parser.dll

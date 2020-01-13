@@ -14,10 +14,13 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
 {
     private LoadBalancingClient loadBalancingClient;
     private List<PlayerControls> players = new List<PlayerControls>();
+    private Dictionary<int, float> hpPlayers = new Dictionary<int, float>();
     public Canvas waitCanvas;
+
     public void AddPlayer(PlayerControls player)
     {
         players.Add(player);
+        hpPlayers[player.photonView.ViewID] = 1.35f;
     }
 
     public Wolrd()
@@ -46,7 +49,7 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
         switch (photonEvent.Code)
         {
             case 1:
-                Debug.Log("1 HAPPEN");
+                //Debug.Log("1 HAPPEN");
                 var p1 = photonEvent.Parameters;
 
                 //comment for check parametrs
@@ -59,6 +62,26 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
                 ApplyCommand(parametrsEventShip);
 
                 break;
+            case 2:
+                Debug.Log("2 HAPPEN");
+                var p2 = photonEvent.Parameters;
+                ExitGames.Client.Photon.Hashtable healthEventShip = (ExitGames.Client.Photon.Hashtable)p2[245];
+
+                //var lines1 = p2.Select(kvp => kvp.Key + ": " + kvp.Value.ToString());
+                //string a1 = string.Join(Environment.NewLine, lines1);
+                //Debug.Log(a1);
+
+                var pID = healthEventShip["playerID"];
+                var hp = healthEventShip["hp"];
+                Debug.Log(pID + " " + hp);
+
+                hpPlayers[(int)pID] = (float)hp;
+
+                if ((float)hp<0)
+                {
+                    ApplyHealtBar((int)pID);
+                }
+                break;
         }
     }
 
@@ -69,11 +92,27 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
         var g = hashPlayer["guns"];
         var slot = hashPlayer["slot"];
         var icon = hashPlayer["iconCard"];
+        var tagTarget = hashPlayer["tagSlot"];
         foreach (var player in players.OrderBy(p => p.photonView.Owner.ActorNumber))
         {
             if (player.photonView.ViewID != (int)pID)
             {
-                player.ChangeEnemyShipContent((string)g, (string)slot, (string)icon);
+                player.ChangeEnemyShipContent((string)g, (string)slot, (string)icon, (string) tagTarget);
+            }
+        }
+    }
+
+    public void ApplyHealtBar(int pID)
+    {
+        foreach (var player in players.OrderBy(p => p.photonView.Owner.ActorNumber))
+        {
+            if (player.photonView.ViewID != (int)pID)
+            {
+                player.YouWin(player.photonView.ViewID);
+            }
+            else
+            {
+                player.YouLose(player.photonView.ViewID);
             }
         }
     }
