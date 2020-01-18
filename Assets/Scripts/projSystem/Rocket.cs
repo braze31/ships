@@ -12,181 +12,149 @@ public class Rocket : MonoBehaviour
 
     public static int movespeed = 300;
     public Vector3 userDirection = Vector3.right;
+    GameObject goPar;
+    Transform TargetTPonY;
 
-    private IEnumerable<Transform> targetObjects = new Transform[] { };
-    private bool block;
-    private RectTransform RT;
-    private bool checkShip;
-    private bool isTriger;
+    public bool rightTrigg;
+    public bool leftTrigg;
+
+    public bool CheckForEvent = false;
 
     void Start()
     {
-        GameObject goPar = gameObject.transform.parent.gameObject;
-        gameObject.GetComponent<Collider2D>().enabled = false;
-        RT = gameObject.GetComponent<RectTransform>();
-        if (RT != null && gameObject != null && targetObjects != null)
-        {
-            if (goPar.name == "Ship-Player")
-            {
-                targetObjects = GiveMeAllSlotGunOnShip("Enemy");
-                checkShip = false;
-            }
-            if (goPar.name == "Ship-Enemy")
-            {
-                targetObjects = GiveMeAllSlotGunOnShip("Player1");
-                checkShip = true;
-            }
-            StartCoroutine(ActiveCollider());
-        }
-        //RT = gameObject.GetComponent<RectTransform>();
-        //Vector3 newV = GetGUIElementOffset(RT);
-        //if (targetObjects.ToList().Count == 0)
-        //{
-        //    targetObjects = parentGO.GetComponentsInChildren<Transform>().Where(i => i.tag == "Enemy");
-        //}
-    }
-    IEnumerable<Transform> GiveMeAllSlotGunOnShip(string nameShip)
-    {
-        GameObject parentGO = GameObject.FindGameObjectWithTag(nameShip);
-
-        IEnumerable<Transform> target1 = parentGO.GetComponentsInChildren<Transform>().Where(i => i.tag == "SlotGunFull" && i.name =="BotGun");
-        if (target1.ToList().Count > 0)
-        {
-            return target1;
-        }
-        IEnumerable<Transform> target2 = parentGO.GetComponentsInChildren<Transform>().Where(i => i.tag == "SlotGunFull" && i.name == "TopGun");
-        if (target2.ToList().Count > 0)
-        {
-            return target2;
-        }
-        IEnumerable<Transform> target3 = parentGO.GetComponentsInChildren<Transform>().Where(i => i.tag == "SlotGun" && i.name == "BotGun");
-        if (target3.ToList().Count > 0)
-        {
-            return target3;
-        }
-        IEnumerable<Transform> target4 = parentGO.GetComponentsInChildren<Transform>().Where(i => i.tag == "SlotGun" && i.name == "TopGun");
-        if (target4.ToList().Count > 0)
-        {
-            return target4;
-        }
-        IEnumerable<Transform> target5 = parentGO.GetComponentsInChildren<Transform>().Where(i => i.tag == "SlotGun");
-        return target5;
-
-    }
-    // collider2D not active when rocket created on scene ... f sec
-    IEnumerator ActiveCollider()
-    {
-        yield return new WaitForSeconds(0.3f);
-        gameObject.GetComponent<Collider2D>().enabled = true;
+        goPar = gameObject.transform.parent.gameObject;
+        TargetTPonY = SearchTarget(goPar);
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        isTriger = true;
-        gameObject.SetActive(false);
-        GameObject expl = Instantiate(ExplosionAnim, ExplosionTransform.transform);
-        expl.transform.SetParent(other.gameObject.transform.parent.gameObject.transform);
-
-        GameObject shipGO = other.gameObject.transform.parent.gameObject;
-        
-
+       // GameObject shipGO = other.gameObject.transform.parent.gameObject;
+        if (other.name == "RightTrigger")
+        {
+            rightTrigg = true;
+        }
+        if (other.name == "LeftTrigger")
+        {
+            leftTrigg = true;
+        }
         if (other.gameObject.tag == "Player1" || other.gameObject.tag == "Enemy")
         {
+            gameObject.GetComponent<Collider2D>().enabled = false;
+            gameObject.SetActive(false);
+            GameObject expl = Instantiate(ExplosionAnim, ExplosionTransform.transform);
+            expl.transform.SetParent(other.gameObject.transform.parent.gameObject.transform);
             Ship go = other.gameObject.GetComponent<Ship>();
             if (go != null)
             {
-                go.ShipTakeDamage(0.2f);
+                go.ShipTakeDamage(0.1f);
             }
+            Invoke("DestroyRocketbyTime", 10);
         }
-        //Invoke("DestroyRocketbyTime", 10);
+        if ((other.gameObject.tag == "RocketP1" && gameObject.tag == "RocketP2") || 
+            (other.gameObject.tag == "RocketP2" && gameObject.tag == "RocketP1"))
+        {
+            gameObject.GetComponent<Collider2D>().enabled = false;
+            gameObject.SetActive(false);
+            GameObject expl = Instantiate(ExplosionAnim, ExplosionTransform.transform);
+            expl.transform.SetParent(other.gameObject.transform.parent.gameObject.transform);
+            Invoke("DestroyRocketbyTime", 10);
+        }
     }
 
-    //void DestroyRocketbyTime()
+    //void OnTriggerExit2D(Collider2D other)
     //{
-    //    Destroy(gameObject);
+    //    if (gameObject.transform.position.x < -100)
+    //    {
+    //        Debug.Log("SOMETHING WRONG THIS ROCKET");
+    //        rightTrigg = true;
+    //    }
+    //    if (gameObject.transform.position.x > 1200)
+    //    {
+    //        Debug.Log("SOMETHING WRONG THIS ROCKET");
+    //        rightTrigg = true;
+    //    }
+    //    CheckForEvent = true;
     //}
+
+    IEnumerator ColliderNotActive(float time)
+    {
+        gameObject.GetComponent<Collider2D>().enabled = false;
+        yield return new WaitForSeconds(time);
+        gameObject.GetComponent<Collider2D>().enabled = true;
+    }
+
+    void DestroyRocketbyTime()
+    {
+        Destroy(gameObject);
+    }
 
     // Update is called once per frame
     void Update()
     {
-        if (!isTriger)
+        gameObject.transform.Translate(userDirection * movespeed * Time.deltaTime);
+        if (CheckForEvent)
         {
-            gameObject.transform.Translate(userDirection * movespeed * Time.deltaTime);
-            RT = gameObject.GetComponent<RectTransform>();
-            if (RT != null && gameObject != null && targetObjects != null)
+            if (rightTrigg)
             {
-                Vector3 newV = GetGUIElementOffset(RT);
-                if (!checkShip)
+                if (TargetTPonY != null)
                 {
-                    // -615 & 675 coordinate where rocket don't see player camera
-                    // need another way resolve this
-                    // probably camera don't see rocket. RendererExtensions script didn't work for camera.main
-                    if (newV.x < -615 && !block)
-                    {
-                        SearchTargetForRocket(-190);
-                        block = true;
-                    }
+                    gameObject.transform.position = new Vector3(-50, TargetTPonY.position.y);
                 }
-                if (checkShip)
-                {
-                    if (newV.x > 675 && !block)
-                    {
-                        SearchTargetForRocket(1215);
-                        block = true;
-                    }
-                }
+                rightTrigg = false;
             }
-        }
-
-        if (isTriger)
-        {
-            targetObjects = null;
+            if (leftTrigg)
+            {
+                if (TargetTPonY != null)
+                {
+                    gameObject.transform.position = new Vector3(1130, TargetTPonY.position.y);
+                }
+                leftTrigg = false;
+            }
+            CheckForEvent = false;
         }
     }
 
-    // -190 coordinate X for rocket start new position for attack enemy ship
-    void SearchTargetForRocket(int poz)
+    Transform SearchTarget(GameObject goPar)
     {
-        int r = Random.Range(0, targetObjects.ToList().Count);
-        if (targetObjects.ToList().Count>0)
+        if (goPar.name == "Ship-Player")
         {
-            Transform posTarget = targetObjects.ToList()[r].gameObject.transform;
-            transform.position = new Vector2(poz, posTarget.transform.position.y);
+            var t = TargetOnShip("Ship-Enemy");
+            if (t!=null)
+            {
+                return (Transform)t;
+            }
+            //gameObject.tag = "RocketP1";
+            Transform target3 = GameObject.Find("Ship-Enemy").GetComponent<Transform>();
+            return target3;
         }
+        if (goPar.name == "Ship-Enemy")
+        {
+            var t = TargetOnShip("Ship-Player");
+            if (t != null)
+            {
+                return (Transform)t;
+            }
+            //gameObject.tag = "RocketP2";
+            Transform target3 = GameObject.Find("Ship-Player").GetComponent<Transform>();
+            return target3;
+        }
+        return null;
     }
 
-    // edge coordinate system for object
-    public static Vector3 GetGUIElementOffset(RectTransform rect)
+    Transform TargetOnShip(string shipPlayer)
     {
-        Rect screenBounds = new Rect(0f, 0f, Screen.width, Screen.height);
-        Vector3[] objectCorners = new Vector3[4];
-        rect.GetWorldCorners(objectCorners);
-
-        var xnew = 0f;
-        var ynew = 0f;
-        var znew = 0f;
-
-        for (int i = 0; i < objectCorners.Length; i++)
+        GameObject SE = GameObject.Find(shipPlayer);
+        Transform target1 = SE.transform.Find("TopGun").GetComponent<Transform>();
+        if (target1.tag == "SlotGunFull")
         {
-            if (objectCorners[i].x < screenBounds.xMin)
-            {
-                xnew = screenBounds.xMin - objectCorners[i].x;
-            }
-            if (objectCorners[i].x > screenBounds.xMax)
-            {
-                xnew = screenBounds.xMax - objectCorners[i].x;
-            }
-            if (objectCorners[i].y < screenBounds.yMin)
-            {
-                ynew = screenBounds.yMin - objectCorners[i].y;
-            }
-            if (objectCorners[i].y > screenBounds.yMax)
-            {
-                ynew = screenBounds.yMax - objectCorners[i].y;
-            }
+            return target1;
+        }
+        Transform target2 = SE.transform.Find("BotGun").GetComponent<Transform>();
+        if (target2.tag == "SlotGunFull")
+        {
+            return target2;
         }
 
-        return new Vector3(xnew, ynew, znew);
-
+        return null;
     }
 }

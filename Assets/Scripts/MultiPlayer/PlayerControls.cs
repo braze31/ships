@@ -24,6 +24,11 @@ public class PlayerControls : MonoBehaviour, IPunObservable
     private int costCardEvent;
     private bool playerLOSE;
     private GameObject ship;
+
+    [SerializeField]
+    private List<Rocket> RocketsSystem;
+    [SerializeField]
+    private Dictionary<int,Rocket> RocketsIDs = new Dictionary<int, Rocket>();
     // Start is called before the first frame update
 
 
@@ -40,7 +45,8 @@ public class PlayerControls : MonoBehaviour, IPunObservable
                     if (targetName == item.name)
                     {
                         item.tag = "SlotGunFull";
-                        StartCoroutine(INSTrocketBytimeNtimes(item,enemyShip));
+                        string tag2 = "RocketP2";
+                        StartCoroutine(INSTrocketBytimeNtimes(item,enemyShip,tag2));
                         
                     }
                 }
@@ -48,28 +54,27 @@ public class PlayerControls : MonoBehaviour, IPunObservable
         }
     }
 
-    IEnumerator INSTrocketBytimeNtimes(Image item, GameObject enemyShip)
+    IEnumerator INSTrocketBytimeNtimes(Image item, GameObject enemyShip, string tag)
     {
-        for (int k = 0; k < 4; k++)
+        for (int k = 0; k < 3; k++)
         {
             Vector3 pointToTravel = item.GetComponent<RectTransform>().localPosition;
             GameObject myNewS = Instantiate(Rocket, pointToTravel, Quaternion.Euler(0f, 0f, 0f));
             Image i = myNewS.GetComponentInChildren<Image>().GetComponent<Image>();
-            //Debug.Log(i.sprite.name);
-            //Debug.Log(nameCard);
-            // create Content for EnemyShip, Card event
-            //if (nameCard == i.sprite.name)
-            //{
-                item.color = new Color(item.color.r, item.color.g, item.color.b, 255f);
-                item.sprite = i.sprite;
-                StartCoroutine(ResetSlotDeleteIcon(item));
-            //}
+
+            item.color = new Color(item.color.r, item.color.g, item.color.b, 255f);
+            item.sprite = i.sprite;
+            myNewS.tag = tag;
+            StartCoroutine(ResetSlotDeleteIcon(item));
+
             // need anchor?
             //myNewS.GetComponent<RectTransform>().anchoredPosition = new Vector3(pointToTravel.x,pointToTravel.y,pointToTravel.z);
+
+            Rocket r = myNewS.GetComponent<Rocket>();
+            RocketsSystem.Add(r);
+
             myNewS.transform.SetParent(enemyShip.transform, false);
             yield return new WaitForSeconds(1.5f);
-            
-            //StartCoroutine(INSTrocketBytimeNtimes(item, nameCard, enemyShip));
         }
         item.tag = "SlotGun";
     }
@@ -92,7 +97,8 @@ public class PlayerControls : MonoBehaviour, IPunObservable
             {
                 if (targetName == item.name)
                 {
-                    StartCoroutine(INSTrocketBytimeNtimes(item, pShip));
+                    string tag1 = "RocketP1";
+                    StartCoroutine(INSTrocketBytimeNtimes(item, pShip, tag1));
                 }
             }
         }
@@ -125,8 +131,8 @@ public class PlayerControls : MonoBehaviour, IPunObservable
 
                 Text youLose = GameObject.FindGameObjectWithTag("Lose").GetComponent<Text>();
                 youLose.enabled = true;
-                Button quit = GameObject.Find("quitButton").GetComponent<Button>();
-                quit.gameObject.SetActive(true);
+                Image quit = GameObject.Find("quitButton").GetComponent<Image>();
+                quit.enabled = true;
             }
         }
     }
@@ -143,19 +149,19 @@ public class PlayerControls : MonoBehaviour, IPunObservable
 
                 Text youLose = GameObject.FindGameObjectWithTag("Win").GetComponent<Text>();
                 youLose.enabled = true;
-                Button quit = GameObject.Find("quitButton").GetComponent<Button>();
-                quit.gameObject.SetActive(true);
+                Image quit = GameObject.Find("quitButton").GetComponent<Image>();
+                quit.enabled = true;
             }
         }
     }
 
     void Start()
     {
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
         photonView = GetComponent<PhotonView>();
         PrefabCanvas.name = $"ID# {photonView.ViewID} - CanvasForEnemyPlayerName";
         playerCanvas = Instantiate(PrefabCanvas);
         gameObject.name = $"{photonView.ViewID} - PlayerName";
-
         // add to canvascontroller all players which connected this room.
         FindObjectOfType<Wolrd>().AddPlayer(this);
     }
@@ -177,6 +183,7 @@ public class PlayerControls : MonoBehaviour, IPunObservable
             evData["slot"] = Target.name;
             evData["tagSlot"] = Target.tag;
             evData["resor"] = currResPlayer;
+
             PhotonNetwork.RaiseEvent(1, evData, options, sendOptions);
             image = null;
         }
@@ -191,8 +198,61 @@ public class PlayerControls : MonoBehaviour, IPunObservable
             ship = GameObject.Find("Ship-Player");
 
             checkHP();
-
         }
+
+        GameObject[] tag_1 = GameObject.FindGameObjectsWithTag("RocketP1");
+
+        GameObject[] tag_2 = GameObject.FindGameObjectsWithTag("RocketP2");
+
+        GameObject[] ALLR = tag_1.Concat(tag_2).ToArray();
+        //GameObject[] ALLR = GameObject.FindGameObjectsWithTag("Rocket");
+
+        if (ALLR.Length>=1)
+        {
+
+            foreach (GameObject p in ALLR)
+            {
+                Debug.Log(p.name);
+                Rocket r = p.GetComponent<Rocket>();
+                if (r.rightTrigg || r.leftTrigg)
+                {
+                    RaiseEventOptions options1 = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+                    SendOptions sendOptions1 = new SendOptions { Reliability = true };
+                    ExitGames.Client.Photon.Hashtable evData1 = new ExitGames.Client.Photon.Hashtable();
+
+                    evData1["playerID"] = photonView.ViewID;
+                    evData1["trig"] = -1;
+                    RocketsIDs[r.gameObject.GetInstanceID()] = r;
+
+                    if (r.rightTrigg)
+                    {
+                        evData1["trig"] = 1;
+                        evData1["idRocket"] = r.gameObject.GetInstanceID();
+                        Debug.Log(r.gameObject.GetInstanceID() + " is trig");
+                    }
+                    if (r.leftTrigg)
+                    {
+                        evData1["trig"] = 0;
+                        evData1["idRocket"] = r.gameObject.GetInstanceID();
+                    }
+                    PhotonNetwork.RaiseEvent(3, evData1, options1, sendOptions1);
+                }
+            }
+        }
+    }
+
+    public void TriggerActivateP1(int id)
+    {
+        if (RocketsIDs.ContainsKey(id))
+        {
+            Rocket r = RocketsIDs[id];
+            r.CheckForEvent = true;
+        }
+    }
+
+    public void TriggerActivateP2()
+    {
+
     }
 
     void checkHP()

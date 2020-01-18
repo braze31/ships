@@ -200,7 +200,7 @@ GameObject:
   - component: {fileID: 1020263259581393123}
   m_Layer: 5
   m_Name: Rocket
-  m_TagString: Untagged
+  m_TagString: Rocket
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -247,10 +247,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3404ec1fe4503eb40a218f3407d67380, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ExplosionAnim: {fileID: 6448132612904936996, guid: e1f6afcdfaa5d8642aed7bd656536532,
-    type: 3}
+  ExplosionAnim: {fileID: 139366, guid: b185c1a9cf067374586d095111b15bd1, type: 3}
   ExplosionTransform: {fileID: 1384920272336751499}
   userDirection: {x: 1, y: 0, z: 0}
+  rightTrigg: 0
+  leftTrigg: 0
+  CheckForEvent: 0
 --- !u!61 &9020509091902517799
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -264,7 +266,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 25.257202, y: -0.2592163}
+  m_Offset: {x: 30.985962, y: -0.2592163}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -275,7 +277,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 15.458618, y: 13.614624}
+  m_Size: {x: 4.0010986, y: 13.614624}
   m_EdgeRadius: 0
 --- !u!50 &1020263259581393123
 Rigidbody2D:

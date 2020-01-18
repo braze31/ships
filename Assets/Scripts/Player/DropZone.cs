@@ -58,7 +58,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 
     IEnumerator ResetSlotDeleteIcon(Image icon)
     {
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(4.5f);
         SlotForCardEmpty = true;
         //image.color = new Color(image.color.r, image.color.g, image.color.b, 0f);
         gameObject.tag = "SlotGun";

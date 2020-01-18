@@ -7,6 +7,7 @@ ScriptsOnlyBuild:
     - DropZone
     - GameManager
     - HealthBar
+    - LeaveFromRoom
     - LobbyManager
     - PlayerControls
     - PlayerStats
@@ -171,6 +172,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 13266}
     - Class: 114
       Script: {instanceID: 13276}
+    - Class: 114
+      Script: {instanceID: 33494}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -188,6 +191,8 @@ ScriptsOnlyBuild:
     - Class: 198
       Script: {instanceID: 0}
     - Class: 199
+      Script: {instanceID: 0}
+    - Class: 212
       Script: {instanceID: 0}
     - Class: 213
       Script: {instanceID: 0}
@@ -270,6 +275,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 13222}
     - Class: 114
       Script: {instanceID: 13290}
+    - Class: 114
+      Script: {instanceID: 33494}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -1077,7 +1084,7 @@ ScriptsOnlyBuild:
     className: HealthBar
   - hash:
       serializedVersion: 2
-      Hash: bddd96f6d31728055dadb3f5e721b8b5
+      Hash: 544ec99618e36dabd1c2859d6518a264
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PlayerControls
@@ -1197,7 +1204,7 @@ ScriptsOnlyBuild:
     className: ServerProperty
   - hash:
       serializedVersion: 2
-      Hash: 108a4d6219105ecf515586293cc75dac
+      Hash: 8588d890eafce78196fd4ed64378a43e
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Ship
@@ -1557,7 +1564,7 @@ ScriptsOnlyBuild:
     className: PlayerNumbering
   - hash:
       serializedVersion: 2
-      Hash: ab72a871df2bcb4817fca29a22bc5738
+      Hash: 8c1ab6d34ffd69c422864380709bdef0
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Rocket
@@ -1687,6 +1694,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
     className: PlayableTrack
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: LeaveFromRoom
   platform: 13
   scenePathNames:
   - Assets/Scenes/Lobby.unity

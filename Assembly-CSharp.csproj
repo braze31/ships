@@ -85,6 +85,7 @@
      <Compile Include="Assets\Photon\PhotonRealtime\Demos\DemoLoadBalancing\ConnectAndJoinRandomLb.cs" />
      <Compile Include="Assets\Scripts\AnimPoofDeleteObject.cs" />
      <Compile Include="Assets\Scripts\HealthBar.cs" />
+     <Compile Include="Assets\Scripts\LeaveFromRoom.cs" />
      <Compile Include="Assets\Scripts\Managers\GameFunctions.cs" />
      <Compile Include="Assets\Scripts\MultiPlayer\CanvasController.cs" />
      <Compile Include="Assets\Scripts\MultiPlayer\ExtensionMethod.cs" />

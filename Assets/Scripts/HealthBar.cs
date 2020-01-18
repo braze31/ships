@@ -13,6 +13,6 @@ public class HealthBar : MonoBehaviour
     // vector3(1.35f,0.1f) - max or full HP player
     public void SetSize(float sizeNormalized)
     {
-        bar.localScale = new Vector3(sizeNormalized, 0.1f);
+        bar.localScale = new Vector3(sizeNormalized, 0.1f, 0f);
     }
 }

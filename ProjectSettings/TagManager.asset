@@ -14,6 +14,9 @@ TagManager:
   - SlotGunFull
   - Lose
   - Win
+  - Rocket
+  - RocketP1
+  - RocketP2
   layers:
   - Default
   - TransparentFX

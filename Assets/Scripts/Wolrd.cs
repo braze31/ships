@@ -16,6 +16,11 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
     private List<PlayerControls> players = new List<PlayerControls>();
     private Dictionary<int, float> hpPlayers = new Dictionary<int, float>();
     public Canvas waitCanvas;
+    private bool twiceHPcheck;
+
+    private Dictionary<int, int> RocketTrigRightPlayer1 = new Dictionary<int,int>();
+    private Dictionary<int, int> RocketTrigRightPlayer2 = new Dictionary<int, int>();
+
 
     public void AddPlayer(PlayerControls player)
     {
@@ -48,6 +53,7 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
     {
         switch (photonEvent.Code)
         {
+            // case 1 for check parametrs Cards events for ship
             case 1:
                 //Debug.Log("1 HAPPEN");
                 var p1 = photonEvent.Parameters;
@@ -62,8 +68,9 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
                 ApplyCommand(parametrsEventShip);
 
                 break;
+            // case 2 for check HP players
             case 2:
-                Debug.Log("2 HAPPEN");
+                //Debug.Log("2 HAPPEN");
                 var p2 = photonEvent.Parameters;
                 ExitGames.Client.Photon.Hashtable healthEventShip = (ExitGames.Client.Photon.Hashtable)p2[245];
 
@@ -73,14 +80,54 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
 
                 var pID = healthEventShip["playerID"];
                 var hp = healthEventShip["hp"];
-                Debug.Log(pID + " " + hp);
+                //Debug.Log(pID + " " + hp);
 
                 hpPlayers[(int)pID] = (float)hp;
 
                 if ((float)hp<0)
                 {
-                    ApplyHealtBar((int)pID);
+                    if (!twiceHPcheck)
+                    {
+                        ApplyHealtBar((int)pID);
+                        twiceHPcheck = true;
+                    }
                 }
+                break;
+            // case 3 for check trigger where rocket place in world position on each player.
+            case 3:
+                //Debug.Log("3 HAPPEN");
+                var p3 = photonEvent.Parameters;
+                ExitGames.Client.Photon.Hashtable pararmsRocketSystem = (ExitGames.Client.Photon.Hashtable)p3[245];
+
+                //var lines1 = p3.Select(kvp => kvp.Key + ": " + kvp.Value.ToString());
+                //string a1 = string.Join(Environment.NewLine, lines1);
+                //Debug.Log(a1);
+
+                var pID1 = pararmsRocketSystem["playerID"];
+                var trig = pararmsRocketSystem["trig"];
+                var idR = pararmsRocketSystem["idRocket"];
+
+
+                if ((int)trig != -1)
+                {
+                    //Debug.Log(pID1 + " " + $"{trig}" + " " + $"{idR}");
+
+                    if ((int)trig == 1)
+                    {
+                        RocketTrigRightPlayer1[(int)pID1] = (int)idR;
+                    }
+                    
+                    if ((int)trig == 0)
+                    {
+                        RocketTrigRightPlayer2[(int)pID1] = (int)idR;
+                    }
+                }
+
+                if (RocketTrigRightPlayer1.Count == 2 && RocketTrigRightPlayer2.Count == 2)
+                {
+                    DauRazreshenie(RocketTrigRightPlayer1, RocketTrigRightPlayer2);
+                }
+
                 break;
         }
     }
@@ -114,6 +161,20 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
             {
                 player.YouLose(player.photonView.ViewID);
             }
+        }
+    }
+    public void DauRazreshenie(Dictionary<int, int> rocketTrigRightPlayer1, Dictionary<int, int> rocketTrigRightPlayer2)
+    {
+        foreach (var player in players)
+        {
+            Debug.Log(rocketTrigRightPlayer1[player.photonView.ViewID] + " is razrehenie" );
+            player.TriggerActivateP1(rocketTrigRightPlayer1[player.photonView.ViewID]);
+
+            player.TriggerActivateP1(rocketTrigRightPlayer2[player.photonView.ViewID]);
+            
+
+            RocketTrigRightPlayer1 = new Dictionary<int, int>();
+            RocketTrigRightPlayer2 = new Dictionary<int, int>();
         }
     }
 

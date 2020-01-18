@@ -81,15 +81,15 @@ public class GameManager : MonoBehaviourPunCallbacks
         return bytes;
     }
 
-    public void Leave()
-    {
-        PhotonNetwork.LeaveRoom();
-    }
+    //public void Leave()
+    //{
+    //    PhotonNetwork.LeaveRoom();
+    //}
 
-    public override void OnLeftRoom()
-    {
-        SceneManager.LoadScene(0);
-    }
+    //public override void OnLeftRoom()
+    //{
+    //    SceneManager.LoadScene(0);
+    //}
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
