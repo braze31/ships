@@ -32,10 +32,10 @@ RectTransform:
   m_Father: {fileID: 5682475894612962609}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -16.4, y: 2.2}
-  m_SizeDelta: {x: 132.8, y: 104.4}
+  m_AnchorMin: {x: 0.36, y: 0.41000003}
+  m_AnchorMax: {x: 0.642, y: 0.5798257}
+  m_AnchoredPosition: {x: 0.29999924, y: 0.29999924}
+  m_SizeDelta: {x: 84.8, y: 87.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6099843333831592391
 CanvasRenderer:
@@ -105,10 +105,10 @@ RectTransform:
   m_Father: {fileID: 5682475894612962609}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 33.9, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchorMin: {x: 0.35417017, y: 0.41000003}
+  m_AnchorMax: {x: 0.642, y: 0.59020346}
+  m_AnchoredPosition: {x: 1, y: 0}
+  m_SizeDelta: {x: 51, y: 82}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &4778972561044295693
 GameObject:
@@ -197,7 +197,9 @@ GameObject:
   - component: {fileID: 5682475894612962615}
   - component: {fileID: 5260370548358814949}
   - component: {fileID: 9020509091902517799}
-  - component: {fileID: 1020263259581393123}
+  - component: {fileID: 115347151609850022}
+  - component: {fileID: 4582233895393721529}
+  - component: {fileID: 3089414238892326736}
   m_Layer: 5
   m_Name: Rocket
   m_TagString: Rocket
@@ -222,10 +224,10 @@ RectTransform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1, y: 2}
-  m_SizeDelta: {x: 239.8, y: 121.9}
+  m_AnchorMin: {x: 0.52474093, y: 0.4988125}
+  m_AnchorMax: {x: 0.52474093, y: 0.4988125}
+  m_AnchoredPosition: {x: -9.3, y: 0.23}
+  m_SizeDelta: {x: 206.4, y: 123.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5682475894612962615
 CanvasRenderer:
@@ -247,12 +249,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3404ec1fe4503eb40a218f3407d67380, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ExplosionAnim: {fileID: 139366, guid: b185c1a9cf067374586d095111b15bd1, type: 3}
+  ExplosionAnim: {fileID: 447838750213710924, guid: 95674f75d7fe2644889f08c5e8a99637,
+    type: 3}
   ExplosionTransform: {fileID: 1384920272336751499}
   userDirection: {x: 1, y: 0, z: 0}
   rightTrigg: 0
   leftTrigg: 0
   CheckForEvent: 0
+  countRSystem: 0
 --- !u!61 &9020509091902517799
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -263,10 +267,10 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 30.985962, y: -0.2592163}
+  m_Offset: {x: 28.28238, y: 0.3661499}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -277,9 +281,46 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 4.0010986, y: 13.614624}
+  m_Size: {x: 20.99347, y: 13.009277}
   m_EdgeRadius: 0
---- !u!50 &1020263259581393123
+--- !u!114 &115347151609850022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5682475894612962608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 4582233895393721529}
+  viewIdField: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &4582233895393721529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5682475894612962608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 0
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+--- !u!50 &3089414238892326736
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0

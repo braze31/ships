@@ -11,7 +11,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
     public Card.Slot typeOfItem = Card.Slot.WEAPON;
     [SerializeField]
     private bool SlotForCardEmpty = true;
-    public delegate void SelectAction(GameObject target, GameObject cardStats, float currRes, Image iconCard);
+    public delegate void SelectAction(GameObject target, GameObject cardStats, float currRes, Image iconCard, int timeID);
     public static event SelectAction OnSelectedEvent;
 
     GameObject ParentCanvas;
@@ -49,11 +49,20 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 
                 if (OnSelectedEvent != null)
                 {
-                    OnSelectedEvent(gameObject, eventData.pointerDrag, EnoughResForCardDrop, gameObject.GetComponent<Image>());
+                    //RocketId idR = new RocketId();
+
+                    int timeID = RandomIDforRocket();
+                    OnSelectedEvent(gameObject, eventData.pointerDrag, EnoughResForCardDrop, gameObject.GetComponent<Image>(), timeID);
                 }
             }
         }
         
+    }
+
+    int RandomIDforRocket()
+    {
+        int idRocket = UnityEngine.Random.Range(1000000, 9999999);
+        return idRocket;
     }
 
     IEnumerator ResetSlotDeleteIcon(Image icon)

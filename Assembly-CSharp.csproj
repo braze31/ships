@@ -103,6 +103,7 @@
      <Compile Include="Assets\Scripts\Wolrd.cs" />
      <Compile Include="Assets\Scripts\WorldDrawer.cs" />
      <Compile Include="Assets\Scripts\projSystem\Rocket.cs" />
+     <Compile Include="Assets\Scripts\projSystem\RocketId.cs" />
      <Compile Include="Assets\Scripts\quit.cs" />
      <None Include="Assets\Photon\PhotonUnityNetworking\changelog.txt" />
      <None Include="Assets\CodeMonkey\README.txt" />

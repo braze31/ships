@@ -18,8 +18,23 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
     public Canvas waitCanvas;
     private bool twiceHPcheck;
 
-    private Dictionary<int, int> RocketTrigRightPlayer1 = new Dictionary<int,int>();
-    private Dictionary<int, int> RocketTrigRightPlayer2 = new Dictionary<int, int>();
+    public struct MyRocket
+    {
+        public int trig;
+        public int IDR;
+    }
+
+    int countR = 1000000;
+
+    //private Dictionary<string, MyRocket> tt0 = new Dictionary<string, MyRocket>();
+    //private Dictionary<string, MyRocket> tt1 = new Dictionary<string, MyRocket>();
+    //private Dictionary<string, MyRocket> tt2 = new Dictionary<string, MyRocket>();
+
+    private Dictionary<string, int> tt0 = new Dictionary<string, int>();
+    private Dictionary<string, int> tt1 = new Dictionary<string, int>();
+    private Dictionary<string, int> tt2 = new Dictionary<string, int>();
+
+    private Dictionary<int, MyRocket> allRockets = new Dictionary<int, MyRocket>();
 
 
     public void AddPlayer(PlayerControls player)
@@ -66,7 +81,7 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
 
                 ExitGames.Client.Photon.Hashtable parametrsEventShip = (ExitGames.Client.Photon.Hashtable)p1[245];
                 ApplyCommand(parametrsEventShip);
-
+                
                 break;
             // case 2 for check HP players
             case 2:
@@ -99,34 +114,64 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
                 var p3 = photonEvent.Parameters;
                 ExitGames.Client.Photon.Hashtable pararmsRocketSystem = (ExitGames.Client.Photon.Hashtable)p3[245];
 
+                var pID1 = pararmsRocketSystem["playerID"];
+                var trig = pararmsRocketSystem["trig"];
+                var idR = pararmsRocketSystem["idRocket"];
+                var countRSystem = pararmsRocketSystem["countRSystem"];
+                var exploydEvent = pararmsRocketSystem["exploydEvent"];
+
+                MyRocket mr = new MyRocket();
+                mr.trig = (int)trig;
+                mr.IDR = (int)idR;
+
+                //Debug.Log((int)countRSystem + " " + (int)trig + " " + (string)pID1);
+
+                if (!allRockets.ContainsKey((int)countRSystem))
+                {
+                    allRockets.Add((int)countRSystem, mr);
+                }
+                else
+                {
+                    if (allRockets[(int)countRSystem].trig != (int)trig)
+                    {
+                        int IDR1 = allRockets[(int)countRSystem].IDR;
+                        takeTwoValue(mr.IDR,IDR1);
+                        allRockets.Remove((int)countRSystem);
+                    }
+                }
+
+                if ((bool)exploydEvent)
+                {
+                    exploydRocketbyID((int)countRSystem);
+                }
+
+                //if ((int)trig == 1)
+                //{
+                //    if (!tt0.ContainsKey((string)pID1))
+                //    {
+                //        tt0.Add((string)pID1, (int)idR);
+                //    }
+                //}
+                //if ((int)trig == 0)
+                //{
+                //    if (!tt1.ContainsKey((string)pID1))
+                //    {
+                //        tt1.Add((string)pID1, (int)idR);
+                //    }
+                //}
+
+                //if (tt0.Count==1 && tt1.Count==1)
+                //{
+                //    takeTwoValue(tt0.First().Value, tt1.First().Value);
+                //    tt0.Clear();
+                //    tt1.Clear();
+                //}
+
+
                 //var lines1 = p3.Select(kvp => kvp.Key + ": " + kvp.Value.ToString());
                 //string a1 = string.Join(Environment.NewLine, lines1);
                 //Debug.Log(a1);
 
-                var pID1 = pararmsRocketSystem["playerID"];
-                var trig = pararmsRocketSystem["trig"];
-                var idR = pararmsRocketSystem["idRocket"];
-
-
-                if ((int)trig != -1)
-                {
-                    //Debug.Log(pID1 + " " + $"{trig}" + " " + $"{idR}");
-
-                    if ((int)trig == 1)
-                    {
-                        RocketTrigRightPlayer1[(int)pID1] = (int)idR;
-                    }
-                    
-                    if ((int)trig == 0)
-                    {
-                        RocketTrigRightPlayer2[(int)pID1] = (int)idR;
-                    }
-                }
-
-                if (RocketTrigRightPlayer1.Count == 2 && RocketTrigRightPlayer2.Count == 2)
-                {
-                    DauRazreshenie(RocketTrigRightPlayer1, RocketTrigRightPlayer2);
-                }
 
                 break;
         }
@@ -140,11 +185,21 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
         var slot = hashPlayer["slot"];
         var icon = hashPlayer["iconCard"];
         var tagTarget = hashPlayer["tagSlot"];
+
+        var timeID = hashPlayer["TimeID"];
+
+        //int timeID = RocketId.idRocket;
+        //Debug.Log((int)timeID);
+
         foreach (var player in players.OrderBy(p => p.photonView.Owner.ActorNumber))
         {
             if (player.photonView.ViewID != (int)pID)
             {
-                player.ChangeEnemyShipContent((string)g, (string)slot, (string)icon, (string) tagTarget);
+                player.ChangeEnemyShipContent((string)slot, (int)timeID);
+            }
+            if (player.photonView.ViewID == (int)pID)
+            {
+                player.CreatePreFab((string)slot, (int)timeID);
             }
         }
     }
@@ -163,18 +218,23 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
             }
         }
     }
-    public void DauRazreshenie(Dictionary<int, int> rocketTrigRightPlayer1, Dictionary<int, int> rocketTrigRightPlayer2)
+
+    public void takeTwoValue(int trig0, int trig1)
     {
         foreach (var player in players)
         {
-            Debug.Log(rocketTrigRightPlayer1[player.photonView.ViewID] + " is razrehenie" );
-            player.TriggerActivateP1(rocketTrigRightPlayer1[player.photonView.ViewID]);
+            player.TriggerActivateP1(trig0);
+            player.TriggerActivateP1(trig1);
+        }
+        //trig0 = new Dictionary<int, MyRocket>();
+        //trig1 = new Dictionary<int, MyRocket>();
+    }
 
-            player.TriggerActivateP1(rocketTrigRightPlayer2[player.photonView.ViewID]);
-            
-
-            RocketTrigRightPlayer1 = new Dictionary<int, int>();
-            RocketTrigRightPlayer2 = new Dictionary<int, int>();
+    public void exploydRocketbyID(int countRSystem)
+    {
+        foreach (var player in players)
+        {
+            player.TakeDestroyRocket(countRSystem);
         }
     }
 

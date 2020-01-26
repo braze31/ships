@@ -17,6 +17,7 @@ TagManager:
   - Rocket
   - RocketP1
   - RocketP2
+  - ping
   layers:
   - Default
   - TransparentFX

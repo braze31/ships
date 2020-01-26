@@ -29,65 +29,43 @@ public class PlayerControls : MonoBehaviour, IPunObservable
     private List<Rocket> RocketsSystem;
     [SerializeField]
     private Dictionary<int,Rocket> RocketsIDs = new Dictionary<int, Rocket>();
+
+    private GameObject yourPing;
+    private int TimeID;
+
     // Start is called before the first frame update
+    void Start()
+    {
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
+        photonView = GetComponent<PhotonView>();
+        PrefabCanvas.name = $"{photonView.ViewID} ID# - CanvasForEnemyPlayerName";
+        playerCanvas = Instantiate(PrefabCanvas);
+        yourPing = GameObject.FindGameObjectWithTag("ping");
+        gameObject.name = $"{photonView.ViewID} - PlayerName";
+        // add to canvascontroller all players which connected this room.
+        FindObjectOfType<Wolrd>().AddPlayer(this);
+    }
 
-
-    public void ChangeEnemyShipContent(string guns, string targetName, string nameCard, string tag)
+    // CREATE if on event FROM another player
+    public void ChangeEnemyShipContent(string targetName, int timeID)
     {
         if (photonView.IsMine)
         {
-            if (guns == Rocket.name)
+            GameObject enemyShip = GameObject.FindGameObjectWithTag("Enemy");
+            Image[] fALL = enemyShip.GetComponentsInChildren<Image>();
+            foreach (var item in fALL)
             {
-                GameObject enemyShip = GameObject.FindGameObjectWithTag("Enemy");
-                Image[] fALL = enemyShip.GetComponentsInChildren<Image>();
-                foreach (var item in fALL)
+                if (targetName == item.name)
                 {
-                    if (targetName == item.name)
-                    {
-                        item.tag = "SlotGunFull";
-                        string tag2 = "RocketP2";
-                        StartCoroutine(INSTrocketBytimeNtimes(item,enemyShip,tag2));
+                    item.tag = "SlotGunFull";
+                    StartCoroutine(INSTrocketBytimeNtimes(item,enemyShip,timeID));
                         
-                    }
                 }
             }
         }
     }
-
-    IEnumerator INSTrocketBytimeNtimes(Image item, GameObject enemyShip, string tag)
-    {
-        for (int k = 0; k < 3; k++)
-        {
-            Vector3 pointToTravel = item.GetComponent<RectTransform>().localPosition;
-            GameObject myNewS = Instantiate(Rocket, pointToTravel, Quaternion.Euler(0f, 0f, 0f));
-            Image i = myNewS.GetComponentInChildren<Image>().GetComponent<Image>();
-
-            item.color = new Color(item.color.r, item.color.g, item.color.b, 255f);
-            item.sprite = i.sprite;
-            myNewS.tag = tag;
-            StartCoroutine(ResetSlotDeleteIcon(item));
-
-            // need anchor?
-            //myNewS.GetComponent<RectTransform>().anchoredPosition = new Vector3(pointToTravel.x,pointToTravel.y,pointToTravel.z);
-
-            Rocket r = myNewS.GetComponent<Rocket>();
-            RocketsSystem.Add(r);
-
-            myNewS.transform.SetParent(enemyShip.transform, false);
-            yield return new WaitForSeconds(1.5f);
-        }
-        item.tag = "SlotGun";
-    }
-
-
-    IEnumerator ResetSlotDeleteIcon(Image icon)
-    {
-        yield return new WaitForSeconds(3);
-        icon.color = new Color(icon.color.r, icon.color.g, icon.color.b, 0f);
-        //icon.tag = "SlotGun";
-    }
-
-    public void CreatePreFab(string targetName)
+    // CREATE if on event FROM self player
+    public void CreatePreFab(string targetName, int timeID)
     {
         if (photonView.IsMine)
         {
@@ -97,11 +75,51 @@ public class PlayerControls : MonoBehaviour, IPunObservable
             {
                 if (targetName == item.name)
                 {
-                    string tag1 = "RocketP1";
-                    StartCoroutine(INSTrocketBytimeNtimes(item, pShip, tag1));
+                    item.tag = "SlotGunFull";
+                    StartCoroutine(INSTrocketBytimeNtimes(item, pShip,timeID));
                 }
             }
         }
+    }
+    IEnumerator INSTrocketBytimeNtimes(Image item, GameObject enemyShip,int timeID)
+    {
+        for (int k = 0; k < 3; k++)
+        {
+            Vector3 pointToTravel = item.GetComponent<RectTransform>().localPosition;
+            GameObject myNewS = Instantiate(Rocket, pointToTravel, Quaternion.Euler(0f, 0f, 0f));
+            Image i = myNewS.GetComponentInChildren<Image>().GetComponent<Image>();
+
+            item.color = new Color(item.color.r, item.color.g, item.color.b, 255f);
+            item.sprite = i.sprite;
+            StartCoroutine(ResetSlotDeleteIcon(item));
+
+            // need anchor?
+            //myNewS.GetComponent<RectTransform>().anchoredPosition = new Vector3(pointToTravel.x,pointToTravel.y,pointToTravel.z);
+
+            Rocket r = myNewS.GetComponent<Rocket>();
+            RocketsSystem.Add(r);
+
+            r.countRSystem = timeID + k;
+
+            myNewS.transform.SetParent(enemyShip.transform, false);
+
+            RocketsIDs[myNewS.GetInstanceID()] = r;
+            yield return new WaitForSeconds(1.5f);
+        }
+        item.tag = "SlotGun";
+    }
+
+    int TimeCreateRocketForID()
+    {
+        int t = UnityEngine.Random.Range(1000000, 9999999);
+        return t;
+    }
+
+    IEnumerator ResetSlotDeleteIcon(Image icon)
+    {
+        yield return new WaitForSeconds(4.5f);
+        icon.color = new Color(icon.color.r, icon.color.g, icon.color.b, 0f);
+        //icon.tag = "SlotGun";
     }
 
 
@@ -155,17 +173,6 @@ public class PlayerControls : MonoBehaviour, IPunObservable
         }
     }
 
-    void Start()
-    {
-        Screen.sleepTimeout = SleepTimeout.NeverSleep;
-        photonView = GetComponent<PhotonView>();
-        PrefabCanvas.name = $"ID# {photonView.ViewID} - CanvasForEnemyPlayerName";
-        playerCanvas = Instantiate(PrefabCanvas);
-        gameObject.name = $"{photonView.ViewID} - PlayerName";
-        // add to canvascontroller all players which connected this room.
-        FindObjectOfType<Wolrd>().AddPlayer(this);
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -178,11 +185,11 @@ public class PlayerControls : MonoBehaviour, IPunObservable
             evData["guns"] = "Rocket";
             evData["iconCard"] = iconCard.sprite.name;
 
-
             evData["playerID"] = photonView.ViewID;
             evData["slot"] = Target.name;
             evData["tagSlot"] = Target.tag;
             evData["resor"] = currResPlayer;
+            evData["TimeID"] = TimeID;
 
             PhotonNetwork.RaiseEvent(1, evData, options, sendOptions);
             image = null;
@@ -199,46 +206,7 @@ public class PlayerControls : MonoBehaviour, IPunObservable
 
             checkHP();
         }
-
-        GameObject[] tag_1 = GameObject.FindGameObjectsWithTag("RocketP1");
-
-        GameObject[] tag_2 = GameObject.FindGameObjectsWithTag("RocketP2");
-
-        GameObject[] ALLR = tag_1.Concat(tag_2).ToArray();
-        //GameObject[] ALLR = GameObject.FindGameObjectsWithTag("Rocket");
-
-        if (ALLR.Length>=1)
-        {
-
-            foreach (GameObject p in ALLR)
-            {
-                Debug.Log(p.name);
-                Rocket r = p.GetComponent<Rocket>();
-                if (r.rightTrigg || r.leftTrigg)
-                {
-                    RaiseEventOptions options1 = new RaiseEventOptions { Receivers = ReceiverGroup.All };
-                    SendOptions sendOptions1 = new SendOptions { Reliability = true };
-                    ExitGames.Client.Photon.Hashtable evData1 = new ExitGames.Client.Photon.Hashtable();
-
-                    evData1["playerID"] = photonView.ViewID;
-                    evData1["trig"] = -1;
-                    RocketsIDs[r.gameObject.GetInstanceID()] = r;
-
-                    if (r.rightTrigg)
-                    {
-                        evData1["trig"] = 1;
-                        evData1["idRocket"] = r.gameObject.GetInstanceID();
-                        Debug.Log(r.gameObject.GetInstanceID() + " is trig");
-                    }
-                    if (r.leftTrigg)
-                    {
-                        evData1["trig"] = 0;
-                        evData1["idRocket"] = r.gameObject.GetInstanceID();
-                    }
-                    PhotonNetwork.RaiseEvent(3, evData1, options1, sendOptions1);
-                }
-            }
-        }
+        yourPing.GetComponent<Text>().text = "Ping: " + PhotonNetwork.GetPing().ToString();
     }
 
     public void TriggerActivateP1(int id)
@@ -250,9 +218,17 @@ public class PlayerControls : MonoBehaviour, IPunObservable
         }
     }
 
-    public void TriggerActivateP2()
+    public void TakeDestroyRocket(int id)
     {
+        foreach (var item in RocketsIDs)
+        {
+            Debug.Log("destroy!");
+            if(item.Value.countRSystem == id)
+            {
+                item.Value.EXPLOYD();
+            }
 
+        }
     }
 
     void checkHP()
@@ -286,14 +262,12 @@ public class PlayerControls : MonoBehaviour, IPunObservable
         //Un-subscribe to event
         DropZone.OnSelectedEvent -= SelectAction;
     }
-
-
-
     //This will be called when invoked
     //This method event for object card which droped on table.
-    void SelectAction(GameObject target, GameObject cardStats, float currRes, Image iconGun)
+    void SelectAction(GameObject target, GameObject cardStats, float currRes, Image iconGun, int timeID)
     {
-        CreatePreFab(target.name);
+        //CreatePreFab(target.name);
+        TimeID = timeID;
         Target = target;
         currResPlayer = currRes;
         iconCard = iconGun;
