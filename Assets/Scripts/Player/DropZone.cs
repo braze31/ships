@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System;
+using System.Linq;
 
 public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
 {
@@ -15,6 +16,13 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
     public static event SelectAction OnSelectedEvent;
 
     GameObject ParentCanvas;
+    public RectTransform posForR;
+
+    void Start()
+    {
+        //Debug.Log(gameObject.name);
+
+    }
 
     public void OnDrop(PointerEventData eventData)
     {
@@ -34,7 +42,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
                 image = gameObject.GetComponent<Image>();
                 image.color = new Color(image.color.r, image.color.g, image.color.b, 255f);
                 gameObject.GetComponent<Image>().sprite = iconGun.sprite;
-                d.parentToReturnTo = this.transform;
+                d.parentToReturnTo = posForR.transform;
                 // this bad solution
                 // something wrong on this eventData? Can't do set point parentToReturn correct
                 // object Card exist, but not delete

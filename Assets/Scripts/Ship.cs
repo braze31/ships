@@ -1,11 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using CodeMonkey.Utils;
 using UnityEngine.UI;
-using Photon.Realtime;
-using ExitGames.Client.Photon;
-using Photon.Pun;
 
 public class Ship : MonoBehaviour
 {
@@ -39,7 +35,7 @@ public class Ship : MonoBehaviour
     {
         curHealth = health - damage;
         health = curHealth;
-        healthBar.SetSize(health);
+        healthBar.SetSize(damage);
     }
 
     void Update()

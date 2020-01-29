@@ -85,7 +85,10 @@ public class PlayerControls : MonoBehaviour, IPunObservable
     {
         for (int k = 0; k < 3; k++)
         {
-            Vector3 pointToTravel = item.GetComponent<RectTransform>().localPosition;
+
+            Vector3 pointToTravel = item.gameObject.GetComponentInChildren<DropZone>().posForR.GetComponent<RectTransform>().localPosition;
+
+            //Vector3 pointToTravel = item.GetComponent<RectTransform>().localPosition;
             GameObject myNewS = Instantiate(Rocket, pointToTravel, Quaternion.Euler(0f, 0f, 0f));
             Image i = myNewS.GetComponentInChildren<Image>().GetComponent<Image>();
 

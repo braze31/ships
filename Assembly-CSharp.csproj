@@ -53,25 +53,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\CodeMonkey\Assets.cs" />
-     <Compile Include="Assets\CodeMonkey\CMDebug.cs" />
-     <Compile Include="Assets\CodeMonkey\MonoBehaviours\CameraFollow.cs" />
-     <Compile Include="Assets\CodeMonkey\MonoBehaviours\CameraFollowSetup.cs" />
-     <Compile Include="Assets\CodeMonkey\MonoBehaviours\ComponentActions.cs" />
-     <Compile Include="Assets\CodeMonkey\MonoBehaviours\PositionRendererSorter.cs" />
-     <Compile Include="Assets\CodeMonkey\Utils\Button_Sprite.cs" />
-     <Compile Include="Assets\CodeMonkey\Utils\Button_UI.cs" />
-     <Compile Include="Assets\CodeMonkey\Utils\FunctionPeriodic.cs" />
-     <Compile Include="Assets\CodeMonkey\Utils\FunctionTimer.cs" />
-     <Compile Include="Assets\CodeMonkey\Utils\FunctionUpdater.cs" />
-     <Compile Include="Assets\CodeMonkey\Utils\UI_Bar.cs" />
-     <Compile Include="Assets\CodeMonkey\Utils\UI_BarMultiple.cs" />
-     <Compile Include="Assets\CodeMonkey\Utils\UI_Sprite.cs" />
-     <Compile Include="Assets\CodeMonkey\Utils\UI_TextComplex.cs" />
-     <Compile Include="Assets\CodeMonkey\Utils\UtilsClass.cs" />
-     <Compile Include="Assets\CodeMonkey\Utils\World_Bar.cs" />
-     <Compile Include="Assets\CodeMonkey\Utils\World_Mesh.cs" />
-     <Compile Include="Assets\CodeMonkey\Utils\World_Sprite.cs" />
      <Compile Include="Assets\Photon\PhotonChat\Demos\Common\EventSystemSpawner.cs" />
      <Compile Include="Assets\Photon\PhotonChat\Demos\Common\OnStartDelete.cs" />
      <Compile Include="Assets\Photon\PhotonChat\Demos\Common\TextButtonTransition.cs" />
@@ -103,10 +84,8 @@
      <Compile Include="Assets\Scripts\Wolrd.cs" />
      <Compile Include="Assets\Scripts\WorldDrawer.cs" />
      <Compile Include="Assets\Scripts\projSystem\Rocket.cs" />
-     <Compile Include="Assets\Scripts\projSystem\RocketId.cs" />
      <Compile Include="Assets\Scripts\quit.cs" />
      <None Include="Assets\Photon\PhotonUnityNetworking\changelog.txt" />
-     <None Include="Assets\CodeMonkey\README.txt" />
      <None Include="Assets\Photon\PhotonLibs\changes-library.txt" />
      <None Include="Assets\Photon\PhotonUnityNetworking\readme.txt" />
      <None Include="Assets\Photon\PhotonLibs\Photon3Unity3D.xml" />
