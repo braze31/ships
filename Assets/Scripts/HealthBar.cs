@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
-    private Transform bar;
     public Image BarHPstatus;
     private bool damageStatus = false;
     private float UNTILdamage;
@@ -13,10 +12,6 @@ public class HealthBar : MonoBehaviour
 
     private void Start()
     {
-        bar = transform.Find("Bar");
-        //BarHPstatus = bar.GetComponent<Image>();
-        //Debug.Log(BarHPstatus.fillAmount);
-        
         UNTILdamage = 1f;
         AFTERdamage = 1f;
     }
@@ -32,16 +27,13 @@ public class HealthBar : MonoBehaviour
     {
         while (damageStatus)
         {
-            if (AFTERdamage <= UNTILdamage)
-            {
-                UNTILdamage -= Time.deltaTime * 0.01f;
-                BarHPstatus.fillAmount = UNTILdamage;
-
-            }
-            else
+            if (UNTILdamage <= AFTERdamage)
             {
                 damageStatus = false;
+                break;
             }
+            UNTILdamage -= Time.deltaTime * 0.1f;
+            BarHPstatus.fillAmount = UNTILdamage;
         }
     }
 }

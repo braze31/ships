@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1028936996406911174}
   - component: {fileID: 6099843333831592391}
   - component: {fileID: 2936633200313389272}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84,7 +84,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1384920272336751499}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -121,7 +121,7 @@ GameObject:
   - component: {fileID: 62919717228640623}
   - component: {fileID: 1356894745183412475}
   - component: {fileID: 1741296480710024455}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -199,8 +199,8 @@ GameObject:
   - component: {fileID: 9020509091902517799}
   - component: {fileID: 115347151609850022}
   - component: {fileID: 4582233895393721529}
-  - component: {fileID: 3089414238892326736}
-  m_Layer: 5
+  - component: {fileID: 4463357503402379245}
+  m_Layer: 8
   m_Name: Rocket
   m_TagString: Rocket
   m_Icon: {fileID: 0}
@@ -226,7 +226,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.49722221, y: 0.4962083}
   m_AnchorMax: {x: 0.535, y: 0.50200003}
-  m_AnchoredPosition: {x: 0.19999981, y: -0.26999998}
+  m_AnchoredPosition: {x: 0.20000076, y: -0.26999998}
   m_SizeDelta: {x: 165.4, y: 112.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5682475894612962615
@@ -320,7 +320,7 @@ MonoBehaviour:
   m_SynchronizePosition: 0
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
---- !u!50 &3089414238892326736
+--- !u!50 &4463357503402379245
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0

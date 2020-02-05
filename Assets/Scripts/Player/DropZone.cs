@@ -17,11 +17,12 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 
     GameObject ParentCanvas;
     public RectTransform posForR;
+    [SerializeField]
+    public HealthBarSystem healthBar;
 
     void Start()
     {
-        //Debug.Log(gameObject.name);
-
+        //Debug.Log(healthBar.gameObject);
     }
 
     public void OnDrop(PointerEventData eventData)
@@ -35,7 +36,8 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 
         if (gameObject.tag == "SlotGun" || gameObject.tag == "SlotGunFull")
         {
-            gameObject.tag = "SlotGunFull";
+            gameObject.GetComponentInChildren<RawImage>().tag = "SlotGunFull";
+            healthBar.EnableImageAndStartReduceHp(4.5f);
             if (d != null && SlotForCardEmpty)
             {
                 Image iconGun = d.Icon;
@@ -78,7 +80,22 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
         yield return new WaitForSeconds(4.5f);
         SlotForCardEmpty = true;
         //image.color = new Color(image.color.r, image.color.g, image.color.b, 0f);
-        gameObject.tag = "SlotGun";
+        gameObject.GetComponentInChildren<RawImage>().tag = "SlotGun";
+    }
+
+    void Update()
+    {
+        if (!SlotForCardEmpty)
+        {
+            if (gameObject.tag == "SlotGunFull")
+            {
+                healthBar.gameObject.GetComponent<Canvas>().enabled = true;
+            }
+        }
+        else
+        {
+            healthBar.gameObject.GetComponent<Canvas>().enabled = false;
+        }
     }
 
     public void OnPointerEnter(PointerEventData eventData)

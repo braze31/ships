@@ -57,9 +57,10 @@ public class PlayerControls : MonoBehaviour, IPunObservable
             {
                 if (targetName == item.name)
                 {
-                    item.tag = "SlotGunFull";
+                    //item.tag = "SlotGunFull";
+                    item.GetComponentInChildren<RawImage>().tag = "SlotGunFull";
                     StartCoroutine(INSTrocketBytimeNtimes(item,enemyShip,timeID));
-                        
+                    item.GetComponent<DropZone>().healthBar.EnableImageAndStartReduceHp(4.5f);  
                 }
             }
         }
@@ -75,7 +76,8 @@ public class PlayerControls : MonoBehaviour, IPunObservable
             {
                 if (targetName == item.name)
                 {
-                    item.tag = "SlotGunFull";
+                    //item.tag = "SlotGunFull";
+                    item.GetComponentInChildren<RawImage>().tag = "SlotGunFull";
                     StartCoroutine(INSTrocketBytimeNtimes(item, pShip,timeID));
                 }
             }
@@ -109,14 +111,11 @@ public class PlayerControls : MonoBehaviour, IPunObservable
             RocketsIDs[myNewS.GetInstanceID()] = r;
             yield return new WaitForSeconds(1.5f);
         }
-        item.tag = "SlotGun";
+        //item.tag = "SlotGun";
+        item.GetComponentInChildren<RawImage>().tag = "SlotGun";
+        item.GetComponent<DropZone>().healthBar.gameObject.GetComponent<Canvas>().enabled = false;
     }
 
-    int TimeCreateRocketForID()
-    {
-        int t = UnityEngine.Random.Range(1000000, 9999999);
-        return t;
-    }
 
     IEnumerator ResetSlotDeleteIcon(Image icon)
     {

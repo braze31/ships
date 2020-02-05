@@ -6,6 +6,7 @@ ScriptsOnlyBuild:
     - DropZone
     - GameManager
     - HealthBar
+    - HealthBarSystem
     - LeaveFromRoom
     - LobbyManager
     - PlayerControls
@@ -14,6 +15,8 @@ ScriptsOnlyBuild:
     - Ship
     - Wolrd
     - quit
+    NavMeshComponents.dll:
+    - UnityEngine.AI.NavMeshModifier
     PhotonUnityNetworking.Demos.dll:
     - Photon.Pun.Demo.Asteroids.Asteroid
     - Photon.Pun.Demo.Asteroids.Bullet
@@ -41,8 +44,10 @@ ScriptsOnlyBuild:
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.StateNode
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
@@ -100,77 +105,81 @@ ScriptsOnlyBuild:
     - Class: 104
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 10942}
+      Script: {instanceID: 10950}
     - Class: 114
-      Script: {instanceID: 11066}
+      Script: {instanceID: 11048}
     - Class: 114
-      Script: {instanceID: 11102}
+      Script: {instanceID: 11086}
     - Class: 114
-      Script: {instanceID: 11118}
+      Script: {instanceID: 11122}
     - Class: 114
-      Script: {instanceID: 11126}
+      Script: {instanceID: 11138}
     - Class: 114
-      Script: {instanceID: 11164}
+      Script: {instanceID: 11146}
     - Class: 114
-      Script: {instanceID: 11208}
+      Script: {instanceID: 11184}
     - Class: 114
-      Script: {instanceID: 11454}
+      Script: {instanceID: 11230}
     - Class: 114
-      Script: {instanceID: 11602}
+      Script: {instanceID: 11484}
     - Class: 114
-      Script: {instanceID: 11686}
+      Script: {instanceID: 11638}
     - Class: 114
-      Script: {instanceID: 11748}
+      Script: {instanceID: 11722}
     - Class: 114
-      Script: {instanceID: 11754}
+      Script: {instanceID: 11786}
     - Class: 114
-      Script: {instanceID: 11954}
+      Script: {instanceID: 11792}
     - Class: 114
-      Script: {instanceID: 12024}
+      Script: {instanceID: 12004}
     - Class: 114
-      Script: {instanceID: 12032}
+      Script: {instanceID: 12078}
     - Class: 114
-      Script: {instanceID: 12150}
+      Script: {instanceID: 12086}
     - Class: 114
-      Script: {instanceID: 12172}
+      Script: {instanceID: 12206}
     - Class: 114
-      Script: {instanceID: 12202}
+      Script: {instanceID: 12228}
     - Class: 114
-      Script: {instanceID: 12282}
+      Script: {instanceID: 12258}
     - Class: 114
       Script: {instanceID: 12338}
     - Class: 114
-      Script: {instanceID: 12350}
+      Script: {instanceID: 12394}
     - Class: 114
-      Script: {instanceID: 12370}
+      Script: {instanceID: 12406}
     - Class: 114
-      Script: {instanceID: 12378}
+      Script: {instanceID: 12426}
     - Class: 114
-      Script: {instanceID: 12418}
+      Script: {instanceID: 12434}
     - Class: 114
-      Script: {instanceID: 12546}
+      Script: {instanceID: 12478}
     - Class: 114
-      Script: {instanceID: 12586}
+      Script: {instanceID: 12608}
     - Class: 114
-      Script: {instanceID: 12594}
+      Script: {instanceID: 12648}
     - Class: 114
-      Script: {instanceID: 12600}
+      Script: {instanceID: 12656}
     - Class: 114
-      Script: {instanceID: 12736}
+      Script: {instanceID: 12664}
     - Class: 114
-      Script: {instanceID: 13000}
+      Script: {instanceID: 12806}
     - Class: 114
-      Script: {instanceID: 13110}
+      Script: {instanceID: 12922}
     - Class: 114
-      Script: {instanceID: 13170}
+      Script: {instanceID: 13078}
     - Class: 114
-      Script: {instanceID: 13180}
+      Script: {instanceID: 13190}
     - Class: 114
-      Script: {instanceID: 13194}
+      Script: {instanceID: 13254}
     - Class: 114
-      Script: {instanceID: 13232}
+      Script: {instanceID: 13264}
     - Class: 114
-      Script: {instanceID: 13240}
+      Script: {instanceID: 13278}
+    - Class: 114
+      Script: {instanceID: 13318}
+    - Class: 114
+      Script: {instanceID: 13326}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -208,6 +217,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 21
       Script: {instanceID: 0}
+    - Class: 23
+      Script: {instanceID: 0}
     - Class: 28
       Script: {instanceID: 0}
     - Class: 48
@@ -227,51 +238,55 @@ ScriptsOnlyBuild:
     - Class: 104
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 10942}
+      Script: {instanceID: 10950}
     - Class: 114
-      Script: {instanceID: 11066}
+      Script: {instanceID: 11048}
     - Class: 114
-      Script: {instanceID: 11164}
+      Script: {instanceID: 11086}
     - Class: 114
-      Script: {instanceID: 11208}
+      Script: {instanceID: 11184}
     - Class: 114
-      Script: {instanceID: 11454}
+      Script: {instanceID: 11230}
     - Class: 114
-      Script: {instanceID: 11686}
+      Script: {instanceID: 11484}
     - Class: 114
-      Script: {instanceID: 11748}
+      Script: {instanceID: 11722}
     - Class: 114
-      Script: {instanceID: 12024}
+      Script: {instanceID: 11786}
     - Class: 114
-      Script: {instanceID: 12032}
+      Script: {instanceID: 12078}
     - Class: 114
-      Script: {instanceID: 12150}
+      Script: {instanceID: 12086}
     - Class: 114
-      Script: {instanceID: 12172}
+      Script: {instanceID: 12206}
     - Class: 114
-      Script: {instanceID: 12338}
+      Script: {instanceID: 12228}
     - Class: 114
-      Script: {instanceID: 12350}
+      Script: {instanceID: 12394}
     - Class: 114
-      Script: {instanceID: 12418}
+      Script: {instanceID: 12406}
     - Class: 114
-      Script: {instanceID: 12546}
+      Script: {instanceID: 12478}
     - Class: 114
-      Script: {instanceID: 12736}
+      Script: {instanceID: 12608}
     - Class: 114
-      Script: {instanceID: 13000}
+      Script: {instanceID: 12806}
     - Class: 114
-      Script: {instanceID: 13092}
+      Script: {instanceID: 12922}
     - Class: 114
-      Script: {instanceID: 13110}
+      Script: {instanceID: 13078}
     - Class: 114
-      Script: {instanceID: 13170}
+      Script: {instanceID: 13172}
     - Class: 114
-      Script: {instanceID: 13180}
-    - Class: 114
-      Script: {instanceID: 13194}
+      Script: {instanceID: 13190}
     - Class: 114
       Script: {instanceID: 13254}
+    - Class: 114
+      Script: {instanceID: 13264}
+    - Class: 114
+      Script: {instanceID: 13278}
+    - Class: 114
+      Script: {instanceID: 13340}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -341,6 +356,12 @@ ScriptsOnlyBuild:
     className: AudioPlayableAsset
   - hash:
       serializedVersion: 2
+      Hash: 8a4ecc6114cf107a280fc0a4e6b393f4
+    assemblyName: NavMeshComponentsExamples.dll
+    namespaceName: 
+    className: MeshTool
+  - hash:
+      serializedVersion: 2
       Hash: bf530eb47e6a86dcee1d42e40c3b7ac8
     assemblyName: Unity.TextMeshPro.dll
     namespaceName: TMPro
@@ -365,6 +386,12 @@ ScriptsOnlyBuild:
     className: GraphicToggleIsOnTransition
   - hash:
       serializedVersion: 2
+      Hash: 2b19be13f00df62e6d4d4f5539bcad51
+    assemblyName: NavMeshComponents.dll
+    namespaceName: UnityEngine.AI
+    className: NavMeshModifier
+  - hash:
+      serializedVersion: 2
       Hash: c656dcc13ae391b68d594cc8f9c590b0
     assemblyName: PhotonUnityNetworking.Demos.dll
     namespaceName: Photon.Pun.Demo.Cockpit
@@ -377,13 +404,19 @@ ScriptsOnlyBuild:
     className: PhotonStatsGui
   - hash:
       serializedVersion: 2
+      Hash: c8c672fee8a258266e51b55a210b8083
+    assemblyName: NavMeshComponents.dll
+    namespaceName: UnityEngine.AI
+    className: NavMeshLink
+  - hash:
+      serializedVersion: 2
       Hash: 8ae3331b163cc121825eeed3975d6c4d
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ChatGui
   - hash:
       serializedVersion: 2
-      Hash: 92e61a77e830bf83738980583581e050
+      Hash: 45c75e8422455f527065f3b8200e4e37
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: DropZone
@@ -557,6 +590,12 @@ ScriptsOnlyBuild:
     className: RoomListCell
   - hash:
       serializedVersion: 2
+      Hash: de0e373f9e7fb0fa48caeb13c2e57300
+    assemblyName: NavMeshComponentsExamples.dll
+    namespaceName: 
+    className: DestroyOnTrigger
+  - hash:
+      serializedVersion: 2
       Hash: c87a2744a4fec8052f557862b102c4e4
     assemblyName: PhotonUnityNetworking.Demos.dll
     namespaceName: Photon.Pun.Demo.Cockpit
@@ -629,6 +668,12 @@ ScriptsOnlyBuild:
     className: SendRateOnSerializeField
   - hash:
       serializedVersion: 2
+      Hash: 1f53cbc473f31cd3401926bb2a2275f8
+    assemblyName: NavMeshComponentsExamples.dll
+    namespaceName: 
+    className: AgentLinkMover
+  - hash:
+      serializedVersion: 2
       Hash: 9d65954b754eaf4accff343c2e40aec1
     assemblyName: PhotonUnityNetworking.Utilities.dll
     namespaceName: Photon.Pun.UtilityScripts
@@ -647,6 +692,12 @@ ScriptsOnlyBuild:
     className: LeaveFromRoom
   - hash:
       serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: NavMeshComponentsExamples.dll
+    namespaceName: 
+    className: ClickToMove
+  - hash:
+      serializedVersion: 2
       Hash: 00274a21279f5cb831ce20f895049e38
     assemblyName: Unity.TextMeshPro.dll
     namespaceName: TMPro
@@ -657,6 +708,12 @@ ScriptsOnlyBuild:
     assemblyName: PhotonUnityNetworking.Demos.dll
     namespaceName: Photon.Pun.Demo.Asteroids
     className: AsteroidsGameManager
+  - hash:
+      serializedVersion: 2
+      Hash: f2d6f78254ca93fbc5b1ada07c8dcb72
+    assemblyName: NavMeshComponentsExamples.dll
+    namespaceName: 
+    className: FreeCam
   - hash:
       serializedVersion: 2
       Hash: 5ab533713adae59372fb3e10a585c186
@@ -737,6 +794,12 @@ ScriptsOnlyBuild:
     className: ControlPlayableAsset
   - hash:
       serializedVersion: 2
+      Hash: af194f19ec5528d7d0aee06309df5c6b
+    assemblyName: NavMeshComponentsExamples.dll
+    namespaceName: 
+    className: Oscillator
+  - hash:
+      serializedVersion: 2
       Hash: 4a8ba6ed903730451f772f718f8624e3
     assemblyName: PhotonUnityNetworking.Demos.dll
     namespaceName: Photon.Pun.Demo.Cockpit.Forms
@@ -797,6 +860,12 @@ ScriptsOnlyBuild:
     className: CurrentRoomPlayerTtlProperty
   - hash:
       serializedVersion: 2
+      Hash: 7299a528424874bcf6b5736b5305ac37
+    assemblyName: NavMeshComponents.dll
+    namespaceName: UnityEngine.AI
+    className: NavMeshModifierVolume
+  - hash:
+      serializedVersion: 2
       Hash: f941c3a384168571b7d90f58ec4986bc
     assemblyName: PhotonUnityNetworking.Demos.dll
     namespaceName: Photon.Pun.Demo.Cockpit
@@ -807,6 +876,12 @@ ScriptsOnlyBuild:
     assemblyName: PhotonUnityNetworking.Demos.dll
     namespaceName: Photon.Pun.Demo.Cockpit
     className: CurrentRoomIsOpenToggle
+  - hash:
+      serializedVersion: 2
+      Hash: 758b5d99bd0554ee74733433b3433b11
+    assemblyName: NavMeshComponentsExamples.dll
+    namespaceName: 
+    className: DungeonManager
   - hash:
       serializedVersion: 2
       Hash: b3ab2106268377ffe25dd18ac23dca28
@@ -927,6 +1002,12 @@ ScriptsOnlyBuild:
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: quit
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: NavMeshComponentsExamples.dll
+    namespaceName: 
+    className: NavMeshSourceTag
   - hash:
       serializedVersion: 2
       Hash: d329540117e6b6c523bded68046af505
@@ -1121,6 +1202,12 @@ ScriptsOnlyBuild:
     className: LobbyMainPanel
   - hash:
       serializedVersion: 2
+      Hash: 8d722e874bde92513d295f5d6bb98e69
+    assemblyName: NavMeshComponentsExamples.dll
+    namespaceName: 
+    className: RandomInstancing
+  - hash:
+      serializedVersion: 2
       Hash: 5ad4aa237d47ac2bab17bacb672edf7a
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.UI
@@ -1167,6 +1254,12 @@ ScriptsOnlyBuild:
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: FriendItem
+  - hash:
+      serializedVersion: 2
+      Hash: 1f1a3b63bcb87e63110a26427883b8e5
+    assemblyName: NavMeshComponentsExamples.dll
+    namespaceName: 
+    className: EnableIffSleeping
   - hash:
       serializedVersion: 2
       Hash: c1933cc0a2f4ff6eb13333347497beb3
@@ -1235,6 +1328,12 @@ ScriptsOnlyBuild:
     className: PlayerManager
   - hash:
       serializedVersion: 2
+      Hash: 74abb616a7b65b377f11c8a31f2ddea6
+    assemblyName: NavMeshComponentsExamples.dll
+    namespaceName: 
+    className: LocalNavMeshBuilder
+  - hash:
+      serializedVersion: 2
       Hash: a8d3c943d9168cbdd8596f040ff02ff4
     assemblyName: PhotonUnityNetworking.Demos.dll
     namespaceName: Photon.Pun.Demo.Asteroids
@@ -1269,6 +1368,12 @@ ScriptsOnlyBuild:
     assemblyName: PhotonUnityNetworking.Demos.dll
     namespaceName: Photon.Pun.Demo.SlotRacer
     className: SlotLanes
+  - hash:
+      serializedVersion: 2
+      Hash: 8d4458b476a9a4dd8df843a849fcfffa
+    assemblyName: NavMeshComponents.dll
+    namespaceName: UnityEngine.AI
+    className: NavMeshSurface
   - hash:
       serializedVersion: 2
       Hash: 3dbccc5793489caad80e37a33f1d2d30
@@ -1332,6 +1437,12 @@ ScriptsOnlyBuild:
   - hash:
       serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: HealthBarSystem
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
     assemblyName: PhotonUnityNetworking.Demos.dll
     namespaceName: Photon.Pun.Demo.Cockpit
     className: CrcCheckToggle
@@ -1347,6 +1458,12 @@ ScriptsOnlyBuild:
     assemblyName: Assembly-CSharp.dll
     namespaceName: Photon.Chat.UtilityScripts
     className: OnStartDelete
+  - hash:
+      serializedVersion: 2
+      Hash: 0e57a341531c2c0a72d6b366fd018e5b
+    assemblyName: NavMeshComponentsExamples.dll
+    namespaceName: 
+    className: NavMeshPrefabInstance
   - hash:
       serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
@@ -1419,6 +1536,12 @@ ScriptsOnlyBuild:
     assemblyName: PhotonUnityNetworking.Demos.dll
     namespaceName: Photon.Pun.Demo.SlotRacer
     className: SlotRacerSplashScreen
+  - hash:
+      serializedVersion: 2
+      Hash: 3c1be37cdbc0f948a3bf53258c6ef03d
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Pathfinding
   - hash:
       serializedVersion: 2
       Hash: d1f07c9e64b7817e6271f80bb03de25f
@@ -1505,6 +1628,12 @@ ScriptsOnlyBuild:
     className: OfflineModeProperty
   - hash:
       serializedVersion: 2
+      Hash: c05d535bfcb6e005cb05d18d0df0e685
+    assemblyName: NavMeshComponentsExamples.dll
+    namespaceName: 
+    className: RandomWalk
+  - hash:
+      serializedVersion: 2
       Hash: 3f52d34ea17dfc771004b80f5d492445
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.EventSystems
@@ -1587,6 +1716,12 @@ ScriptsOnlyBuild:
     assemblyName: PhotonUnityNetworking.Demos.dll
     namespaceName: Photon.Pun.Demo.Procedural
     className: WorldGenerator
+  - hash:
+      serializedVersion: 2
+      Hash: 142ac660d938c77d06a40116647495c6
+    assemblyName: NavMeshComponentsExamples.dll
+    namespaceName: 
+    className: SpawnPrefabOnKeyDown
   - hash:
       serializedVersion: 2
       Hash: 55fd795e51da61232a17e9ce0af59f52
