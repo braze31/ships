@@ -58,9 +58,19 @@ public class PlayerControls : MonoBehaviour, IPunObservable
                 if (targetName == item.name)
                 {
                     //item.tag = "SlotGunFull";
-                    item.GetComponentInChildren<RawImage>().tag = "SlotGunFull";
-                    StartCoroutine(INSTrocketBytimeNtimes(item,enemyShip,timeID));
-                    item.GetComponent<DropZone>().healthBar.EnableImageAndStartReduceHp(4.5f);  
+                    string nameSlot;
+                    if (item.name == "BotGun1" || item.name == "BotGun")
+                    {
+                        item.transform.parent.Find("SlotBOT").GetComponent<RawImage>().tag = "SlotGunFull";
+                        nameSlot = "SlotBOT";
+                    }
+                    else
+                    {
+                        item.transform.parent.Find("SlotTOP").GetComponent<RawImage>().tag = "SlotGunFull";
+                        nameSlot = "SlotTOP";
+                    }
+                    StartCoroutine(INSTrocketBytimeNtimes(item,enemyShip,timeID, nameSlot));
+                    item.GetComponent<DropZone>().healthBar.EnableImageAndStartReduceHp(4.5f);
                 }
             }
         }
@@ -77,13 +87,24 @@ public class PlayerControls : MonoBehaviour, IPunObservable
                 if (targetName == item.name)
                 {
                     //item.tag = "SlotGunFull";
-                    item.GetComponentInChildren<RawImage>().tag = "SlotGunFull";
-                    StartCoroutine(INSTrocketBytimeNtimes(item, pShip,timeID));
+                    string nameSlot;
+                    if (item.name=="BotGun1" || item.name == "BotGun")
+                    {
+                        item.transform.parent.Find("SlotBOT").GetComponent<RawImage>().tag = "SlotGunFull";
+                        nameSlot = "SlotBOT";
+                    }
+                    else
+                    {
+                        item.transform.parent.Find("SlotTOP").GetComponent<RawImage>().tag = "SlotGunFull";
+                        nameSlot = "SlotTOP";
+                    }
+
+                    StartCoroutine(INSTrocketBytimeNtimes(item, pShip,timeID, nameSlot));
                 }
             }
         }
     }
-    IEnumerator INSTrocketBytimeNtimes(Image item, GameObject enemyShip,int timeID)
+    IEnumerator INSTrocketBytimeNtimes(Image item, GameObject enemyShip,int timeID,string nameSlot)
     {
         for (int k = 0; k < 3; k++)
         {
@@ -112,7 +133,7 @@ public class PlayerControls : MonoBehaviour, IPunObservable
             yield return new WaitForSeconds(1.5f);
         }
         //item.tag = "SlotGun";
-        item.GetComponentInChildren<RawImage>().tag = "SlotGun";
+        item.transform.parent.Find(nameSlot).GetComponent<RawImage>().tag = "SlotGun";
         item.GetComponent<DropZone>().healthBar.gameObject.GetComponent<Canvas>().enabled = false;
     }
 
@@ -204,7 +225,7 @@ public class PlayerControls : MonoBehaviour, IPunObservable
                 playerCanvas.GetComponentInChildren<Canvas>().GetComponent<Canvas>().enabled = true;
                 playerCanvas.GetComponent<PlayerStats>().enabled = true;
             }
-            ship = GameObject.Find("Ship-Player");
+            ship = GameObject.Find("Ship-Player-1");
 
             checkHP();
         }

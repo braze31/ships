@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class HealthBarSystem : MonoBehaviour
 {
     private Image bar;
-    private bool startReduce;
+    public bool startReduce;
     float fill = 1f;
     float time;
 

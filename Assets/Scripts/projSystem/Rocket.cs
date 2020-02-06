@@ -37,7 +37,7 @@ public class Rocket : MonoBehaviourPun
         StartCoroutine(disableCollider());
 
         var csharp = new GameObject("MyGO", typeof(RectTransform));
-        if (goPar.name == "Ship-Player")
+        if (goPar.name == "Ship-Player-1")
         {
             float dif = GameObject.Find("Ship-Enemy").GetComponent<RectTransform>().transform.position.y-TargetTPonY.position.y+10f;
             float dif1 = GameObject.Find("Ship-Player").GetComponent<RectTransform>().transform.position.y;
@@ -54,7 +54,7 @@ public class Rocket : MonoBehaviourPun
                 gameObject.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, -angle);
             }
         }
-        if (goPar.name == "Ship-Enemy")
+        if (goPar.name == "Ship-Player-2")
         {
             float dif = GameObject.Find("Ship-Player").GetComponent<RectTransform>().transform.position.y - TargetTPonY.position.y+10f;
             float dif1 = GameObject.Find("Ship-Enemy").GetComponent<RectTransform>().transform.position.y;
@@ -74,7 +74,7 @@ public class Rocket : MonoBehaviourPun
                 gameObject.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, angle);
             }
         }
-        //Destroy(csharp, 15f);
+        Destroy(csharp, 15f);
     }
 
     IEnumerator disableCollider()
@@ -100,15 +100,15 @@ public class Rocket : MonoBehaviourPun
 
     public void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.gameObject.name == "RightTrigger" && goPar.name == "Ship-Player")
+        if (col.gameObject.name == "RightTrigger" && goPar.name == "Ship-Player-1")
         {
             difOnTrig = GameObject.Find("Ship-Player").GetComponent<RectTransform>().transform.position.y - gameObject.transform.position.y;
 
             rightTrigg = true;
-            Invoke("DestroyRocketbyTime", 10);
+            //Invoke("DestroyRocketbyTime", 10);
             SendEvent();
         }
-        if (col.gameObject.name == "LeftTrigger" && goPar.name == "Ship-Enemy")
+        if (col.gameObject.name == "LeftTrigger" && goPar.name == "Ship-Player-2")
         {
             difOnTrig = GameObject.Find("Ship-Enemy").GetComponent<RectTransform>().transform.position.y - gameObject.transform.position.y;
 
@@ -151,7 +151,7 @@ public class Rocket : MonoBehaviourPun
 
         evData1["playerID"] = nameViewIDPlayer;
         evData1["trig"] = -1;
-        evData1["pos"] = TargetTPonY.position.y;
+        //evData1["pos"] = TargetTPonY.position.y;
         evData1["countRSystem"] = countRSystem;
         evData1["exploydEvent"] = exploydEvent;
         evData1["idRocket"] = gameObject.GetInstanceID();
@@ -179,17 +179,28 @@ public class Rocket : MonoBehaviourPun
 
                 if (TargetTPonY != null)
                 {
-                    gameObject.transform.position = new Vector3(0, GameObject.Find("Ship-Enemy").GetComponent<RectTransform>().transform.position.y - difOnTrig);
-                    userDirection = Vector3.right;
-                    gameObject.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, 0f);
-                    angle = Vector3.Angle(transform.right, TargetTPonY.transform.position - transform.position);
-                    if (TargetTPonY.transform.position.y > transform.position.y)
+                    if (TargetTPonY.position.y == GameObject.Find("Ship-Player-2").GetComponent<RectTransform>().transform.position.y)
                     {
-                        gameObject.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, angle);
+                        gameObject.transform.position = new Vector3(0, GameObject.Find("Ship-Player-2").GetComponent<RectTransform>().transform.position.y - difOnTrig);
+                    }
+                    else if((int)angle==0)
+                    {
+                        gameObject.transform.position = new Vector3(0,TargetTPonY.position.y);
                     }
                     else
                     {
-                        gameObject.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, -angle);
+                        gameObject.transform.position = new Vector3(0, GameObject.Find("Ship-Player-2").GetComponent<RectTransform>().transform.position.y);
+                        userDirection = Vector3.right;
+                        gameObject.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, 0f);
+                        angle = Vector3.Angle(transform.right, TargetTPonY.transform.position - transform.position);
+                        if (TargetTPonY.transform.position.y > transform.position.y)
+                        {
+                            gameObject.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, angle);
+                        }
+                        else
+                        {
+                            gameObject.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, -angle);
+                        }
                     }
                 }
                 rightTrigg = false;
@@ -199,7 +210,32 @@ public class Rocket : MonoBehaviourPun
 
                 if (TargetTPonY != null)
                 {
-                    gameObject.transform.position = new Vector3(1080, GameObject.Find("Ship-Player").GetComponent<RectTransform>().transform.position.y - difOnTrig);
+                    if (TargetTPonY.position.y == GameObject.Find("Ship-Player-1").GetComponent<RectTransform>().transform.position.y)
+                    {
+                        gameObject.transform.position = new Vector3(1080, GameObject.Find("Ship-Player-1").GetComponent<RectTransform>().transform.position.y - difOnTrig);
+                    }
+                    else if ((int)angle == 0)
+                    {
+                        gameObject.transform.position = new Vector3(1080, TargetTPonY.position.y);
+                    }
+                    else
+                    {
+                        gameObject.transform.position = new Vector3(1080, GameObject.Find("Ship-Player-1").GetComponent<RectTransform>().transform.position.y);
+                        userDirection = Vector3.right;
+                        gameObject.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, 0f);
+                        angle = Vector3.Angle(transform.right, TargetTPonY.transform.position - transform.position);
+                        IEnumerable<Image> imageRotate = gameObject.GetComponentsInChildren<Image>().Where(i => i.name == "Image");
+
+                        imageRotate.First().GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, 1f);
+                        if (TargetTPonY.transform.position.y > transform.position.y)
+                        {
+                            gameObject.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, angle);
+                        }
+                        else
+                        {
+                            gameObject.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, -angle);
+                        }
+                    }
                 }
 
                 leftTrigg = false;
@@ -210,44 +246,40 @@ public class Rocket : MonoBehaviourPun
 
     Transform SearchTargetForRocket(GameObject goPar)
     {
-        if (goPar.name == "Ship-Player")
+        if (goPar.name == "Ship-Player-1")
         {
             allPoints.Add(GameObject.Find("Ship-Enemy").transform);
-            GameObject ES = GameObject.Find("Ship-Enemy");
-            IEnumerable<Image> ESt = ES.gameObject.transform.GetComponentsInChildren<Image>()
-                .Where(i=>i.name=="TopGun" || i.name=="BotGun" ||
-                    i.name == "TopGun1" || i.name == "BotGun1"
-                );
+            GameObject ES = GameObject.Find("Ship-Player-2");
+            IEnumerable<RawImage> ESt = ES.gameObject.transform.GetComponentsInChildren<RawImage>()
+                .Where(i=>i.name=="SlotBOT" || i.name=="SlotTOP");
 
-            foreach (Image item in ESt)
+            foreach (RawImage item in ESt)
             {
-                GameObject IRW = item.gameObject.transform.GetComponentInChildren<RawImage>().gameObject;
+                //GameObject IRW = item.gameObject.transform.GetComponentInChildren<RawImage>().gameObject;
                 //Debug.Log(IRW.transform.GetComponentInChildren<RawImage>().gameObject.tag);
 
-                if (IRW.tag == "SlotGunFull")
+                if (item.tag == "SlotGunFull")
                 {
-                    allPoints.Add(IRW.GetComponent<Transform>());
+                    allPoints.Add(item.GetComponent<Transform>());
                 }
             }
         }
-        if (goPar.name == "Ship-Enemy")
+        if (goPar.name == "Ship-Player-2")
         {
             allPoints.Add(GameObject.Find("Ship-Player").transform);
-            GameObject PS = GameObject.Find("Ship-Player");
+            GameObject PS = GameObject.Find("Ship-Player-1");
 
-            IEnumerable<Image> PSt = PS.gameObject.transform.GetComponentsInChildren<Image>()
-                .Where(i => i.name == "TopGun" || i.name == "BotGun" ||
-                    i.name == "TopGun1" || i.name == "BotGun1"
-                );
+            IEnumerable<RawImage> PSt = PS.gameObject.transform.GetComponentsInChildren<RawImage>()
+                .Where(i => i.name == "SlotBOT" || i.name == "SlotTOP");
 
-            foreach (Image item in PSt)
+            foreach (RawImage item in PSt)
             {
-                GameObject IRW = item.gameObject.transform.GetComponentInChildren<RawImage>().gameObject;
+                //GameObject IRW = item.gameObject.transform.GetComponentInChildren<RawImage>().gameObject;
                 //Debug.Log(IRW.transform.GetComponentInChildren<RawImage>().gameObject.tag);
 
-                if (IRW.tag == "SlotGunFull")
+                if (item.tag == "SlotGunFull")
                 {
-                    allPoints.Add(IRW.GetComponent<Transform>());
+                    allPoints.Add(item.GetComponent<Transform>());
                 }
             }
         }

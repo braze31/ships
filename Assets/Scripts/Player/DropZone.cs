@@ -36,7 +36,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 
         if (gameObject.tag == "SlotGun" || gameObject.tag == "SlotGunFull")
         {
-            gameObject.GetComponentInChildren<RawImage>().tag = "SlotGunFull";
+            posForR.GetComponentInChildren<RawImage>().tag = "SlotGunFull";
             healthBar.EnableImageAndStartReduceHp(4.5f);
             if (d != null && SlotForCardEmpty)
             {
@@ -80,17 +80,14 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
         yield return new WaitForSeconds(4.5f);
         SlotForCardEmpty = true;
         //image.color = new Color(image.color.r, image.color.g, image.color.b, 0f);
-        gameObject.GetComponentInChildren<RawImage>().tag = "SlotGun";
+        posForR.GetComponentInChildren<RawImage>().tag = "SlotGun";
     }
 
     void Update()
     {
-        if (!SlotForCardEmpty)
+        if (healthBar.startReduce)
         {
-            if (gameObject.tag == "SlotGunFull")
-            {
-                healthBar.gameObject.GetComponent<Canvas>().enabled = true;
-            }
+            healthBar.gameObject.GetComponent<Canvas>().enabled = true;
         }
         else
         {
