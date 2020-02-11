@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,19 +12,13 @@ public class Ship : MonoBehaviour
     float health = 1f;
     public float curHealth = 1f;
     public Text textHP;
+    public bool DamageDone = false;
+    [SerializeField]
+    public IEnumerable<RectTransform> rt;
 
     private void Start()
     {
         curHealth = health;
-        //FunctionPeriodic.Create(() =>
-        //{
-        //    if (health > curHealth)
-        //    {
-        //        health -= 0.01f;
-        //        healthBar.SetSize(health);
-        //    }
-        //},
-        //0.03f);
     }
 
     void OnCollision2D(Collider2D other)
@@ -36,10 +31,29 @@ public class Ship : MonoBehaviour
         curHealth = health - damage;
         health = curHealth;
         healthBar.SetSize(damage);
+        DamageDone = true;
     }
 
     void Update()
     {
         textHP.GetComponent<Text>().text = curHealth.ToString();
+        rt = gameObject.transform.GetComponentsInChildren<RectTransform>().Where(i => i.tag == "SlotGunFull");
     }
+
+    //void OnEnable()
+    //{
+    //    //subscribe to event
+    //    Rocket.OnSelectedEvent += SelectAction;
+    //}
+
+    //void OnDisable()
+    //{
+    //    //Un-subscribe to event
+    //    Rocket.OnSelectedEvent -= SelectAction;
+    //}
+
+    //void SelectAction(int id)
+    //{
+
+    //}
 }

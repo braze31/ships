@@ -23,7 +23,7 @@ public class PlayerControls : MonoBehaviour, IPunObservable
     private Image iconCard;
     private int costCardEvent;
     private bool playerLOSE;
-    private GameObject ship;
+    private Ship ship;
 
     [SerializeField]
     private List<Rocket> RocketsSystem;
@@ -44,67 +44,65 @@ public class PlayerControls : MonoBehaviour, IPunObservable
         gameObject.name = $"{photonView.ViewID} - PlayerName";
         // add to canvascontroller all players which connected this room.
         FindObjectOfType<Wolrd>().AddPlayer(this);
+        ship = GameObject.Find("Ship-Player-1").GetComponent<Ship>();
     }
 
-    // CREATE if on event FROM another player
-    public void ChangeEnemyShipContent(string targetName, int timeID)
+    //// CREATE if on event FROM another player
+    //public void ChangeEnemyShipContent(string targetName, int timeID)
+    //{
+    //    if (photonView.IsMine)
+    //    {
+    //        GameObject enemyShip = GameObject.FindGameObjectWithTag("Enemy");
+    //        Image[] fALL = enemyShip.GetComponentsInChildren<Image>();
+    //        foreach (var item in fALL)
+    //        {
+    //            if (targetName == item.name)
+    //            {
+    //                item.tag = "SlotGunFull";
+    //                StartCoroutine(INSTrocketBytimeNtimes(item,enemyShip,timeID));
+    //                item.GetComponent<DropZone>().healthBar.EnableImageAndStartReduceHp(4.5f);
+    //            }
+    //        }
+    //    }
+    //}
+    //// CREATE if on event FROM self player
+    //public void CreatePreFab(string targetName, int timeID)
+    //{
+    //    if (photonView.IsMine)
+    //    {
+    //        GameObject pShip = GameObject.FindGameObjectWithTag("Player1");
+    //        Image[] fALL = pShip.GetComponentsInChildren<Image>();
+    //        foreach (var item in fALL)
+    //        {
+    //            if (targetName == item.name)
+    //            {
+    //                item.tag = "SlotGunFull";
+    //                StartCoroutine(INSTrocketBytimeNtimes(item, pShip,timeID));
+    //                item.GetComponent<DropZone>().healthBar.EnableImageAndStartReduceHp(4.5f);
+    //            }
+    //        }
+    //    }
+    //}
+
+    public void CreatePreFabForSystemRocket(string targetName, int timeID, string playerName)
     {
         if (photonView.IsMine)
         {
-            GameObject enemyShip = GameObject.FindGameObjectWithTag("Enemy");
-            Image[] fALL = enemyShip.GetComponentsInChildren<Image>();
-            foreach (var item in fALL)
-            {
-                if (targetName == item.name)
-                {
-                    //item.tag = "SlotGunFull";
-                    string nameSlot;
-                    if (item.name == "BotGun1" || item.name == "BotGun")
-                    {
-                        item.transform.parent.Find("SlotBOT").GetComponent<RawImage>().tag = "SlotGunFull";
-                        nameSlot = "SlotBOT";
-                    }
-                    else
-                    {
-                        item.transform.parent.Find("SlotTOP").GetComponent<RawImage>().tag = "SlotGunFull";
-                        nameSlot = "SlotTOP";
-                    }
-                    StartCoroutine(INSTrocketBytimeNtimes(item,enemyShip,timeID, nameSlot));
-                    item.GetComponent<DropZone>().healthBar.EnableImageAndStartReduceHp(4.5f);
-                }
-            }
-        }
-    }
-    // CREATE if on event FROM self player
-    public void CreatePreFab(string targetName, int timeID)
-    {
-        if (photonView.IsMine)
-        {
-            GameObject pShip = GameObject.FindGameObjectWithTag("Player1");
+            GameObject pShip = GameObject.FindGameObjectWithTag(playerName);
             Image[] fALL = pShip.GetComponentsInChildren<Image>();
             foreach (var item in fALL)
             {
                 if (targetName == item.name)
                 {
-                    //item.tag = "SlotGunFull";
-                    string nameSlot;
-                    if (item.name=="BotGun1" || item.name == "BotGun")
-                    {
-                        item.transform.parent.Find("SlotBOT").GetComponent<RawImage>().tag = "SlotGunFull";
-                        nameSlot = "SlotBOT";
-                    }
-                    else
-                    {
-                        item.transform.parent.Find("SlotTOP").GetComponent<RawImage>().tag = "SlotGunFull";
-                        nameSlot = "SlotTOP";
-                    }
-
-                    StartCoroutine(INSTrocketBytimeNtimes(item, pShip,timeID, nameSlot));
+                    item.tag = "SlotGunFull";
+                    StartCoroutine(INSTrocketBytimeNtimes(item, pShip, timeID));
+                    item.GetComponent<DropZone>().healthBar.EnableImageAndStartReduceHp(4.5f);
                 }
             }
         }
     }
-    IEnumerator INSTrocketBytimeNtimes(Image item, GameObject enemyShip,int timeID,string nameSlot)
+
+    IEnumerator INSTrocketBytimeNtimes(Image item, GameObject enemyShip,int timeID)
     {
         for (int k = 0; k < 3; k++)
         {
@@ -114,10 +112,17 @@ public class PlayerControls : MonoBehaviour, IPunObservable
             //Vector3 pointToTravel = item.GetComponent<RectTransform>().localPosition;
             GameObject myNewS = Instantiate(Rocket, pointToTravel, Quaternion.Euler(0f, 0f, 0f));
             Image i = myNewS.GetComponentInChildren<Image>().GetComponent<Image>();
+            RawImage ri = myNewS.GetComponentInChildren<RawImage>().GetComponent<RawImage>();
 
             item.color = new Color(item.color.r, item.color.g, item.color.b, 255f);
             item.sprite = i.sprite;
-            StartCoroutine(ResetSlotDeleteIcon(item));
+
+            GameObject PRSPAWN = item.gameObject.GetComponent<DropZone>().posForR.gameObject.GetComponentInChildren<RawImage>().gameObject;
+            item.GetComponent<RectTransform>().rotation = new Quaternion(0f, 0f, 0f,1f);
+            PRSPAWN.GetComponent<RawImage>().texture = ri.texture;
+            PRSPAWN.GetComponent<RawImage>().color = new Color(ri.color.r, ri.color.g, ri.color.b, 0f);
+
+            StartCoroutine(ResetSlotDeleteIcon(item,PRSPAWN.GetComponent<RawImage>()));
 
             // need anchor?
             //myNewS.GetComponent<RectTransform>().anchoredPosition = new Vector3(pointToTravel.x,pointToTravel.y,pointToTravel.z);
@@ -132,16 +137,17 @@ public class PlayerControls : MonoBehaviour, IPunObservable
             RocketsIDs[myNewS.GetInstanceID()] = r;
             yield return new WaitForSeconds(1.5f);
         }
-        //item.tag = "SlotGun";
-        item.transform.parent.Find(nameSlot).GetComponent<RawImage>().tag = "SlotGun";
+        item.tag = "SlotGun";
+        //item.transform.parent.Find(nameSlot).tag = "SlotGun";
         item.GetComponent<DropZone>().healthBar.gameObject.GetComponent<Canvas>().enabled = false;
     }
 
 
-    IEnumerator ResetSlotDeleteIcon(Image icon)
+    IEnumerator ResetSlotDeleteIcon(Image icon,RawImage Ricon)
     {
         yield return new WaitForSeconds(4.5f);
         icon.color = new Color(icon.color.r, icon.color.g, icon.color.b, 0f);
+        Ricon.color = new Color(icon.color.r, icon.color.g, icon.color.b, 0f);
         //icon.tag = "SlotGun";
     }
 
@@ -160,6 +166,22 @@ public class PlayerControls : MonoBehaviour, IPunObservable
         }
     }
 
+    void LOSEorWIN(string status)
+    {
+        Canvas canvasPlayer = GameObject.FindGameObjectWithTag("PlayerCanvas").GetComponent<Canvas>();
+        canvasPlayer.enabled = false;
+        Image quit = GameObject.Find("quitButton").GetComponent<Image>();
+        quit.enabled = true;
+        Image leave = GameObject.Find("LeaveButtonA").GetComponent<Image>();
+        leave.enabled = true;
+        GameObject shipImage1 = GameObject.Find("Ship-Player (1)");
+        shipImage1.SetActive(false);
+        GameObject shipImage2 = GameObject.Find("Ship-Player (2)");
+        shipImage2.SetActive(false);
+        Text youLose = GameObject.FindGameObjectWithTag(status).GetComponent<Text>();
+        youLose.enabled = true;
+    }
+
     public void YouLose(int ID)
     {
         if (photonView.ViewID == ID)
@@ -167,13 +189,7 @@ public class PlayerControls : MonoBehaviour, IPunObservable
             playerLOSE = true;
             if (photonView.IsMine)
             {
-                Canvas canvasPlayer = GameObject.FindGameObjectWithTag("PlayerCanvas").GetComponent<Canvas>();
-                canvasPlayer.enabled = false;
-
-                Text youLose = GameObject.FindGameObjectWithTag("Lose").GetComponent<Text>();
-                youLose.enabled = true;
-                Image quit = GameObject.Find("quitButton").GetComponent<Image>();
-                quit.enabled = true;
+                LOSEorWIN("Lose");
             }
         }
     }
@@ -185,13 +201,7 @@ public class PlayerControls : MonoBehaviour, IPunObservable
             playerLOSE = true;
             if (photonView.IsMine)
             {
-                Canvas canvasPlayer = GameObject.FindGameObjectWithTag("PlayerCanvas").GetComponent<Canvas>();
-                canvasPlayer.enabled = false;
-
-                Text youLose = GameObject.FindGameObjectWithTag("Win").GetComponent<Text>();
-                youLose.enabled = true;
-                Image quit = GameObject.Find("quitButton").GetComponent<Image>();
-                quit.enabled = true;
+                LOSEorWIN("Win");
             }
         }
     }
@@ -225,9 +235,12 @@ public class PlayerControls : MonoBehaviour, IPunObservable
                 playerCanvas.GetComponentInChildren<Canvas>().GetComponent<Canvas>().enabled = true;
                 playerCanvas.GetComponent<PlayerStats>().enabled = true;
             }
-            ship = GameObject.Find("Ship-Player-1");
+            if (ship.DamageDone)
+            {
+                checkHP();
+                ship.DamageDone = false;
+            }
 
-            checkHP();
         }
         yourPing.GetComponent<Text>().text = "Ping: " + PhotonNetwork.GetPing().ToString();
     }
@@ -250,13 +263,21 @@ public class PlayerControls : MonoBehaviour, IPunObservable
             {
                 item.Value.EXPLOYD();
             }
+        }
+    }
 
+    public void ChangeTagRocket(int idRocketS)
+    {
+        if (RocketsIDs.ContainsKey(idRocketS))
+        {
+            Rocket r = RocketsIDs[idRocketS];
+            r.tag = "RocketS";
+            Debug.Log("RENAME");
         }
     }
 
     void checkHP()
     {
-        
         if (ship!=null)
         {
             float hp = ship.GetComponent<Ship>().curHealth;
@@ -289,7 +310,6 @@ public class PlayerControls : MonoBehaviour, IPunObservable
     //This method event for object card which droped on table.
     void SelectAction(GameObject target, GameObject cardStats, float currRes, Image iconGun, int timeID)
     {
-        //CreatePreFab(target.name);
         TimeID = timeID;
         Target = target;
         currResPlayer = currRes;

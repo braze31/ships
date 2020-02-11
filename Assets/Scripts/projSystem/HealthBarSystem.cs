@@ -21,6 +21,14 @@ public class HealthBarSystem : MonoBehaviour
         time = 1/liveTime;
     }
 
+    public void ReduceHPSystem(float damage)
+    {
+        if (startReduce)
+        {
+            fill -= damage;
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {

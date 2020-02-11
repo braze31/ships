@@ -36,8 +36,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 
         if (gameObject.tag == "SlotGun" || gameObject.tag == "SlotGunFull")
         {
-            posForR.GetComponentInChildren<RawImage>().tag = "SlotGunFull";
-            healthBar.EnableImageAndStartReduceHp(4.5f);
+            //gameObject.tag = "SlotGunFull";
             if (d != null && SlotForCardEmpty)
             {
                 Image iconGun = d.Icon;
@@ -62,11 +61,10 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
                     //RocketId idR = new RocketId();
 
                     int timeID = RandomIDforRocket();
-                    OnSelectedEvent(gameObject, eventData.pointerDrag, EnoughResForCardDrop, gameObject.GetComponent<Image>(), timeID);
+                    OnSelectedEvent(gameObject, eventData.pointerDrag, EnoughResForCardDrop, iconGun, timeID);
                 }
             }
         }
-        
     }
 
     int RandomIDforRocket()
@@ -80,7 +78,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
         yield return new WaitForSeconds(4.5f);
         SlotForCardEmpty = true;
         //image.color = new Color(image.color.r, image.color.g, image.color.b, 0f);
-        posForR.GetComponentInChildren<RawImage>().tag = "SlotGun";
+        //gameObject.tag = "SlotGun";
     }
 
     void Update()
@@ -88,10 +86,12 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
         if (healthBar.startReduce)
         {
             healthBar.gameObject.GetComponent<Canvas>().enabled = true;
+            //gameObject.GetComponent<BoxCollider2D>().enabled = true;
         }
         else
         {
             healthBar.gameObject.GetComponent<Canvas>().enabled = false;
+            //gameObject.GetComponent<BoxCollider2D>().enabled = false;
         }
     }
 

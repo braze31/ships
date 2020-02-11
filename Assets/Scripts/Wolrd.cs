@@ -15,7 +15,7 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
     private LoadBalancingClient loadBalancingClient;
     private List<PlayerControls> players = new List<PlayerControls>();
     private Dictionary<int, float> hpPlayers = new Dictionary<int, float>();
-    public Canvas waitCanvas;
+    public Text waitCanvas;
     private bool twiceHPcheck;
 
     public struct MyRocket
@@ -23,16 +23,6 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
         public int trig;
         public int IDR;
     }
-
-    int countR = 1000000;
-
-    //private Dictionary<string, MyRocket> tt0 = new Dictionary<string, MyRocket>();
-    //private Dictionary<string, MyRocket> tt1 = new Dictionary<string, MyRocket>();
-    //private Dictionary<string, MyRocket> tt2 = new Dictionary<string, MyRocket>();
-
-    private Dictionary<string, int> tt0 = new Dictionary<string, int>();
-    private Dictionary<string, int> tt1 = new Dictionary<string, int>();
-    private Dictionary<string, int> tt2 = new Dictionary<string, int>();
 
     private Dictionary<int, MyRocket> allRockets = new Dictionary<int, MyRocket>();
 
@@ -119,6 +109,7 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
                 var idR = pararmsRocketSystem["idRocket"];
                 var countRSystem = pararmsRocketSystem["countRSystem"];
                 var exploydEvent = pararmsRocketSystem["exploydEvent"];
+                var targetRocket = pararmsRocketSystem["tag"];
 
                 MyRocket mr = new MyRocket();
                 mr.trig = (int)trig;
@@ -145,34 +136,10 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
                     exploydRocketbyID((int)countRSystem);
                 }
 
-                //if ((int)trig == 1)
-                //{
-                //    if (!tt0.ContainsKey((string)pID1))
-                //    {
-                //        tt0.Add((string)pID1, (int)idR);
-                //    }
-                //}
-                //if ((int)trig == 0)
-                //{
-                //    if (!tt1.ContainsKey((string)pID1))
-                //    {
-                //        tt1.Add((string)pID1, (int)idR);
-                //    }
-                //}
-
-                //if (tt0.Count==1 && tt1.Count==1)
-                //{
-                //    takeTwoValue(tt0.First().Value, tt1.First().Value);
-                //    tt0.Clear();
-                //    tt1.Clear();
-                //}
-
-
-                //var lines1 = p3.Select(kvp => kvp.Key + ": " + kvp.Value.ToString());
-                //string a1 = string.Join(Environment.NewLine, lines1);
-                //Debug.Log(a1);
-
-
+                if ((string)targetRocket == "RocketS")
+                {
+                    AllPlayerTagRocketS((int)idR);
+                }
                 break;
         }
     }
@@ -188,18 +155,15 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
 
         var timeID = hashPlayer["TimeID"];
 
-        //int timeID = RocketId.idRocket;
-        //Debug.Log((int)timeID);
-
         foreach (var player in players.OrderBy(p => p.photonView.Owner.ActorNumber))
         {
             if (player.photonView.ViewID != (int)pID)
             {
-                player.ChangeEnemyShipContent((string)slot, (int)timeID);
+                player.CreatePreFabForSystemRocket((string)slot, (int)timeID, "Enemy");
             }
             if (player.photonView.ViewID == (int)pID)
             {
-                player.CreatePreFab((string)slot, (int)timeID);
+                player.CreatePreFabForSystemRocket((string)slot, (int)timeID, "Player1");
             }
         }
     }
@@ -226,8 +190,14 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
             player.TriggerActivateP1(trig0);
             player.TriggerActivateP1(trig1);
         }
-        //trig0 = new Dictionary<int, MyRocket>();
-        //trig1 = new Dictionary<int, MyRocket>();
+    }
+
+    public void AllPlayerTagRocketS(int idRocketWithTagRocketS)
+    {
+        foreach (var player in players.OrderBy(p => p.photonView.Owner.ActorNumber))
+        {
+            player.ChangeTagRocket(idRocketWithTagRocketS);
+        }
     }
 
     public void exploydRocketbyID(int countRSystem)

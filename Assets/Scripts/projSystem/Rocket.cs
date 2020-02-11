@@ -15,7 +15,7 @@ public class Rocket : MonoBehaviourPun
     public static int movespeed = 600;
     public Vector3 userDirection = Vector3.right;
     GameObject goPar;
-    Transform TargetTPonY;
+    Transform TargetForRocket;
 
     public bool rightTrigg;
     public bool leftTrigg;
@@ -28,21 +28,29 @@ public class Rocket : MonoBehaviourPun
     private bool exploydEvent = false;
 
     float angle;
-    float difOnTrig;
+
+    public float SystemRocketDamage = 0.3f;
+    public float ShipRocketDamage = 0.1f;
+    public float ShipAndSystemRocketDamage = 0.05f;
+
+    //public RectTransform ExplosionTransform;
 
     void Start()
     {
         goPar = gameObject.transform.parent.gameObject;
-        TargetTPonY = SearchTargetForRocket(goPar);
-        StartCoroutine(disableCollider());
+        TargetForRocket = SearchTargetForRocket(goPar);
+        if (TargetForRocket.name=="Ship-Player" || TargetForRocket.name == "Ship-Enemy")
+        {
+            gameObject.tag = "RocketS";
+        }
 
+        StartCoroutine(disableCollider());
         var csharp = new GameObject("MyGO", typeof(RectTransform));
         if (goPar.name == "Ship-Player-1")
         {
-            float dif = GameObject.Find("Ship-Enemy").GetComponent<RectTransform>().transform.position.y-TargetTPonY.position.y+10f;
             float dif1 = GameObject.Find("Ship-Player").GetComponent<RectTransform>().transform.position.y;
 
-            csharp.transform.position = new Vector3(1080 + TargetTPonY.position.x, dif1 - dif, transform.position.z);
+            csharp.transform.position = new Vector3(1080 + TargetForRocket.position.x, dif1, transform.position.z);
             userDirection = Vector3.right;
             angle = Vector3.Angle(transform.right, csharp.transform.position - transform.position);
             if (csharp.transform.position.y > transform.position.y)
@@ -56,10 +64,9 @@ public class Rocket : MonoBehaviourPun
         }
         if (goPar.name == "Ship-Player-2")
         {
-            float dif = GameObject.Find("Ship-Player").GetComponent<RectTransform>().transform.position.y - TargetTPonY.position.y+10f;
             float dif1 = GameObject.Find("Ship-Enemy").GetComponent<RectTransform>().transform.position.y;
 
-            csharp.transform.position = new Vector3(-1080+TargetTPonY.position.x, dif1 - dif, transform.position.z);
+            csharp.transform.position = new Vector3(-1080+TargetForRocket.position.x, dif1, transform.position.z);
             userDirection = Vector3.left;
             angle = Vector3.Angle(transform.right, csharp.transform.position - transform.position);
             IEnumerable<Image> imageRotate = gameObject.GetComponentsInChildren<Image>().Where(i => i.name == "Image");
@@ -93,51 +100,60 @@ public class Rocket : MonoBehaviourPun
     {
         gameObject.SetActive(false);
         gameObject.GetComponent<Collider2D>().enabled = false;
-        GameObject expl = Instantiate(ExplosionAnim, ExplosionTransform.transform);
+        GameObject expl = Instantiate(ExplosionAnim, ExplosionTransform.transform.position, Quaternion.Euler(1f, 1f, 0f));
+        expl.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 0f);
         GameObject col = GameObject.FindGameObjectWithTag("PlayerCanvas");
         expl.transform.SetParent(col.gameObject.transform);
     }
 
-    public void OnCollisionEnter2D(Collision2D col)
+    void OnTriggerEnter2D(Collider2D other)
     {
-        if (col.gameObject.name == "RightTrigger" && goPar.name == "Ship-Player-1")
+        if (other.gameObject.name == "RightTrigger" && goPar.name == "Ship-Player-1")
         {
-            difOnTrig = GameObject.Find("Ship-Player").GetComponent<RectTransform>().transform.position.y - gameObject.transform.position.y;
-
             rightTrigg = true;
             //Invoke("DestroyRocketbyTime", 10);
             SendEvent();
         }
-        if (col.gameObject.name == "LeftTrigger" && goPar.name == "Ship-Player-2")
+        if (other.gameObject.name == "LeftTrigger" && goPar.name == "Ship-Player-2")
         {
-            difOnTrig = GameObject.Find("Ship-Enemy").GetComponent<RectTransform>().transform.position.y - gameObject.transform.position.y;
-
             leftTrigg = true;
             //Invoke("DestroyRocketbyTime", 10);
             SendEvent();
         }
-        if (col.gameObject.tag == "Player1" || col.gameObject.tag == "Enemy" )
+        if (other.name == TargetForRocket.name && (other.name != "Ship-Player" || other.name != "Ship-Enemy"))
         {
-            gameObject.GetComponent<Collider2D>().enabled = false;
             gameObject.SetActive(false);
-            GameObject expl = Instantiate(ExplosionAnim, ExplosionTransform.transform);
-            expl.transform.SetParent(col.gameObject.transform.parent.gameObject.transform);
-            Ship go = col.gameObject.GetComponent<Ship>();
+            GameObject expl = Instantiate(ExplosionAnim, ExplosionTransform.transform.position, Quaternion.Euler(0f, 0f, 0f));
+            expl.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 0f);
+            expl.transform.SetParent(other.gameObject.transform.parent.gameObject.transform);
+            
+            DropZone dz = other.GetComponent<DropZone>();
+            dz.healthBar.ReduceHPSystem(SystemRocketDamage);
+            Ship go = other.transform.parent.gameObject.GetComponent<Ship>();
+            go.ShipTakeDamage(ShipAndSystemRocketDamage);
+        }
+        if (gameObject.tag =="RocketS" && other.name == "Ship-Player-1"
+            || gameObject.tag == "RocketS" && other.name == "Ship-Player-2")
+        {
+            Ship go = other.gameObject.GetComponent<Ship>();
             if (go != null)
             {
-                go.ShipTakeDamage(0.1f);
+                go.ShipTakeDamage(ShipRocketDamage);
             }
-            //Invoke("DestroyRocketbyTime", 10);
+            gameObject.SetActive(false);
+            GameObject expl = Instantiate(ExplosionAnim, ExplosionTransform.transform.position, Quaternion.Euler(0f, 0f, 0f));
+            expl.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 0f);
+            expl.transform.SetParent(other.gameObject.transform.parent.gameObject.transform);
         }
-        //if (col.gameObject.tag == "Rocket")
-        //{
-        //    gameObject.SetActive(false);
-        //    gameObject.GetComponent<Collider2D>().enabled = false;
-        //    GameObject expl = Instantiate(ExplosionAnim, ExplosionTransform.transform);
-        //    expl.transform.SetParent(col.gameObject.transform.parent.gameObject.transform);
-        //    exploydEvent = true;
-        //    SendEvent();
-        //}
+        //    //if (col.gameObject.tag == "Rocket")
+        //    //{
+        //    //    gameObject.SetActive(false);
+        //    //    gameObject.GetComponent<Collider2D>().enabled = false;
+        //    //    GameObject expl = Instantiate(ExplosionAnim, ExplosionTransform.transform);
+        //    //    expl.transform.SetParent(col.gameObject.transform.parent.gameObject.transform);
+        //    //    exploydEvent = true;
+        //    //    SendEvent();
+        //    //}
     }
 
     public void SendEvent()
@@ -151,7 +167,7 @@ public class Rocket : MonoBehaviourPun
 
         evData1["playerID"] = nameViewIDPlayer;
         evData1["trig"] = -1;
-        //evData1["pos"] = TargetTPonY.position.y;
+        evData1["tag"] = gameObject.tag;
         evData1["countRSystem"] = countRSystem;
         evData1["exploydEvent"] = exploydEvent;
         evData1["idRocket"] = gameObject.GetInstanceID();
@@ -176,68 +192,54 @@ public class Rocket : MonoBehaviourPun
         {
             if (rightTrigg)
             {
-
-                if (TargetTPonY != null)
+                if (TargetForRocket != null)
                 {
-                    if (TargetTPonY.position.y == GameObject.Find("Ship-Player-2").GetComponent<RectTransform>().transform.position.y)
+                    var csharp = new GameObject("MyGOUP", typeof(RectTransform));
+
+                    gameObject.transform.position = new Vector3(0, GameObject.Find("Ship-Player-2").GetComponent<RectTransform>().transform.position.y);
+                    csharp.transform.position = new Vector3(TargetForRocket.transform.position.x, TargetForRocket.transform.position.y, TargetForRocket.transform.position.z);
+                    
+                    gameObject.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, 0f);
+
+                    angle = Vector3.Angle(transform.right, csharp.transform.position - transform.position);
+                    if (TargetForRocket.transform.position.y > transform.position.y)
                     {
-                        gameObject.transform.position = new Vector3(0, GameObject.Find("Ship-Player-2").GetComponent<RectTransform>().transform.position.y - difOnTrig);
-                    }
-                    else if((int)angle==0)
-                    {
-                        gameObject.transform.position = new Vector3(0,TargetTPonY.position.y);
+                        gameObject.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, angle);
                     }
                     else
                     {
-                        gameObject.transform.position = new Vector3(0, GameObject.Find("Ship-Player-2").GetComponent<RectTransform>().transform.position.y);
-                        userDirection = Vector3.right;
-                        gameObject.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, 0f);
-                        angle = Vector3.Angle(transform.right, TargetTPonY.transform.position - transform.position);
-                        if (TargetTPonY.transform.position.y > transform.position.y)
-                        {
-                            gameObject.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, angle);
-                        }
-                        else
-                        {
-                            gameObject.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, -angle);
-                        }
+                        gameObject.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, -angle);
                     }
+                    Destroy(csharp, 15f);
                 }
                 rightTrigg = false;
             }
             if (leftTrigg)
             {
 
-                if (TargetTPonY != null)
+                if (TargetForRocket != null)
                 {
-                    if (TargetTPonY.position.y == GameObject.Find("Ship-Player-1").GetComponent<RectTransform>().transform.position.y)
+                    var csharp = new GameObject("MyGODOWN", typeof(RectTransform));
+
+                    gameObject.transform.position = new Vector3(1080, GameObject.Find("Ship-Player-1").GetComponent<RectTransform>().transform.position.y);
+                    csharp.transform.position = new Vector3(TargetForRocket.transform.position.x, TargetForRocket.transform.position.y, TargetForRocket.transform.position.z);
+                    
+                    userDirection = Vector3.right;
+                    gameObject.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, 0f);
+                    angle = Vector3.Angle(transform.right, csharp.transform.position - transform.position);
+                    IEnumerable<Image> imageRotate = gameObject.GetComponentsInChildren<Image>().Where(i => i.name == "Image");
+
+                    imageRotate.First().GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, 1f);
+                    if (TargetForRocket.transform.position.y > transform.position.y)
                     {
-                        gameObject.transform.position = new Vector3(1080, GameObject.Find("Ship-Player-1").GetComponent<RectTransform>().transform.position.y - difOnTrig);
-                    }
-                    else if ((int)angle == 0)
-                    {
-                        gameObject.transform.position = new Vector3(1080, TargetTPonY.position.y);
+                        gameObject.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, angle);
                     }
                     else
                     {
-                        gameObject.transform.position = new Vector3(1080, GameObject.Find("Ship-Player-1").GetComponent<RectTransform>().transform.position.y);
-                        userDirection = Vector3.right;
-                        gameObject.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, 0f);
-                        angle = Vector3.Angle(transform.right, TargetTPonY.transform.position - transform.position);
-                        IEnumerable<Image> imageRotate = gameObject.GetComponentsInChildren<Image>().Where(i => i.name == "Image");
-
-                        imageRotate.First().GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, 1f);
-                        if (TargetTPonY.transform.position.y > transform.position.y)
-                        {
-                            gameObject.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, angle);
-                        }
-                        else
-                        {
-                            gameObject.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, -angle);
-                        }
+                        gameObject.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, -angle);
                     }
+                    Destroy(csharp, 15f);
                 }
-
                 leftTrigg = false;
             }
             CheckForEvent = false;
@@ -250,17 +252,12 @@ public class Rocket : MonoBehaviourPun
         {
             allPoints.Add(GameObject.Find("Ship-Enemy").transform);
             GameObject ES = GameObject.Find("Ship-Player-2");
-            IEnumerable<RawImage> ESt = ES.gameObject.transform.GetComponentsInChildren<RawImage>()
-                .Where(i=>i.name=="SlotBOT" || i.name=="SlotTOP");
-
-            foreach (RawImage item in ESt)
+            IEnumerable<RectTransform> ESt = ES.GetComponent<Ship>().rt;
+            foreach (RectTransform item in ESt)
             {
-                //GameObject IRW = item.gameObject.transform.GetComponentInChildren<RawImage>().gameObject;
-                //Debug.Log(IRW.transform.GetComponentInChildren<RawImage>().gameObject.tag);
-
                 if (item.tag == "SlotGunFull")
                 {
-                    allPoints.Add(item.GetComponent<Transform>());
+                    allPoints.Add(item.GetComponent<RectTransform>());
                 }
             }
         }
@@ -268,21 +265,73 @@ public class Rocket : MonoBehaviourPun
         {
             allPoints.Add(GameObject.Find("Ship-Player").transform);
             GameObject PS = GameObject.Find("Ship-Player-1");
-
-            IEnumerable<RawImage> PSt = PS.gameObject.transform.GetComponentsInChildren<RawImage>()
-                .Where(i => i.name == "SlotBOT" || i.name == "SlotTOP");
-
-            foreach (RawImage item in PSt)
+            IEnumerable<RectTransform> PSt = PS.GetComponent<Ship>().rt;
+            foreach (RectTransform item in PSt)
             {
-                //GameObject IRW = item.gameObject.transform.GetComponentInChildren<RawImage>().gameObject;
-                //Debug.Log(IRW.transform.GetComponentInChildren<RawImage>().gameObject.tag);
-
                 if (item.tag == "SlotGunFull")
                 {
-                    allPoints.Add(item.GetComponent<Transform>());
+                    allPoints.Add(item.GetComponent<RectTransform>());
                 }
             }
         }
         return allPoints.Last();
     }
+
+    //public void OnCollisionEnter2D(Collision2D col)
+    //{
+    //    if (col.gameObject.name == "RightTrigger" && goPar.name == "Ship-Player-1")
+    //    {
+    //        difOnTrig = GameObject.Find("Ship-Player").GetComponent<RectTransform>().transform.position.y - gameObject.transform.position.y;
+
+    //        rightTrigg = true;
+    //        //Invoke("DestroyRocketbyTime", 10);
+    //        SendEvent();
+    //    }
+    //    if (col.gameObject.name == "LeftTrigger" && goPar.name == "Ship-Player-2")
+    //    {
+    //        difOnTrig = GameObject.Find("Ship-Enemy").GetComponent<RectTransform>().transform.position.y - gameObject.transform.position.y;
+
+    //        leftTrigg = true;
+    //        //Invoke("DestroyRocketbyTime", 10);
+    //        SendEvent();
+    //    }
+    //    if (col.gameObject.tag == "Player1" || col.gameObject.tag == "Enemy" )
+    //    {
+    //        gameObject.GetComponent<Collider2D>().enabled = false;
+    //        gameObject.SetActive(false);
+    //        GameObject expl = Instantiate(ExplosionAnim, ExplosionTransform.transform.position, Quaternion.Euler(0f, 0f, 0f));
+    //        expl.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 0f);
+    //        expl.transform.SetParent(col.gameObject.transform.parent.gameObject.transform);
+    //        Ship go = col.gameObject.GetComponent<Ship>();
+    //        if (go != null)
+    //        {
+    //            go.ShipTakeDamage(0.1f);
+    //        }
+    //        //Invoke("DestroyRocketbyTime", 10);
+    //    }
+    //    if (col.gameObject.tag == "SlotGunFull")
+    //    {
+    //        gameObject.SetActive(false);
+    //        GameObject expl = Instantiate(ExplosionAnim, ExplosionTransform.transform.position, Quaternion.Euler(0f, 0f, 0f));
+    //        expl.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 0f);
+    //        expl.transform.SetParent(col.gameObject.transform.parent.gameObject.transform);
+    //    }
+
+    //    if (col.gameObject.tag == "SlotGun" && col.gameObject.name == TargetTPonY.name)
+    //    {
+    //        gameObject.SetActive(false);
+    //        GameObject expl = Instantiate(ExplosionAnim, ExplosionTransform.transform.position, Quaternion.Euler(0f, 0f, 0f));
+    //        expl.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 0f);
+    //        expl.transform.SetParent(col.gameObject.transform.parent.gameObject.transform);
+    //    }
+    //    //if (col.gameObject.tag == "Rocket")
+    //    //{
+    //    //    gameObject.SetActive(false);
+    //    //    gameObject.GetComponent<Collider2D>().enabled = false;
+    //    //    GameObject expl = Instantiate(ExplosionAnim, ExplosionTransform.transform);
+    //    //    expl.transform.SetParent(col.gameObject.transform.parent.gameObject.transform);
+    //    //    exploydEvent = true;
+    //    //    SendEvent();
+    //    //}
+    //}
 }
