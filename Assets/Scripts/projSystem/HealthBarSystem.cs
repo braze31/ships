@@ -5,18 +5,23 @@ using UnityEngine.UI;
 
 public class HealthBarSystem : MonoBehaviour
 {
-    private Image bar;
+    public Image bar;
     public bool startReduce;
     float fill = 1f;
     float time;
+    public bool stopSystem;
+    private Image icon;
 
     void Start()
     {
         bar = transform.Find("BarRed").GetComponent<Image>();
+        icon = gameObject.transform.parent.GetComponent<Image>();
     }
 
     public void EnableImageAndStartReduceHp(float liveTime)
     {
+        fill = 1f;
+        icon.color = new Color(icon.color.r, icon.color.g, icon.color.b, 255f);
         startReduce = true;
         time = 1/liveTime;
     }
@@ -26,7 +31,21 @@ public class HealthBarSystem : MonoBehaviour
         if (startReduce)
         {
             fill -= damage;
+            if (fill<=0)
+            {
+                StopSystem();
+            }
         }
+    }
+
+    public void StopSystem()
+    {
+        startReduce = false;
+        stopSystem = true;
+        gameObject.GetComponent<Canvas>().enabled = false;
+        icon.color = new Color(icon.color.r, icon.color.g, icon.color.b, 0f);
+        icon.gameObject.tag = "SlotGun";
+        icon.gameObject.GetComponent<DropZone>().SlotForCardEmpty = true;
     }
 
     // Update is called once per frame
@@ -40,8 +59,9 @@ public class HealthBarSystem : MonoBehaviour
             {
                 startReduce = false;
                 gameObject.GetComponent<Canvas>().enabled = false;
-                fill = 1f;
-                bar.fillAmount = 1f;
+                icon.color = new Color(icon.color.r, icon.color.g, icon.color.b, 0f);
+                icon.gameObject.tag = "SlotGun";
+                icon.gameObject.GetComponent<DropZone>().SlotForCardEmpty = true;
             }
         }
     }

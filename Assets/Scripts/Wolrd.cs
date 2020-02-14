@@ -116,18 +116,20 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
                 mr.IDR = (int)idR;
 
                 //Debug.Log((int)countRSystem + " " + (int)trig + " " + (string)pID1);
-
-                if (!allRockets.ContainsKey((int)countRSystem))
+                if ((int)trig!=-1)
                 {
-                    allRockets.Add((int)countRSystem, mr);
-                }
-                else
-                {
-                    if (allRockets[(int)countRSystem].trig != (int)trig)
+                    if (!allRockets.ContainsKey((int)countRSystem))
                     {
-                        int IDR1 = allRockets[(int)countRSystem].IDR;
-                        takeTwoValue(mr.IDR,IDR1);
-                        allRockets.Remove((int)countRSystem);
+                        allRockets.Add((int)countRSystem, mr);
+                    }
+                    else
+                    {
+                        if (allRockets[(int)countRSystem].trig != (int)trig)
+                        {
+                            int IDR1 = allRockets[(int)countRSystem].IDR;
+                            takeTwoValue(mr.IDR, IDR1);
+                            allRockets.Remove((int)countRSystem);
+                        }
                     }
                 }
 

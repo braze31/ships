@@ -1152,7 +1152,7 @@ ScriptsOnlyBuild:
     className: HealthBar
   - hash:
       serializedVersion: 2
-      Hash: 544ec99618e36dabd1c2859d6518a264
+      Hash: 5c5b4c9cb88b2bb7c0a15769a14ec9d9
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PlayerControls
@@ -1434,7 +1434,7 @@ ScriptsOnlyBuild:
     className: PhotonTransformViewClassic
   - hash:
       serializedVersion: 2
-      Hash: 2cbf1309cc20839c35297b4b1ae8180b
+      Hash: 0b5eede22712863befbc3825a0e615c1
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: HealthBarSystem

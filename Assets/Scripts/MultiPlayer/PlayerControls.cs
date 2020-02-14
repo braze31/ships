@@ -16,6 +16,7 @@ public class PlayerControls : MonoBehaviour, IPunObservable
     public GameObject Rocket;
     public Transform Trans;
     public Vector2Int Position;
+    public int HowMuchRocketInSystem = 3;
 
     private GameObject Target;
     GameObject playerCanvas;
@@ -32,6 +33,8 @@ public class PlayerControls : MonoBehaviour, IPunObservable
 
     private GameObject yourPing;
     private int TimeID;
+    // PRSPAWN FOR RESET PREFAB ICON CARD
+    private GameObject PRSPAWN;
 
     // Start is called before the first frame update
     void Start()
@@ -47,43 +50,8 @@ public class PlayerControls : MonoBehaviour, IPunObservable
         ship = GameObject.Find("Ship-Player-1").GetComponent<Ship>();
     }
 
-    //// CREATE if on event FROM another player
-    //public void ChangeEnemyShipContent(string targetName, int timeID)
-    //{
-    //    if (photonView.IsMine)
-    //    {
-    //        GameObject enemyShip = GameObject.FindGameObjectWithTag("Enemy");
-    //        Image[] fALL = enemyShip.GetComponentsInChildren<Image>();
-    //        foreach (var item in fALL)
-    //        {
-    //            if (targetName == item.name)
-    //            {
-    //                item.tag = "SlotGunFull";
-    //                StartCoroutine(INSTrocketBytimeNtimes(item,enemyShip,timeID));
-    //                item.GetComponent<DropZone>().healthBar.EnableImageAndStartReduceHp(4.5f);
-    //            }
-    //        }
-    //    }
-    //}
-    //// CREATE if on event FROM self player
-    //public void CreatePreFab(string targetName, int timeID)
-    //{
-    //    if (photonView.IsMine)
-    //    {
-    //        GameObject pShip = GameObject.FindGameObjectWithTag("Player1");
-    //        Image[] fALL = pShip.GetComponentsInChildren<Image>();
-    //        foreach (var item in fALL)
-    //        {
-    //            if (targetName == item.name)
-    //            {
-    //                item.tag = "SlotGunFull";
-    //                StartCoroutine(INSTrocketBytimeNtimes(item, pShip,timeID));
-    //                item.GetComponent<DropZone>().healthBar.EnableImageAndStartReduceHp(4.5f);
-    //            }
-    //        }
-    //    }
-    //}
-
+    // CREATE if on event FROM self player
+    // CREATE if on event FROM another player
     public void CreatePreFabForSystemRocket(string targetName, int timeID, string playerName)
     {
         if (photonView.IsMine)
@@ -96,7 +64,9 @@ public class PlayerControls : MonoBehaviour, IPunObservable
                 {
                     item.tag = "SlotGunFull";
                     StartCoroutine(INSTrocketBytimeNtimes(item, pShip, timeID));
-                    item.GetComponent<DropZone>().healthBar.EnableImageAndStartReduceHp(4.5f);
+                    // GameConstants.TIME_ROCKET_SYSTEM-GameConstants.TIME_BEETWEN_ROCKET_SPAWN because first rocket live in first moment live system.
+                    item.GetComponent<DropZone>().healthBar.EnableImageAndStartReduceHp(GameConstants.TIME_ROCKET_SYSTEM-GameConstants.TIME_BEETWEN_ROCKET_SPAWN);
+                    StartCoroutine(ResetSlotDeleteIcon(item, PRSPAWN.GetComponent<RawImage>()));
                 }
             }
         }
@@ -104,40 +74,45 @@ public class PlayerControls : MonoBehaviour, IPunObservable
 
     IEnumerator INSTrocketBytimeNtimes(Image item, GameObject enemyShip,int timeID)
     {
-        for (int k = 0; k < 3; k++)
+        //item.color = new Color(item.color.r, item.color.g, item.color.b, 255f);
+
+        for (int k = 0; k < HowMuchRocketInSystem; k++)
         {
+            if (item.GetComponent<DropZone>().healthBar.bar.fillAmount <= 0)
+            {
+                StopCoroutine("INSTrocketBytimeNtimes");
+                //item.color = new Color(item.color.r, item.color.g, item.color.b, 0f);
+                yield return null;
+            }
+            else
+            {
+                Vector3 pointToTravel = item.gameObject.GetComponentInChildren<DropZone>().posForR.GetComponent<RectTransform>().localPosition;
+                //Vector3 pointToTravel = item.GetComponent<RectTransform>().localPosition;
+                GameObject myNewS = Instantiate(Rocket, pointToTravel, Quaternion.Euler(0f, 0f, 0f));
+                Image i = myNewS.GetComponentInChildren<Image>().GetComponent<Image>();
+                RawImage ri = myNewS.GetComponentInChildren<RawImage>().GetComponent<RawImage>();
 
-            Vector3 pointToTravel = item.gameObject.GetComponentInChildren<DropZone>().posForR.GetComponent<RectTransform>().localPosition;
+                item.sprite = i.sprite;
 
-            //Vector3 pointToTravel = item.GetComponent<RectTransform>().localPosition;
-            GameObject myNewS = Instantiate(Rocket, pointToTravel, Quaternion.Euler(0f, 0f, 0f));
-            Image i = myNewS.GetComponentInChildren<Image>().GetComponent<Image>();
-            RawImage ri = myNewS.GetComponentInChildren<RawImage>().GetComponent<RawImage>();
+                PRSPAWN = item.gameObject.GetComponent<DropZone>().posForR.gameObject.GetComponentInChildren<RawImage>().gameObject;
+                //item.GetComponent<RectTransform>().rotation = new Quaternion(0f, 0f, 0f, 1f);
+                PRSPAWN.GetComponent<RawImage>().texture = ri.texture;
+                PRSPAWN.GetComponent<RawImage>().color = new Color(ri.color.r, ri.color.g, ri.color.b, 0f);
 
-            item.color = new Color(item.color.r, item.color.g, item.color.b, 255f);
-            item.sprite = i.sprite;
+                // need anchor?
+                //myNewS.GetComponent<RectTransform>().anchoredPosition = new Vector3(pointToTravel.x,pointToTravel.y,pointToTravel.z);
 
-            GameObject PRSPAWN = item.gameObject.GetComponent<DropZone>().posForR.gameObject.GetComponentInChildren<RawImage>().gameObject;
-            item.GetComponent<RectTransform>().rotation = new Quaternion(0f, 0f, 0f,1f);
-            PRSPAWN.GetComponent<RawImage>().texture = ri.texture;
-            PRSPAWN.GetComponent<RawImage>().color = new Color(ri.color.r, ri.color.g, ri.color.b, 0f);
+                Rocket r = myNewS.GetComponent<Rocket>();
+                RocketsSystem.Add(r);
 
-            StartCoroutine(ResetSlotDeleteIcon(item,PRSPAWN.GetComponent<RawImage>()));
+                r.countRSystem = timeID + k;
 
-            // need anchor?
-            //myNewS.GetComponent<RectTransform>().anchoredPosition = new Vector3(pointToTravel.x,pointToTravel.y,pointToTravel.z);
+                myNewS.transform.SetParent(enemyShip.transform, false);
 
-            Rocket r = myNewS.GetComponent<Rocket>();
-            RocketsSystem.Add(r);
-
-            r.countRSystem = timeID + k;
-
-            myNewS.transform.SetParent(enemyShip.transform, false);
-
-            RocketsIDs[myNewS.GetInstanceID()] = r;
-            yield return new WaitForSeconds(1.5f);
+                RocketsIDs[myNewS.GetInstanceID()] = r;
+                yield return new WaitForSeconds(GameConstants.TIME_BEETWEN_ROCKET_SPAWN);
+            }
         }
-        item.tag = "SlotGun";
         //item.transform.parent.Find(nameSlot).tag = "SlotGun";
         item.GetComponent<DropZone>().healthBar.gameObject.GetComponent<Canvas>().enabled = false;
     }
@@ -145,10 +120,10 @@ public class PlayerControls : MonoBehaviour, IPunObservable
 
     IEnumerator ResetSlotDeleteIcon(Image icon,RawImage Ricon)
     {
-        yield return new WaitForSeconds(4.5f);
-        icon.color = new Color(icon.color.r, icon.color.g, icon.color.b, 0f);
-        Ricon.color = new Color(icon.color.r, icon.color.g, icon.color.b, 0f);
-        //icon.tag = "SlotGun";
+        yield return new WaitForSeconds(GameConstants.TIME_ROCKET_SYSTEM);
+        //icon.color = new Color(icon.color.r, icon.color.g, icon.color.b, 0f);
+        //Ricon.color = new Color(icon.color.r, icon.color.g, icon.color.b, 0f);
+        icon.tag = "SlotGun";
     }
 
 
@@ -272,7 +247,6 @@ public class PlayerControls : MonoBehaviour, IPunObservable
         {
             Rocket r = RocketsIDs[idRocketS];
             r.tag = "RocketS";
-            Debug.Log("RENAME");
         }
     }
 
@@ -291,7 +265,6 @@ public class PlayerControls : MonoBehaviour, IPunObservable
             healthData["hp"] = hp;
 
             PhotonNetwork.RaiseEvent(2, healthData, options, sendOptions);
-            
         }
     }
 

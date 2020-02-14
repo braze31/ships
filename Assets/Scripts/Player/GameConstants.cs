@@ -10,4 +10,7 @@ public static class GameConstants
     public static int RESOURCE_MAX = 9;
     public static int MAX_HAND_SIZE = 4;
     public static string HUD_CANVAS = "HUD - Canvas";
+    public static float TIME_ROCKET_SYSTEM = 8f;
+    // need corret this value?
+    public static float TIME_BEETWEN_ROCKET_SPAWN = TIME_ROCKET_SYSTEM/3-0.17f;
 }

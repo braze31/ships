@@ -11,7 +11,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
     Image image;
     public Card.Slot typeOfItem = Card.Slot.WEAPON;
     [SerializeField]
-    private bool SlotForCardEmpty = true;
+    public bool SlotForCardEmpty = true;
     public delegate void SelectAction(GameObject target, GameObject cardStats, float currRes, Image iconCard, int timeID);
     public static event SelectAction OnSelectedEvent;
 
@@ -75,7 +75,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 
     IEnumerator ResetSlotDeleteIcon(Image icon)
     {
-        yield return new WaitForSeconds(4.5f);
+        yield return new WaitForSeconds(GameConstants.TIME_ROCKET_SYSTEM);
         SlotForCardEmpty = true;
         //image.color = new Color(image.color.r, image.color.g, image.color.b, 0f);
         //gameObject.tag = "SlotGun";
