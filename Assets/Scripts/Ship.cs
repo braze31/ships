@@ -15,6 +15,8 @@ public class Ship : MonoBehaviour
     public bool DamageDone = false;
     [SerializeField]
     public IEnumerable<RectTransform> rt;
+    [SerializeField]
+    public IEnumerable<RectTransform> AllObjectsFromShip;
 
     private void Start()
     {
@@ -38,6 +40,9 @@ public class Ship : MonoBehaviour
     {
         textHP.GetComponent<Text>().text = curHealth.ToString();
         rt = gameObject.transform.GetComponentsInChildren<RectTransform>().Where(i => i.tag == "SlotGunFull");
+        AllObjectsFromShip = gameObject.transform.GetComponentsInChildren<RectTransform>().Where(
+            a => a.tag == "Rocket" || a.tag == "RocketS"
+            );
     }
 
     //void OnEnable()

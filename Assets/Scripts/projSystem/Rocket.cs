@@ -22,6 +22,8 @@ public class Rocket : MonoBehaviourPun
 
     public bool CheckForEvent = false;
 
+    public bool triggerIsActived;
+
     private List<Transform> allPoints = new List<Transform>() { };
     [SerializeField]
     public int countRSystem = 0;
@@ -33,10 +35,17 @@ public class Rocket : MonoBehaviourPun
     public float ShipRocketDamage = 0.1f;
     public float ShipAndSystemRocketDamage = 0.05f;
 
+    [SerializeField]
+    public float initializationTime;
+
+    [SerializeField]
+    public float HealthRocket = 100;
+
     //public RectTransform ExplosionTransform;
 
     void Start()
     {
+        initializationTime = Time.timeSinceLevelLoad;
         goPar = gameObject.transform.parent.gameObject;
         TargetForRocket = SearchTargetForRocket(goPar);
         if (TargetForRocket.name=="Ship-Player" || TargetForRocket.name == "Ship-Enemy")
@@ -111,12 +120,14 @@ public class Rocket : MonoBehaviourPun
         if (other.gameObject.name == "RightTrigger" && goPar.name == "Ship-Player-1")
         {
             rightTrigg = true;
+            triggerIsActived = true;
             //Invoke("DestroyRocketbyTime", 10);
             SendEvent();
         }
         if (other.gameObject.name == "LeftTrigger" && goPar.name == "Ship-Player-2")
         {
             leftTrigg = true;
+            triggerIsActived = true;
             //Invoke("DestroyRocketbyTime", 10);
             SendEvent();
         }
@@ -131,6 +142,7 @@ public class Rocket : MonoBehaviourPun
             dz.healthBar.ReduceHPSystem(SystemRocketDamage);
             Ship go = other.transform.parent.gameObject.GetComponent<Ship>();
             go.ShipTakeDamage(ShipAndSystemRocketDamage);
+            HealthRocket = 0;
         }
         if (gameObject.tag =="RocketS" && other.name == "Ship-Player-1"
             || gameObject.tag == "RocketS" && other.name == "Ship-Player-2")
@@ -144,6 +156,7 @@ public class Rocket : MonoBehaviourPun
             GameObject expl = Instantiate(ExplosionAnim, ExplosionTransform.transform.position, Quaternion.Euler(0f, 0f, 0f));
             expl.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 0f);
             expl.transform.SetParent(other.gameObject.transform.parent.gameObject.transform);
+            HealthRocket = 0;
         }
         //    //if (col.gameObject.tag == "Rocket")
         //    //{
@@ -184,9 +197,27 @@ public class Rocket : MonoBehaviourPun
         
     }
 
+    public void DestroyAndAnimate(GameObject other)
+    {
+        gameObject.SetActive(false);
+        GameObject expl = Instantiate(ExplosionAnim, ExplosionTransform.transform.position, Quaternion.Euler(0f, 0f, 0f));
+        expl.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 0f);
+        expl.transform.SetParent(other.gameObject.transform.parent.gameObject.transform);
+        if (gameObject.transform.position.x > 1080)
+        {
+            expl.transform.position = new Vector3(1050f, expl.transform.position.y);
+        }
+        if (gameObject.transform.position.x < 0)
+        {
+            expl.transform.position = new Vector3(30f, expl.transform.position.y);
+        }
+        Destroy(gameObject);
+    }
+
     // Update is called once per frame
     void Update()
     {
+        float timeSinceInitialization = Time.timeSinceLevelLoad - initializationTime;
         gameObject.transform.Translate(userDirection * movespeed * Time.deltaTime);
         if (CheckForEvent)
         {

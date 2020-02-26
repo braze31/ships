@@ -14,7 +14,7 @@ public class PlayerControls : MonoBehaviour, IPunObservable
     private Texture2D image;
     public GameObject PrefabCanvas;
     public GameObject Rocket;
-    public Transform Trans;
+    public GameObject Laser;
     public Vector2Int Position;
     public int HowMuchRocketInSystem = 3;
 
@@ -34,7 +34,7 @@ public class PlayerControls : MonoBehaviour, IPunObservable
     private GameObject yourPing;
     private int TimeID;
     // PRSPAWN FOR RESET PREFAB ICON CARD
-    private GameObject PRSPAWN;
+    //private GameObject PRSPAWN;
 
     // Start is called before the first frame update
     void Start()
@@ -66,7 +66,26 @@ public class PlayerControls : MonoBehaviour, IPunObservable
                     StartCoroutine(INSTrocketBytimeNtimes(item, pShip, timeID));
                     // GameConstants.TIME_ROCKET_SYSTEM-GameConstants.TIME_BEETWEN_ROCKET_SPAWN because first rocket live in first moment live system.
                     item.GetComponent<DropZone>().healthBar.EnableImageAndStartReduceHp(GameConstants.TIME_ROCKET_SYSTEM-GameConstants.TIME_BEETWEN_ROCKET_SPAWN);
-                    StartCoroutine(ResetSlotDeleteIcon(item, PRSPAWN.GetComponent<RawImage>()));
+                    StartCoroutine(ResetSlotDeleteIcon(item)); //  PRSPAWN.GetComponent<RawImage>()
+                }
+            }
+        }
+    }
+
+    public void CreatePreFabForSystemLaser(string targetName, int timeID, string playerName)
+    {
+        if (photonView.IsMine)
+        {
+            GameObject pShip = GameObject.FindGameObjectWithTag(playerName);
+            Image[] fALL = pShip.GetComponentsInChildren<Image>();
+            foreach (var item in fALL)
+            {
+                if (targetName == item.name)
+                {
+                    item.tag = "SlotGunFull";
+                    StartCoroutine(INSTlaserBytimeNtimes(item, pShip, timeID, 3f));
+                    item.GetComponent<DropZone>().healthBar.EnableImageAndStartReduceHp(3f);
+                    //StartCoroutine(ResetSlotDeleteIcon(item, PRSPAWN.GetComponent<RawImage>()));
                 }
             }
         }
@@ -94,10 +113,10 @@ public class PlayerControls : MonoBehaviour, IPunObservable
 
                 item.sprite = i.sprite;
 
-                PRSPAWN = item.gameObject.GetComponent<DropZone>().posForR.gameObject.GetComponentInChildren<RawImage>().gameObject;
-                //item.GetComponent<RectTransform>().rotation = new Quaternion(0f, 0f, 0f, 1f);
-                PRSPAWN.GetComponent<RawImage>().texture = ri.texture;
-                PRSPAWN.GetComponent<RawImage>().color = new Color(ri.color.r, ri.color.g, ri.color.b, 0f);
+                //PRSPAWN = item.gameObject.GetComponent<DropZone>().posForR.gameObject.GetComponentInChildren<RawImage>().gameObject;
+                ////item.GetComponent<RectTransform>().rotation = new Quaternion(0f, 0f, 0f, 1f);
+                //PRSPAWN.GetComponent<RawImage>().texture = ri.texture;
+                //PRSPAWN.GetComponent<RawImage>().color = new Color(ri.color.r, ri.color.g, ri.color.b, 0f);
 
                 // need anchor?
                 //myNewS.GetComponent<RectTransform>().anchoredPosition = new Vector3(pointToTravel.x,pointToTravel.y,pointToTravel.z);
@@ -117,8 +136,39 @@ public class PlayerControls : MonoBehaviour, IPunObservable
         item.GetComponent<DropZone>().healthBar.gameObject.GetComponent<Canvas>().enabled = false;
     }
 
+    IEnumerator INSTlaserBytimeNtimes(Image item, GameObject enemyShip, int timeID, float TimeLifeLaser)
+    {
 
-    IEnumerator ResetSlotDeleteIcon(Image icon,RawImage Ricon)
+        //if (item.GetComponent<DropZone>().healthBar.bar.fillAmount <= 0)
+        //{
+        //    yield return null;
+        //}
+        //else
+        //{
+            //Vector3 pointToTravel = item.gameObject.GetComponentInChildren<DropZone>().posForR.GetComponent<RectTransform>().localPosition;
+            GameObject myNewSystemL1 = Instantiate(Laser, new Vector3(0, 0, 0), Quaternion.Euler(0f, 0f, 0f));
+            GameObject myNewSystemL2 = Instantiate(Laser, new Vector3(0, 0, 0), Quaternion.Euler(0f, 0f, 0f));
+
+            IEnumerable<Image> i = myNewSystemL1.GetComponentsInChildren<Image>().Where(a => a.name == "Icon");
+
+            item.sprite = i.First().GetComponent<Image>().sprite;
+
+            myNewSystemL1.transform.SetParent(enemyShip.transform, true);
+            myNewSystemL2.transform.SetParent(enemyShip.transform, true);
+            myNewSystemL1.GetComponent<Laser>().TakeStartPosition(item.gameObject.GetComponentInChildren<DropZone>().posForR.transform.position);
+            myNewSystemL2.GetComponent<Laser>().TakeStartPositionOFFLaser(item.gameObject.GetComponentInChildren<DropZone>().posForR.transform.position);
+            //myNewSystemL1.GetComponent<Laser>().TimeLife(TimeLifeLaser);
+            //myNewSystemL2.GetComponent<Laser>().TimeLife(TimeLifeLaser);
+        //}
+        //item.transform.parent.Find(nameSlot).tag = "SlotGun";
+
+        yield return new WaitForSeconds(3f);
+
+        item.GetComponent<DropZone>().healthBar.gameObject.GetComponent<Canvas>().enabled = false;
+    }
+
+
+    IEnumerator ResetSlotDeleteIcon(Image icon)
     {
         yield return new WaitForSeconds(GameConstants.TIME_ROCKET_SYSTEM);
         //icon.color = new Color(icon.color.r, icon.color.g, icon.color.b, 0f);

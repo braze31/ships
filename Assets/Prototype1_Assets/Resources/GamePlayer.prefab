@@ -426,7 +426,7 @@ MonoBehaviour:
   PrefabCanvas: {fileID: 410258715617483847, guid: 8810af97eebc0c843b45efedaf0771f2,
     type: 3}
   Rocket: {fileID: 5682475894612962608, guid: da35c085e72e3f842aebb44c7ec179e5, type: 3}
-  Trans: {fileID: 4290899093232644219}
+  Laser: {fileID: 28543106658496149, guid: d3d978ad2412cca42b542920ec492d57, type: 3}
   Position: {x: 0, y: 0}
   HowMuchRocketInSystem: 3
   RocketsSystem: []

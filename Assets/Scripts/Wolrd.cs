@@ -156,16 +156,32 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
         var tagTarget = hashPlayer["tagSlot"];
 
         var timeID = hashPlayer["TimeID"];
-
-        foreach (var player in players.OrderBy(p => p.photonView.Owner.ActorNumber))
+        if ((string)icon == "rocket")
         {
-            if (player.photonView.ViewID != (int)pID)
+            foreach (var player in players.OrderBy(p => p.photonView.Owner.ActorNumber))
             {
-                player.CreatePreFabForSystemRocket((string)slot, (int)timeID, "Enemy");
+                if (player.photonView.ViewID != (int)pID)
+                {
+                    player.CreatePreFabForSystemRocket((string)slot, (int)timeID, "Enemy");
+                }
+                if (player.photonView.ViewID == (int)pID)
+                {
+                    player.CreatePreFabForSystemRocket((string)slot, (int)timeID, "Player1");
+                }
             }
-            if (player.photonView.ViewID == (int)pID)
+        }
+        if ((string)icon == "laser")
+        {
+            foreach (var player in players.OrderBy(p => p.photonView.Owner.ActorNumber))
             {
-                player.CreatePreFabForSystemRocket((string)slot, (int)timeID, "Player1");
+                if (player.photonView.ViewID != (int)pID)
+                {
+                    player.CreatePreFabForSystemLaser((string)slot, (int)timeID, "Enemy");
+                }
+                if (player.photonView.ViewID == (int)pID)
+                {
+                    player.CreatePreFabForSystemLaser((string)slot, (int)timeID, "Player1");
+                }
             }
         }
     }
