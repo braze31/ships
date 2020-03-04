@@ -17,6 +17,8 @@ public class Rocket : MonoBehaviourPun
     GameObject goPar;
     Transform TargetForRocket;
 
+    public bool rocketONAttack;
+
     public bool rightTrigg;
     public bool leftTrigg;
 
@@ -200,7 +202,8 @@ public class Rocket : MonoBehaviourPun
     public void DestroyAndAnimate(GameObject other)
     {
         gameObject.SetActive(false);
-        GameObject expl = Instantiate(ExplosionAnim, ExplosionTransform.transform.position, Quaternion.Euler(0f, 0f, 0f));
+        // for laser transorm, not same position like explosion transform.
+        GameObject expl = Instantiate(ExplosionAnim, gameObject.transform.position, Quaternion.Euler(0f, 0f, 0f));
         expl.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 0f);
         expl.transform.SetParent(other.gameObject.transform.parent.gameObject.transform);
         if (gameObject.transform.position.x > 1080)
@@ -287,6 +290,11 @@ public class Rocket : MonoBehaviourPun
             }
             CheckForEvent = false;
         }
+        if (HealthRocket <= 0)
+        {
+            Destroy(gameObject);
+        }
+        //Debug.Log(HealthRocket);
     }
 
     Transform SearchTargetForRocket(GameObject goPar)

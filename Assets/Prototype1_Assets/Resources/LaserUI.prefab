@@ -61,7 +61,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LR: {fileID: 5387323569872157637}
   LineDrawSpeed: 7
-  interpolationPeriod: 4
+  STOPTHIS: 0
+  STARTTHIS: 0
+  SwapPoints: 0
 --- !u!114 &5387323569872157637
 MonoBehaviour:
   m_ObjectHideFlags: 0

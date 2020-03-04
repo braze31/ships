@@ -83,7 +83,7 @@ public class PlayerControls : MonoBehaviour, IPunObservable
                 if (targetName == item.name)
                 {
                     item.tag = "SlotGunFull";
-                    StartCoroutine(INSTlaserBytimeNtimes(item, pShip, timeID, 3f));
+                    StartCoroutine(INSTlaserBytimeNtimes(item, pShip, timeID, 9f));
                     item.GetComponent<DropZone>().healthBar.EnableImageAndStartReduceHp(3f);
                     //StartCoroutine(ResetSlotDeleteIcon(item, PRSPAWN.GetComponent<RawImage>()));
                 }
@@ -138,13 +138,14 @@ public class PlayerControls : MonoBehaviour, IPunObservable
 
     IEnumerator INSTlaserBytimeNtimes(Image item, GameObject enemyShip, int timeID, float TimeLifeLaser)
     {
-
-        //if (item.GetComponent<DropZone>().healthBar.bar.fillAmount <= 0)
-        //{
-        //    yield return null;
-        //}
-        //else
-        //{
+        for (int k = 0; k < HowMuchRocketInSystem; k++)
+        {
+            //if (item.GetComponent<DropZone>().healthBar.bar.fillAmount <= 0)
+            //{
+            //    yield return null;
+            //}
+            //else
+            //{
             //Vector3 pointToTravel = item.gameObject.GetComponentInChildren<DropZone>().posForR.GetComponent<RectTransform>().localPosition;
             GameObject myNewSystemL1 = Instantiate(Laser, new Vector3(0, 0, 0), Quaternion.Euler(0f, 0f, 0f));
             GameObject myNewSystemL2 = Instantiate(Laser, new Vector3(0, 0, 0), Quaternion.Euler(0f, 0f, 0f));
@@ -157,12 +158,15 @@ public class PlayerControls : MonoBehaviour, IPunObservable
             myNewSystemL2.transform.SetParent(enemyShip.transform, true);
             myNewSystemL1.GetComponent<Laser>().TakeStartPosition(item.gameObject.GetComponentInChildren<DropZone>().posForR.transform.position);
             myNewSystemL2.GetComponent<Laser>().TakeStartPositionOFFLaser(item.gameObject.GetComponentInChildren<DropZone>().posForR.transform.position);
+            myNewSystemL1.GetComponent<Laser>().TakeStartHPBARLaser(item);
+            myNewSystemL2.GetComponent<Laser>().TakeStartHPBARLaser(item);
             //myNewSystemL1.GetComponent<Laser>().TimeLife(TimeLifeLaser);
             //myNewSystemL2.GetComponent<Laser>().TimeLife(TimeLifeLaser);
-        //}
-        //item.transform.parent.Find(nameSlot).tag = "SlotGun";
+            //}
+            //item.transform.parent.Find(nameSlot).tag = "SlotGun";
 
-        yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(1f);
+        }
 
         item.GetComponent<DropZone>().healthBar.gameObject.GetComponent<Canvas>().enabled = false;
     }

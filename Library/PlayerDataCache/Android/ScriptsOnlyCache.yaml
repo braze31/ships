@@ -1360,7 +1360,7 @@ ScriptsOnlyBuild:
     className: ExampleSelectable
   - hash:
       serializedVersion: 2
-      Hash: a09dc3855779229da2b437ed70ef884c
+      Hash: 16e5700c4cfbd4f8ebc0c4bec4cd1b4a
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Laser
@@ -2446,7 +2446,7 @@ ScriptsOnlyBuild:
     className: ToolTip
   - hash:
       serializedVersion: 2
-      Hash: f9df30fee184e6c6d03fd2df359ab372
+      Hash: d0fa266e87d0970c51e53929326ddad9
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Rocket
