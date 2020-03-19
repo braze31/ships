@@ -427,6 +427,7 @@ MonoBehaviour:
     type: 3}
   Rocket: {fileID: 5682475894612962608, guid: da35c085e72e3f842aebb44c7ec179e5, type: 3}
   Laser: {fileID: 28543106658496149, guid: d3d978ad2412cca42b542920ec492d57, type: 3}
+  Shield: {fileID: 8720670855022971880, guid: cd04909e662b21342b1d179ac454a5a9, type: 3}
   Position: {x: 0, y: 0}
   HowMuchRocketInSystem: 3
   RocketsSystem: []

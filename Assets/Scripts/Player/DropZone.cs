@@ -12,17 +12,24 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
     public Card.Slot typeOfItem = Card.Slot.WEAPON;
     [SerializeField]
     public bool SlotForCardEmpty = true;
-    public delegate void SelectAction(GameObject target, GameObject cardStats, float currRes, Image iconCard, int timeID);
+    public delegate void SelectAction(Image target, GameObject cardStats, float currRes, Image iconCard, int timeID);
     public static event SelectAction OnSelectedEvent;
 
     GameObject ParentCanvas;
     public RectTransform posForR;
     [SerializeField]
     public HealthBarSystem healthBar;
+    public Image iconSystem;
+
+    private GameObject ShipThisDropZone;
+
+    // DROPZONE instruction how this WORKS!
+    // every gameobjects which they are have dropzone, 
+    // must have IMAGE or RAWIMAGE with bool value -> RAYCASTTARGET = true
 
     void Start()
     {
-        //Debug.Log(healthBar.gameObject);
+        ShipThisDropZone = gameObject.transform.parent.gameObject;
     }
 
     public void OnDrop(PointerEventData eventData)
@@ -33,16 +40,23 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
         ParentCanvas = gameObject.transform.root.gameObject;
         float GetCurRes = ParentCanvas.GetComponent<PlayerStats>().GetCurrResource;
         float EnoughResForCardDrop = GetCurRes - Convert.ToInt32(d.Cost.text);
-
-        if (gameObject.tag == "SlotGun" || gameObject.tag == "SlotGunFull")
+        if (gameObject.tag == "SlotGun")
         {
+            if (ShipThisDropZone.GetComponent<Ship>().shieldActive && d.Icon.sprite.name == "shield")
+            {
+                SlotForCardEmpty = false;
+            }
+            else
+            {
+                SlotForCardEmpty = true;
+            }
             //gameObject.tag = "SlotGunFull";
             if (d != null && SlotForCardEmpty)
             {
                 Image iconGun = d.Icon;
-                image = gameObject.GetComponent<Image>();
-                image.color = new Color(image.color.r, image.color.g, image.color.b, 255f);
-                gameObject.GetComponent<Image>().sprite = iconGun.sprite;
+                //image = gameObject.GetComponent<Image>();
+                iconSystem.color = new Color(iconSystem.color.r, iconSystem.color.g, iconSystem.color.b, 255f);
+                iconSystem.GetComponent<Image>().sprite = iconGun.sprite;
                 d.parentToReturnTo = posForR.transform;
                 // this bad solution
                 // something wrong on this eventData? Can't do set point parentToReturn correct
@@ -61,7 +75,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
                     //RocketId idR = new RocketId();
 
                     int timeID = RandomIDforRocket();
-                    OnSelectedEvent(gameObject, eventData.pointerDrag, EnoughResForCardDrop, iconGun, timeID);
+                    OnSelectedEvent(iconSystem, eventData.pointerDrag, EnoughResForCardDrop, iconGun, timeID);
                 }
             }
         }

@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LR: {fileID: 5387323569872157637}
-  LineDrawSpeed: 7
+  LineDrawSpeed: 8
   STOPTHIS: 0
   STARTTHIS: 0
   SwapPoints: 0
@@ -91,7 +91,7 @@ MonoBehaviour:
   m_points:
   - {x: 0, y: 0}
   - {x: 0, y: 0}
-  lineThickness: 30
+  lineThickness: 31
   relativeSize: 0
   lineList: 0
   lineCaps: 0

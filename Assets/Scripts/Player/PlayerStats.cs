@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -87,10 +88,14 @@ public class PlayerStats : MonoBehaviour
         }
     }
     public GameObject FullRes;
+    private GameObject ShipPlayer;
+    public GameObject HandOnScreen;
+    IEnumerable<RectTransform> allCards;
 
     private void Start()
     {
         playerDeck.Start();
+        ShipPlayer = GameObject.Find("Ship-Player-1");
     }
 
     private void Update()
@@ -108,6 +113,7 @@ public class PlayerStats : MonoBehaviour
         {
             FullRes.SetActive(false);
         }
+        allCards = HandOnScreen.GetComponentsInChildren<RectTransform>().Where(a => a.gameObject.tag == "Card");
         UpdateText();
         UpdateDeck();
     }
@@ -135,13 +141,49 @@ public class PlayerStats : MonoBehaviour
 
     void UpdateDeck()
     {
-        if(playerDeck.Hand.Count < GameConstants.MAX_HAND_SIZE)
+        if (allCards!=null)
         {
-            CardStats cs = playerDeck.DrawCard();
-            GameObject go = Instantiate(cardPrefab, handParent);
-            Card c = go.GetComponent<Card>();
-            c.PlayerInfo = this;
-            c.CardInfo = cs;
+            if (allCards.Count() < GameConstants.MAX_HAND_SIZE && !onDragging)
+            {
+                int countShield = 0;
+                foreach (var item in allCards)
+                {
+                    // check standart icon in prefab
+                    if (item.gameObject.transform.Find("Icon").GetComponent<Image>().sprite.name != "flame1")
+                    {
+                        if (item.gameObject.transform.Find("Icon").GetComponent<Image>().sprite.name == "shield")
+                        {
+                            countShield++;
+                        }
+                    }
+                }
+                //Debug.Log(countShield);
+                CardStats cs = playerDeck.DrawCard();
+
+                if (ShipPlayer.GetComponent<Ship>().shieldActive)
+                {
+                    while (cs.Icon.texture.name == "shield")
+                    {
+                        cs = playerDeck.DrawCard();
+                    }
+                    playerDeck.RemoveShield(cs);
+                }
+                if (cs.Icon.texture.name == "shield" && countShield >= 1)
+                {
+                    while (cs.Icon.texture.name == "shield")
+                    {
+                        cs = playerDeck.DrawCard();
+                    }
+
+                    playerDeck.RemoveShield(cs);
+                    Debug.Log(playerDeck.Hand.Count);
+                    //playerDeck.Hand.ToList().ForEach(o => Debug.Log(o.Icon.name));
+                }
+                GameObject go = Instantiate(cardPrefab, handParent);
+                Card c = go.GetComponent<Card>();
+                c.PlayerInfo = this;
+                c.CardInfo = cs;
+            }
         }
 
         nextCard.CardInfo = playerDeck.NextCard;

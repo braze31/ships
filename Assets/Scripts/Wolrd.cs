@@ -25,7 +25,7 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
     }
 
     private Dictionary<int, MyRocket> allRockets = new Dictionary<int, MyRocket>();
-
+    private bool maxPlayerWasBeen;
 
     public void AddPlayer(PlayerControls player)
     {
@@ -138,10 +138,23 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
                     exploydRocketbyID((int)countRSystem);
                 }
 
-                if ((string)targetRocket == "RocketS")
+                //if ((string)targetRocket == "RocketS")
+                //{
+                //    AllPlayerTagRocketS((int)idR);
+                //}
+                break;
+            case 4:
+                var p4 = photonEvent.Parameters;
+                ExitGames.Client.Photon.Hashtable numberAndbool = (ExitGames.Client.Photon.Hashtable)p4[245];
+                //var boolForRandomNumberAndEvent = numberAndbool["boolForRandomNumberAndEvent"];
+
+
+                if (numberAndbool["randomNumber"] != null)
                 {
-                    AllPlayerTagRocketS((int)idR);
+                    var randomNumber = numberAndbool["randomNumber"];
+                    GivePlayersSameRandomNumber((int)randomNumber);
                 }
+
                 break;
         }
     }
@@ -184,6 +197,28 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
                 }
             }
         }
+        if ((string)icon == "shield")
+        {
+            foreach (var player in players.OrderBy(p => p.photonView.Owner.ActorNumber))
+            {
+                if (player.photonView.ViewID != (int)pID)
+                {
+                    player.CreatePreFabForSystemShield((string)slot, (int)timeID, "Enemy");
+                }
+                if (player.photonView.ViewID == (int)pID)
+                {
+                    player.CreatePreFabForSystemShield((string)slot, (int)timeID, "Player1");
+                }
+            }
+        }
+    }
+
+    public void GivePlayersSameRandomNumber(int randomNumber)
+    {
+        foreach (var player in players)
+        {
+            player.TakeRandomNumer(randomNumber);
+        }
     }
 
     public void ApplyHealtBar(int pID)
@@ -210,13 +245,13 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
         }
     }
 
-    public void AllPlayerTagRocketS(int idRocketWithTagRocketS)
-    {
-        foreach (var player in players.OrderBy(p => p.photonView.Owner.ActorNumber))
-        {
-            player.ChangeTagRocket(idRocketWithTagRocketS);
-        }
-    }
+    //public void AllPlayerTagRocketS(int idRocketWithTagRocketS)
+    //{
+    //    foreach (var player in players.OrderBy(p => p.photonView.Owner.ActorNumber))
+    //    {
+    //        player.ChangeTagRocket(idRocketWithTagRocketS);
+    //    }
+    //}
 
     public void exploydRocketbyID(int countRSystem)
     {
@@ -242,9 +277,17 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
         {
             // do something master
         }
-        if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
+        if (PhotonNetwork.CurrentRoom.PlayerCount == 2 && PhotonNetwork.CurrentRoom != null)
         {
             waitCanvas.GetComponentInChildren<Text>().text = "";
+            maxPlayerWasBeen = true;
+        }
+        else
+        {
+            if (maxPlayerWasBeen)
+            {
+                PhotonNetwork.LeaveRoom();
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [System.Serializable]
@@ -37,7 +38,18 @@ public class Deck
     public CardStats DrawCard()
     {
         CardStats cs = nextCard;
-
+        if (nextCard.Icon.texture.name == "rocket")
+        {
+            nextCard.Cost = 5;
+        }
+        if (nextCard.Icon.texture.name == "laser")
+        {
+            nextCard.Cost = 4;
+        }
+        if (nextCard.Icon.texture.name == "shield")
+        {
+            nextCard.Cost = 3;
+        }
         hand.Add(nextCard);
         cards.Remove(nextCard);
         nextCard = cards[0];
@@ -56,5 +68,10 @@ public class Deck
                 break;
             }
         }
+    }
+
+    public void RemoveShield(CardStats cs)
+    {
+        hand.Remove(cs);
     }
 }

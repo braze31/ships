@@ -13,6 +13,7 @@ ScriptsOnlyBuild:
     - PlayerControls
     - PlayerStats
     - Rocket
+    - Shield
     - Ship
     - UnityEngine.UI.Extensions.UILineRenderer
     - Wolrd
@@ -87,6 +88,8 @@ ScriptsOnlyBuild:
     - Class: 50
       Script: {instanceID: 0}
     - Class: 54
+      Script: {instanceID: 0}
+    - Class: 60
       Script: {instanceID: 0}
     - Class: 61
       Script: {instanceID: 0}
@@ -173,17 +176,19 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 13424}
     - Class: 114
-      Script: {instanceID: 13552}
+      Script: {instanceID: 13454}
     - Class: 114
-      Script: {instanceID: 13626}
+      Script: {instanceID: 13554}
     - Class: 114
-      Script: {instanceID: 13638}
+      Script: {instanceID: 13628}
     - Class: 114
-      Script: {instanceID: 13654}
+      Script: {instanceID: 13640}
     - Class: 114
-      Script: {instanceID: 13700}
+      Script: {instanceID: 13656}
     - Class: 114
-      Script: {instanceID: 13708}
+      Script: {instanceID: 13702}
+    - Class: 114
+      Script: {instanceID: 13710}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -201,6 +206,8 @@ ScriptsOnlyBuild:
     - Class: 198
       Script: {instanceID: 0}
     - Class: 199
+      Script: {instanceID: 0}
+    - Class: 212
       Script: {instanceID: 0}
     - Class: 213
       Script: {instanceID: 0}
@@ -228,6 +235,8 @@ ScriptsOnlyBuild:
     - Class: 48
       Script: {instanceID: 0}
     - Class: 50
+      Script: {instanceID: 0}
+    - Class: 60
       Script: {instanceID: 0}
     - Class: 61
       Script: {instanceID: 0}
@@ -284,17 +293,19 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 13424}
     - Class: 114
-      Script: {instanceID: 13530}
+      Script: {instanceID: 13454}
     - Class: 114
-      Script: {instanceID: 13552}
+      Script: {instanceID: 13532}
     - Class: 114
-      Script: {instanceID: 13626}
+      Script: {instanceID: 13554}
     - Class: 114
-      Script: {instanceID: 13638}
+      Script: {instanceID: 13628}
     - Class: 114
-      Script: {instanceID: 13654}
+      Script: {instanceID: 13640}
     - Class: 114
-      Script: {instanceID: 13726}
+      Script: {instanceID: 13656}
+    - Class: 114
+      Script: {instanceID: 13728}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -466,7 +477,7 @@ ScriptsOnlyBuild:
     className: ChatGui
   - hash:
       serializedVersion: 2
-      Hash: 45c75e8422455f527065f3b8200e4e37
+      Hash: 5b190735fbc4bce2590b6864831f781f
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: DropZone
@@ -1360,7 +1371,7 @@ ScriptsOnlyBuild:
     className: ExampleSelectable
   - hash:
       serializedVersion: 2
-      Hash: 16e5700c4cfbd4f8ebc0c4bec4cd1b4a
+      Hash: 89423e3067f357a6223ecbc7bef646a7
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Laser
@@ -1678,7 +1689,7 @@ ScriptsOnlyBuild:
     className: UIFlippable
   - hash:
       serializedVersion: 2
-      Hash: f251cdd857c423de2fe1126d2be7ca72
+      Hash: 224c8257bb5204bb0a2488f0b002e29c
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PlayerControls
@@ -1894,7 +1905,7 @@ ScriptsOnlyBuild:
     className: ServerProperty
   - hash:
       serializedVersion: 2
-      Hash: bc0a4eb83ea32fa364aecce3dc65022b
+      Hash: a5c15c991a8d2a1db57674a8adc80493
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Ship
@@ -2116,7 +2127,7 @@ ScriptsOnlyBuild:
     className: PhotonTransformViewClassic
   - hash:
       serializedVersion: 2
-      Hash: 0b5eede22712863befbc3825a0e615c1
+      Hash: adef6bfa479275ebe7d8b530aa996856
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: HealthBarSystem
@@ -2270,6 +2281,12 @@ ScriptsOnlyBuild:
     assemblyName: PhotonUnityNetworking.Demos.dll
     namespaceName: Photon.Pun.Demo.SlotRacer
     className: SlotRacerSplashScreen
+  - hash:
+      serializedVersion: 2
+      Hash: 2c75f5f5a8f9d970db53aeed693b24b8
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Shield
   - hash:
       serializedVersion: 2
       Hash: 3c1be37cdbc0f948a3bf53258c6ef03d
@@ -2446,7 +2463,7 @@ ScriptsOnlyBuild:
     className: ToolTip
   - hash:
       serializedVersion: 2
-      Hash: d0fa266e87d0970c51e53929326ddad9
+      Hash: 5e6fae1bd35df3d7016943360f37c2e4
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Rocket
@@ -2476,7 +2493,7 @@ ScriptsOnlyBuild:
     className: CurrentRoomExpectedUsersProperty
   - hash:
       serializedVersion: 2
-      Hash: de4bb545eb34c711c32e9d812441472c
+      Hash: 6c9383305961e88cdd9dc12cd58b31e1
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PlayerStats

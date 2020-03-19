@@ -15,6 +15,7 @@ public class PlayerControls : MonoBehaviour, IPunObservable
     public GameObject PrefabCanvas;
     public GameObject Rocket;
     public GameObject Laser;
+    public GameObject Shield;
     public Vector2Int Position;
     public int HowMuchRocketInSystem = 3;
 
@@ -33,6 +34,9 @@ public class PlayerControls : MonoBehaviour, IPunObservable
 
     private GameObject yourPing;
     private int TimeID;
+    private int randomNumber;
+    private bool boolForRandomNumberAndEvent = false;
+
     // PRSPAWN FOR RESET PREFAB ICON CARD
     //private GameObject PRSPAWN;
 
@@ -57,15 +61,15 @@ public class PlayerControls : MonoBehaviour, IPunObservable
         if (photonView.IsMine)
         {
             GameObject pShip = GameObject.FindGameObjectWithTag(playerName);
-            Image[] fALL = pShip.GetComponentsInChildren<Image>();
+            IEnumerable<Image> fALL = pShip.GetComponentsInChildren<Image>().Where(a => a.gameObject.name == "ImageIcon");
             foreach (var item in fALL)
             {
-                if (targetName == item.name)
+                if (targetName == item.transform.parent.name)
                 {
-                    item.tag = "SlotGunFull";
+                    item.transform.parent.tag = "SlotGunFull";
                     StartCoroutine(INSTrocketBytimeNtimes(item, pShip, timeID));
                     // GameConstants.TIME_ROCKET_SYSTEM-GameConstants.TIME_BEETWEN_ROCKET_SPAWN because first rocket live in first moment live system.
-                    item.GetComponent<DropZone>().healthBar.EnableImageAndStartReduceHp(GameConstants.TIME_ROCKET_SYSTEM-GameConstants.TIME_BEETWEN_ROCKET_SPAWN);
+                    item.transform.parent.GetComponent<DropZone>().healthBar.EnableImageAndStartReduceHp(GameConstants.TIME_ROCKET_SYSTEM-GameConstants.TIME_BEETWEN_ROCKET_SPAWN);
                     StartCoroutine(ResetSlotDeleteIcon(item)); //  PRSPAWN.GetComponent<RawImage>()
                 }
             }
@@ -77,14 +81,33 @@ public class PlayerControls : MonoBehaviour, IPunObservable
         if (photonView.IsMine)
         {
             GameObject pShip = GameObject.FindGameObjectWithTag(playerName);
-            Image[] fALL = pShip.GetComponentsInChildren<Image>();
+            IEnumerable<Image> fALL = pShip.GetComponentsInChildren<Image>().Where(a => a.gameObject.name == "ImageIcon");
             foreach (var item in fALL)
             {
-                if (targetName == item.name)
+                if (targetName == item.transform.parent.name)
                 {
-                    item.tag = "SlotGunFull";
-                    StartCoroutine(INSTlaserBytimeNtimes(item, pShip, timeID, 9f));
-                    item.GetComponent<DropZone>().healthBar.EnableImageAndStartReduceHp(3f);
+                    item.transform.parent.tag = "SlotGunFull";
+                    StartCoroutine(INSTlaserBytimeNtimes(item, pShip, timeID));
+                    item.transform.parent.GetComponent<DropZone>().healthBar.EnableImageAndStartReduceHp(3f);
+                    //StartCoroutine(ResetSlotDeleteIcon(item, PRSPAWN.GetComponent<RawImage>()));
+                }
+            }
+        }
+    }
+
+    public void CreatePreFabForSystemShield(string targetName, int timeID, string playerName)
+    {
+        if (photonView.IsMine)
+        {
+            GameObject pShip = GameObject.FindGameObjectWithTag(playerName);
+            IEnumerable<Image> fALL = pShip.GetComponentsInChildren<Image>().Where(a => a.gameObject.name == "ImageIcon");
+            foreach (var item in fALL)
+            {
+                if (targetName == item.transform.parent.name)
+                {
+                    item.transform.parent.tag = "SlotGunFull";
+                    StartCoroutine(INSTshield(item, pShip, timeID));
+                    item.transform.parent.GetComponent<DropZone>().healthBar.EnableImageAndStartReduceHp(5f);
                     //StartCoroutine(ResetSlotDeleteIcon(item, PRSPAWN.GetComponent<RawImage>()));
                 }
             }
@@ -93,82 +116,139 @@ public class PlayerControls : MonoBehaviour, IPunObservable
 
     IEnumerator INSTrocketBytimeNtimes(Image item, GameObject enemyShip,int timeID)
     {
-        //item.color = new Color(item.color.r, item.color.g, item.color.b, 255f);
-
         for (int k = 0; k < HowMuchRocketInSystem; k++)
         {
-            if (item.GetComponent<DropZone>().healthBar.bar.fillAmount <= 0)
+            //Debug.Log(item.transform.parent.GetComponent<DropZone>().healthBar.bar.fillAmount);
+            if (item.transform.parent.tag == "SlotGun")
             {
-                StopCoroutine("INSTrocketBytimeNtimes");
+                StopCoroutine(INSTrocketBytimeNtimes(item,enemyShip,timeID));
                 //item.color = new Color(item.color.r, item.color.g, item.color.b, 0f);
                 yield return null;
             }
             else
             {
-                Vector3 pointToTravel = item.gameObject.GetComponentInChildren<DropZone>().posForR.GetComponent<RectTransform>().localPosition;
+                Vector3 pointToTravel = item.transform.parent.gameObject.GetComponentInChildren<DropZone>().posForR.GetComponent<RectTransform>().localPosition;
                 //Vector3 pointToTravel = item.GetComponent<RectTransform>().localPosition;
+
                 GameObject myNewS = Instantiate(Rocket, pointToTravel, Quaternion.Euler(0f, 0f, 0f));
+
                 Image i = myNewS.GetComponentInChildren<Image>().GetComponent<Image>();
                 RawImage ri = myNewS.GetComponentInChildren<RawImage>().GetComponent<RawImage>();
 
-                item.sprite = i.sprite;
-
-                //PRSPAWN = item.gameObject.GetComponent<DropZone>().posForR.gameObject.GetComponentInChildren<RawImage>().gameObject;
-                ////item.GetComponent<RectTransform>().rotation = new Quaternion(0f, 0f, 0f, 1f);
-                //PRSPAWN.GetComponent<RawImage>().texture = ri.texture;
-                //PRSPAWN.GetComponent<RawImage>().color = new Color(ri.color.r, ri.color.g, ri.color.b, 0f);
-
-                // need anchor?
-                //myNewS.GetComponent<RectTransform>().anchoredPosition = new Vector3(pointToTravel.x,pointToTravel.y,pointToTravel.z);
-
                 Rocket r = myNewS.GetComponent<Rocket>();
+                //give rocket bool for copy rocket with another side window.
+                r.trueRocket = true;
                 RocketsSystem.Add(r);
 
+                item.transform.parent.gameObject.GetComponentInChildren<DropZone>().iconSystem.sprite = i.sprite;
                 r.countRSystem = timeID + k;
 
                 myNewS.transform.SetParent(enemyShip.transform, false);
 
                 RocketsIDs[myNewS.GetInstanceID()] = r;
+                GameObject myNewSOFF = Instantiate(Rocket, pointToTravel, Quaternion.Euler(0f, 0f, 0f));
+                myNewSOFF.transform.SetParent(enemyShip.transform, false);
+
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    Target = enemyShip;
+                    boolForRandomNumberAndEvent = true;
+                }
+
+                myNewS.GetComponent<Rocket>().TakeRandomNumberForSearch(randomNumber);
+                myNewSOFF.GetComponent<Rocket>().TakeRandomNumberForSearch(randomNumber);
+
                 yield return new WaitForSeconds(GameConstants.TIME_BEETWEN_ROCKET_SPAWN);
             }
         }
         //item.transform.parent.Find(nameSlot).tag = "SlotGun";
-        item.GetComponent<DropZone>().healthBar.gameObject.GetComponent<Canvas>().enabled = false;
+        item.transform.parent.GetComponent<DropZone>().healthBar.gameObject.GetComponent<Canvas>().enabled = false;
     }
 
-    IEnumerator INSTlaserBytimeNtimes(Image item, GameObject enemyShip, int timeID, float TimeLifeLaser)
+    IEnumerator INSTlaserBytimeNtimes(Image item, GameObject enemyShip, int timeID)
     {
         for (int k = 0; k < HowMuchRocketInSystem; k++)
         {
-            //if (item.GetComponent<DropZone>().healthBar.bar.fillAmount <= 0)
-            //{
-            //    yield return null;
-            //}
-            //else
-            //{
-            //Vector3 pointToTravel = item.gameObject.GetComponentInChildren<DropZone>().posForR.GetComponent<RectTransform>().localPosition;
+            if (item.transform.parent.tag == "SlotGun")
+            {
+                StopCoroutine(INSTlaserBytimeNtimes(item, enemyShip, timeID));
+                yield return null;
+            }
             GameObject myNewSystemL1 = Instantiate(Laser, new Vector3(0, 0, 0), Quaternion.Euler(0f, 0f, 0f));
             GameObject myNewSystemL2 = Instantiate(Laser, new Vector3(0, 0, 0), Quaternion.Euler(0f, 0f, 0f));
 
             IEnumerable<Image> i = myNewSystemL1.GetComponentsInChildren<Image>().Where(a => a.name == "Icon");
 
-            item.sprite = i.First().GetComponent<Image>().sprite;
+            item.transform.parent.gameObject.GetComponentInChildren<DropZone>().iconSystem.sprite = i.First().GetComponent<Image>().sprite;
 
             myNewSystemL1.transform.SetParent(enemyShip.transform, true);
             myNewSystemL2.transform.SetParent(enemyShip.transform, true);
-            myNewSystemL1.GetComponent<Laser>().TakeStartPosition(item.gameObject.GetComponentInChildren<DropZone>().posForR.transform.position);
-            myNewSystemL2.GetComponent<Laser>().TakeStartPositionOFFLaser(item.gameObject.GetComponentInChildren<DropZone>().posForR.transform.position);
+            myNewSystemL1.GetComponent<Laser>().TakeStartPosition(item.transform.parent.gameObject.GetComponentInChildren<DropZone>().posForR.transform.position);
+            myNewSystemL2.GetComponent<Laser>().TakeStartPositionOFFLaser(item.transform.parent.gameObject.GetComponentInChildren<DropZone>().posForR.transform.position);
             myNewSystemL1.GetComponent<Laser>().TakeStartHPBARLaser(item);
             myNewSystemL2.GetComponent<Laser>().TakeStartHPBARLaser(item);
-            //myNewSystemL1.GetComponent<Laser>().TimeLife(TimeLifeLaser);
-            //myNewSystemL2.GetComponent<Laser>().TimeLife(TimeLifeLaser);
-            //}
-            //item.transform.parent.Find(nameSlot).tag = "SlotGun";
+
+            if (PhotonNetwork.IsMasterClient)
+            {
+                Target = enemyShip;
+                boolForRandomNumberAndEvent = true;
+            }
+
+            myNewSystemL1.GetComponent<Laser>().TakeRandomNumberForSearch(randomNumber);
+            myNewSystemL2.GetComponent<Laser>().TakeRandomNumberForSearch(randomNumber);
 
             yield return new WaitForSeconds(1f);
         }
 
-        item.GetComponent<DropZone>().healthBar.gameObject.GetComponent<Canvas>().enabled = false;
+        item.transform.parent.GetComponent<DropZone>().healthBar.gameObject.GetComponent<Canvas>().enabled = false;
+    }
+
+    IEnumerator INSTshield(Image item, GameObject enemyShip, int timeID)
+    {
+        if (item.transform.parent.tag == "SlotGun")
+        {
+            StopCoroutine(INSTshield(item, enemyShip, timeID));
+            yield return null;
+        }
+        enemyShip.GetComponent<Ship>().shieldActive = true;
+        //RawImage shieldBar = enemyShip.GetComponent<Ship>().shieldImage;
+        //Shield shield = enemyShip.GetComponent<Ship>().shieldImage.GetComponent<Shield>();
+
+        GameObject myNewSystemShield = Instantiate(Shield, new Vector3(0, 0, 0), Quaternion.Euler(0f, 0f, 0f));
+        myNewSystemShield.transform.position = enemyShip.GetComponent<Ship>().ShieldPosforShip.position;
+        myNewSystemShield.transform.SetParent(enemyShip.transform, true);
+        enemyShip.GetComponent<Ship>().shieldImage = myNewSystemShield.GetComponent<RawImage>();
+
+        myNewSystemShield.GetComponent<Shield>().TakeHpbarValueFromImage(item);
+        IEnumerable<Image> i = enemyShip.GetComponent<Ship>().shieldImage.GetComponentsInChildren<Image>().Where(a => a.name == "Icon");
+        item.transform.parent.gameObject.GetComponentInChildren<DropZone>().iconSystem.sprite = i.First().GetComponent<Image>().sprite;
+
+        yield return new WaitForSeconds(5f);
+        enemyShip.GetComponent<Ship>().shieldActive = false ;
+        item.transform.parent.GetComponent<DropZone>().healthBar.gameObject.GetComponent<Canvas>().enabled = false;
+    }
+
+    public int GiveAllPlayersSameRandom(GameObject enemyShip)
+    {
+        // if target for rocket empty = empty system with tag equal SlotGun
+        // Search target for empty slot use random number
+        if (enemyShip.name == "Ship-Player-1")
+        {
+            GameObject go = GameObject.Find("Ship-Player-2");
+            Ship ship = go.GetComponent<Ship>();
+            ship.FindAllSlotGunsEmpty();
+            IOrderedEnumerable<RectTransform> sortList = ship.slotGunsEmpty.ToList().OrderBy(nameS => nameS.name);
+            randomNumber = UnityEngine.Random.Range(0, sortList.Count());
+        }
+        else
+        {
+            GameObject go = GameObject.Find("Ship-Player-1");
+            Ship ship = go.GetComponent<Ship>();
+            ship.FindAllSlotGunsEmpty();
+            IOrderedEnumerable<RectTransform> sortList = ship.slotGunsEmpty.ToList().OrderBy(nameS => nameS.name);
+            randomNumber = UnityEngine.Random.Range(0, sortList.Count());
+        }
+        return randomNumber;
     }
 
 
@@ -177,7 +257,7 @@ public class PlayerControls : MonoBehaviour, IPunObservable
         yield return new WaitForSeconds(GameConstants.TIME_ROCKET_SYSTEM);
         //icon.color = new Color(icon.color.r, icon.color.g, icon.color.b, 0f);
         //Ricon.color = new Color(icon.color.r, icon.color.g, icon.color.b, 0f);
-        icon.tag = "SlotGun";
+        icon.transform.parent.tag = "SlotGun";
     }
 
 
@@ -207,6 +287,10 @@ public class PlayerControls : MonoBehaviour, IPunObservable
         shipImage1.SetActive(false);
         GameObject shipImage2 = GameObject.Find("Ship-Player (2)");
         shipImage2.SetActive(false);
+        GameObject shipImage3 = GameObject.Find("Ship-Player-1");
+        shipImage3.SetActive(false);
+        GameObject shipImage4 = GameObject.Find("Ship-Player-2");
+        shipImage4.SetActive(false);
         Text youLose = GameObject.FindGameObjectWithTag(status).GetComponent<Text>();
         youLose.enabled = true;
     }
@@ -235,25 +319,47 @@ public class PlayerControls : MonoBehaviour, IPunObservable
         }
     }
 
+    public void TakeRandomNumer(int _randomNuber)
+    {
+        randomNumber = _randomNuber;
+    }
+
+    void SendEventFromPlayer()
+    {
+        RaiseEventOptions options = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+        SendOptions sendOptions = new SendOptions { Reliability = true };
+        ExitGames.Client.Photon.Hashtable evData = new ExitGames.Client.Photon.Hashtable();
+
+        evData["guns"] = "Rocket";
+        evData["iconCard"] = iconCard.sprite.name;
+
+        evData["playerID"] = photonView.ViewID;
+        evData["slot"] = Target.name;
+        evData["tagSlot"] = Target.tag;
+        evData["resor"] = currResPlayer;
+        evData["TimeID"] = TimeID;
+
+
+        PhotonNetwork.RaiseEvent(1, evData, options, sendOptions);
+    }
+
+    void SendEventNumber()
+    {
+        RaiseEventOptions options = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+        SendOptions sendOptions = new SendOptions { Reliability = true };
+        ExitGames.Client.Photon.Hashtable evData = new ExitGames.Client.Photon.Hashtable();
+
+        evData["randomNumber"] = GiveAllPlayersSameRandom(Target);
+        evData["boolForRandomNumberAndEvent"] = boolForRandomNumberAndEvent;
+        PhotonNetwork.RaiseEvent(4, evData, options, sendOptions);
+    }
+
     // Update is called once per frame
     void Update()
     {
         if(photonView.IsMine && image != null)
         {
-            RaiseEventOptions options = new RaiseEventOptions { Receivers = ReceiverGroup.All };
-            SendOptions sendOptions = new SendOptions { Reliability = true };
-            ExitGames.Client.Photon.Hashtable evData = new ExitGames.Client.Photon.Hashtable();
-
-            evData["guns"] = "Rocket";
-            evData["iconCard"] = iconCard.sprite.name;
-
-            evData["playerID"] = photonView.ViewID;
-            evData["slot"] = Target.name;
-            evData["tagSlot"] = Target.tag;
-            evData["resor"] = currResPlayer;
-            evData["TimeID"] = TimeID;
-
-            PhotonNetwork.RaiseEvent(1, evData, options, sendOptions);
+            SendEventFromPlayer();
             image = null;
         }
 
@@ -271,6 +377,13 @@ public class PlayerControls : MonoBehaviour, IPunObservable
             }
 
         }
+
+        if (boolForRandomNumberAndEvent)
+        {
+            SendEventNumber();
+            boolForRandomNumberAndEvent = false;
+        }
+
         yourPing.GetComponent<Text>().text = "Ping: " + PhotonNetwork.GetPing().ToString();
     }
 
@@ -295,14 +408,14 @@ public class PlayerControls : MonoBehaviour, IPunObservable
         }
     }
 
-    public void ChangeTagRocket(int idRocketS)
-    {
-        if (RocketsIDs.ContainsKey(idRocketS))
-        {
-            Rocket r = RocketsIDs[idRocketS];
-            r.tag = "RocketS";
-        }
-    }
+    //public void ChangeTagRocket(int idRocketS)
+    //{
+    //    if (RocketsIDs.ContainsKey(idRocketS))
+    //    {
+    //        Rocket r = RocketsIDs[idRocketS];
+    //        r.tag = "RocketS";
+    //    }
+    //}
 
     void checkHP()
     {
@@ -335,16 +448,16 @@ public class PlayerControls : MonoBehaviour, IPunObservable
     }
     //This will be called when invoked
     //This method event for object card which droped on table.
-    void SelectAction(GameObject target, GameObject cardStats, float currRes, Image iconGun, int timeID)
+    void SelectAction(Image Imagetarget, GameObject cardStats, float currRes, Image iconGun, int timeID)
     {
         TimeID = timeID;
-        Target = target;
+        Target = Imagetarget.gameObject.transform.parent.gameObject;
         currResPlayer = currRes;
         iconCard = iconGun;
         Card d = cardStats.GetComponent<Card>();
         int t = d.CardInfo.Index;
         costCardEvent = Convert.ToInt32(d.Cost.text);
         playerCanvas.GetComponent<PlayerStats>().RemoveResources((float)costCardEvent, t);
-        image = target.GetComponent<Image>().sprite.texture;
+        image = Imagetarget.GetComponent<Image>().sprite.texture;
     }
 }

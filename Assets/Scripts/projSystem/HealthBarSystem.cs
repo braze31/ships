@@ -10,12 +10,12 @@ public class HealthBarSystem : MonoBehaviour
     float fill = 1f;
     float time;
     public bool stopSystem;
-    private Image icon;
+    public Image icon;
 
     void Start()
     {
         bar = transform.Find("BarRed").GetComponent<Image>();
-        icon = gameObject.transform.parent.GetComponent<Image>();
+        //icon = gameObject.transform.parent.GetComponent<Image>();
     }
 
     public void EnableImageAndStartReduceHp(float liveTime)
@@ -26,7 +26,7 @@ public class HealthBarSystem : MonoBehaviour
         time = 1/liveTime;
     }
 
-    public void ReduceHPSystem(float damage)
+    public void ReduceHPSystem(float damage, GameObject go)
     {
         if (startReduce)
         {
@@ -34,6 +34,10 @@ public class HealthBarSystem : MonoBehaviour
             if (fill<=0)
             {
                 StopSystem();
+                if (go.tag == "Shield")
+                {
+                    Destroy(go);
+                }
             }
         }
     }
@@ -44,8 +48,8 @@ public class HealthBarSystem : MonoBehaviour
         stopSystem = true;
         gameObject.GetComponent<Canvas>().enabled = false;
         icon.color = new Color(icon.color.r, icon.color.g, icon.color.b, 0f);
-        icon.gameObject.tag = "SlotGun";
-        icon.gameObject.GetComponent<DropZone>().SlotForCardEmpty = true;
+        icon.transform.parent.gameObject.tag = "SlotGun";
+        icon.transform.parent.gameObject.GetComponent<DropZone>().SlotForCardEmpty = true;
     }
 
     // Update is called once per frame
@@ -60,8 +64,9 @@ public class HealthBarSystem : MonoBehaviour
                 startReduce = false;
                 gameObject.GetComponent<Canvas>().enabled = false;
                 icon.color = new Color(icon.color.r, icon.color.g, icon.color.b, 0f);
-                icon.gameObject.tag = "SlotGun";
-                icon.gameObject.GetComponent<DropZone>().SlotForCardEmpty = true;
+                icon.transform.parent.gameObject.tag = "SlotGun";
+                icon.transform.parent.GetComponent<DropZone>().SlotForCardEmpty = true;
+                bar.fillAmount = 1f;
             }
         }
     }
