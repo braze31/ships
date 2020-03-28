@@ -176,7 +176,7 @@ public class PlayerStats : MonoBehaviour
                     }
 
                     playerDeck.RemoveShield(cs);
-                    Debug.Log(playerDeck.Hand.Count);
+                    //Debug.Log(playerDeck.Hand.Count);
                     //playerDeck.Hand.ToList().ForEach(o => Debug.Log(o.Icon.name));
                 }
                 GameObject go = Instantiate(cardPrefab, handParent);

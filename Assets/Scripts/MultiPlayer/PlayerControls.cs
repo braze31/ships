@@ -16,6 +16,8 @@ public class PlayerControls : MonoBehaviour, IPunObservable
     public GameObject Rocket;
     public GameObject Laser;
     public GameObject Shield;
+    public GameObject Bomb;
+    public GameObject Flare;
     public Vector2Int Position;
     public int HowMuchRocketInSystem = 3;
 
@@ -108,6 +110,44 @@ public class PlayerControls : MonoBehaviour, IPunObservable
                     item.transform.parent.tag = "SlotGunFull";
                     StartCoroutine(INSTshield(item, pShip, timeID));
                     item.transform.parent.GetComponent<DropZone>().healthBar.EnableImageAndStartReduceHp(5f);
+                    //StartCoroutine(ResetSlotDeleteIcon(item, PRSPAWN.GetComponent<RawImage>()));
+                }
+            }
+        }
+    }
+
+    public void CreatePreFabForSystemBomb(string targetName, int timeID, string playerName)
+    {
+        if (photonView.IsMine)
+        {
+            GameObject pShip = GameObject.FindGameObjectWithTag(playerName);
+            IEnumerable<Image> fALL = pShip.GetComponentsInChildren<Image>().Where(a => a.gameObject.name == "ImageIcon");
+            foreach (var item in fALL)
+            {
+                if (targetName == item.transform.parent.name)
+                {
+                    item.transform.parent.tag = "SlotGunFull";
+                    StartCoroutine(INSTBomb(item, pShip, timeID));
+                    item.transform.parent.GetComponent<DropZone>().healthBar.EnableImageAndStartReduceHp(6f);
+                    //StartCoroutine(ResetSlotDeleteIcon(item, PRSPAWN.GetComponent<RawImage>()));
+                }
+            }
+        }
+    }
+
+    public void CreatePreFabForSystemFlare(string targetName, int timeID, string playerName)
+    {
+        if (photonView.IsMine)
+        {
+            GameObject pShip = GameObject.FindGameObjectWithTag(playerName);
+            IEnumerable<Image> fALL = pShip.GetComponentsInChildren<Image>().Where(a => a.gameObject.name == "ImageIcon");
+            foreach (var item in fALL)
+            {
+                if (targetName == item.transform.parent.name)
+                {
+                    item.transform.parent.tag = "SlotGunFull";
+                    StartCoroutine(INSTFlare(item, pShip, timeID));
+                    item.transform.parent.GetComponent<DropZone>().healthBar.EnableImageAndStartReduceHp(3f);
                     //StartCoroutine(ResetSlotDeleteIcon(item, PRSPAWN.GetComponent<RawImage>()));
                 }
             }
@@ -228,6 +268,98 @@ public class PlayerControls : MonoBehaviour, IPunObservable
         item.transform.parent.GetComponent<DropZone>().healthBar.gameObject.GetComponent<Canvas>().enabled = false;
     }
 
+    IEnumerator INSTBomb(Image item, GameObject enemyShip, int timeID)
+    {
+        for (int k = 0; k < 2; k++)
+        {
+            if (item.transform.parent.tag == "SlotGun")
+            {
+                StopCoroutine(INSTBomb(item, enemyShip, timeID));
+                yield return null;
+            }
+            else
+            {
+                Vector3 pointToTravel = item.transform.parent.gameObject.GetComponentInChildren<DropZone>().posForR.GetComponent<RectTransform>().localPosition;
+
+                GameObject myNewS = Instantiate(Bomb, pointToTravel, Quaternion.Euler(0f, 0f, 0f));
+
+                Image i = myNewS.GetComponentInChildren<Image>().GetComponent<Image>();
+                RawImage ri = myNewS.GetComponentInChildren<RawImage>().GetComponent<RawImage>();
+
+                Bomb b = myNewS.GetComponent<Bomb>();
+
+                b.trueRocket = true;
+
+                item.transform.parent.gameObject.GetComponentInChildren<DropZone>().iconSystem.sprite = i.sprite;
+
+                myNewS.transform.SetParent(enemyShip.transform, false);
+
+                GameObject myNewSOFF = Instantiate(Bomb, pointToTravel, Quaternion.Euler(0f, 0f, 0f));
+                myNewSOFF.transform.SetParent(enemyShip.transform, false);
+
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    Target = enemyShip;
+                    boolForRandomNumberAndEvent = true;
+                }
+
+                myNewS.GetComponent<Bomb>().TakeRandomNumberForSearch(randomNumber);
+                myNewSOFF.GetComponent<Bomb>().TakeRandomNumberForSearch(randomNumber);
+
+                yield return new WaitForSeconds(5.9f);
+            }
+        }
+        //item.transform.parent.Find(nameSlot).tag = "SlotGun";
+        item.transform.parent.GetComponent<DropZone>().healthBar.gameObject.GetComponent<Canvas>().enabled = false;
+    }
+
+    IEnumerator INSTFlare(Image item, GameObject enemyShip, int timeID)
+    {
+        for (int k = 0; k < 3; k++)
+        {
+            if (item.transform.parent.tag == "SlotGun")
+            {
+                StopCoroutine(INSTFlare(item, enemyShip, timeID));
+                yield return null;
+            }
+            else
+            {
+                Vector3 pointToTravel = item.transform.parent.gameObject.GetComponentInChildren<DropZone>().posForR.GetComponent<RectTransform>().localPosition;
+
+                GameObject myNewS = Instantiate(Flare, pointToTravel, Quaternion.Euler(0f, 0f, 0f));
+
+                Image i = myNewS.GetComponentInChildren<Image>().GetComponent<Image>();
+                RawImage ri = myNewS.GetComponentInChildren<RawImage>().GetComponent<RawImage>();
+
+                Flare b = myNewS.GetComponent<Flare>();
+
+                b.trueRocket = true;
+
+                item.transform.parent.gameObject.GetComponentInChildren<DropZone>().iconSystem.sprite = i.sprite;
+
+                myNewS.transform.SetParent(enemyShip.transform, false);
+
+                GameObject myNewSOFF = Instantiate(Flare, pointToTravel, Quaternion.Euler(0f, 0f, 0f));
+                myNewSOFF.transform.SetParent(enemyShip.transform, false);
+
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    Target = enemyShip;
+                    boolForRandomNumberAndEvent = true;
+                }
+
+                myNewS.GetComponent<Flare>().TakeRandomNumberForSearch(randomNumber);
+                myNewSOFF.GetComponent<Flare>().TakeRandomNumberForSearch(randomNumber);
+
+                yield return new WaitForSeconds(0.97f);
+            }
+        }
+        //item.transform.parent.Find(nameSlot).tag = "SlotGun";
+        item.transform.parent.GetComponent<DropZone>().healthBar.gameObject.GetComponent<Canvas>().enabled = false;
+    }
+
+
+    // Player System search for each player same target
     public int GiveAllPlayersSameRandom(GameObject enemyShip)
     {
         // if target for rocket empty = empty system with tag equal SlotGun

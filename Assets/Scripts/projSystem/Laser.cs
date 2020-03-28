@@ -38,6 +38,8 @@ public class Laser : MonoBehaviour
     private bool oneTimeCor;
     public int randomNumber;
     private Transform targetEmpty;
+    private GameObject targetBomb;
+    private GameObject targetFlare;
 
     void Awake()
     {
@@ -54,12 +56,10 @@ public class Laser : MonoBehaviour
         if (offCameraLasser && goParant.name == "Ship-Player-1")
         {
             laserTargetGameObjectSearch.transform.position = targetEmpty.transform.position;
-            AttackShip(ShipPlayer2);
         }
         if (offCameraLasser && goParant.name == "Ship-Player-2")
         {
             laserTargetGameObjectSearch.transform.position = targetEmpty.transform.position;
-            AttackShip(ShipPlayer1);
         }
         if (!offCameraLasser && goParant.name == "Ship-Player-1")
         {
@@ -183,6 +183,54 @@ public class Laser : MonoBehaviour
 
         if (target!=null)
         {
+            if (targetBomb != null)
+            {
+                if (targetBomb.tag == "Bomb")
+                {
+                    Vector2 newVR = new Vector2(targetBomb.transform.position.x, targetBomb.transform.position.y);
+                    if (LR.Points[1] == newVR)
+                    {
+                        targetBomb.GetComponent<Bomb>().HealthRocket -= Time.deltaTime * 400;
+                        targetBomb.GetComponent<Bomb>().rocketONAttack = true;
+                        if (targetBomb.GetComponent<Bomb>().HealthRocket <= 0)
+                        {
+                            SearchTargetInUpdate = false;
+                            STARTTHIS = false;
+                            disAppear = true;
+                            LR.Points[1] = targetBomb.transform.position;
+                            targetBomb.GetComponent<Bomb>().DestroyAndAnimate(gameObject);
+                            StartCoroutine(waitSearchAfterBOOM());
+                        }
+                    }
+                    else
+                    {
+                        targetBomb.GetComponent<Bomb>().rocketONAttack = false;
+                    }
+                }
+                if (targetFlare.tag == "Flare")
+                {
+                    Vector2 newVR = new Vector2(targetFlare.transform.position.x, targetFlare.transform.position.y);
+                    if (LR.Points[1] == newVR)
+                    {
+                        targetFlare.GetComponent<Flare>().HealthRocket -= Time.deltaTime * 400;
+                        targetFlare.GetComponent<Flare>().flareONAttack = true;
+                        if (targetFlare.GetComponent<Flare>().HealthRocket <= 0)
+                        {
+                            SearchTargetInUpdate = false;
+                            STARTTHIS = false;
+                            disAppear = true;
+                            LR.Points[1] = targetFlare.transform.position;
+                            StartCoroutine(waitSearchAfterBOOM());
+                        }
+                    }
+                    else
+                    {
+                        targetFlare.GetComponent<Flare>().flareONAttack = false;
+                    }
+                }
+
+            }
+
             if (RocketCheckTrig != null)
             {
                 Vector2 newVR = new Vector2(RocketCheckTrig.transform.position.x, RocketCheckTrig.transform.position.y);
@@ -262,14 +310,17 @@ public class Laser : MonoBehaviour
         Ship go = ShipAttack.gameObject.GetComponent<Ship>();
         if (go != null)
         {
-            if (go.shieldActive)
+            if (RocketCheckTrig == null || targetBomb == null)
             {
-                go.ShipTakeDamage(0.05f*0.3f);
-                //go.shieldImage.gameObject.GetComponent<Shield>().TakeNewColorA();
-            }
-            else
-            {
-                go.ShipTakeDamage(0.05f);
+                if (go.shieldActive)
+                {
+                    go.ShipTakeDamage(0.05f * 0.3f);
+                    //go.shieldImage.gameObject.GetComponent<Shield>().TakeNewColorA();
+                }
+                else
+                {
+                    go.ShipTakeDamage(0.05f);
+                }
             }
         }
     }
@@ -299,34 +350,117 @@ public class Laser : MonoBehaviour
         if (goParant.name == "Ship-Player-1")
         {
             GameObject ES = GameObject.Find("Ship-Player-2");
-            IEnumerable<RectTransform> ESt = ES.GetComponent<Ship>().AllObjectsFromShip;
+
+            IEnumerable<RectTransform> ESb = ES.GetComponent<Ship>().FindAllBombFromShip();
+            if (ESb != null && ESb.Count()>0)
+            {
+                float maxB = 0;
+
+                foreach (RectTransform item in ESb)
+                {
+                    if (item != null && !item.Equals(null))
+                    {
+                        float valueTime = item.GetComponent<Bomb>().initializationTime;
+                        if (!offCameraLasser)
+                        {
+                            if (item.transform.position.y < 1100f)
+                            {
+                                if (maxB < valueTime)
+                                {
+                                    maxB = valueTime;
+                                    targetBomb = item.gameObject;
+                                    //findAimnOneMoreTime = false;
+                                }
+                            }
+                        }
+                        if (offCameraLasser)
+                        {
+                            if (item.transform.position.y > 1100f)
+                            {
+                                if (maxB < valueTime)
+                                {
+                                    maxB = valueTime;
+                                    targetBomb = item.gameObject;
+                                    //findAimnOneMoreTime = false;
+                                }
+                            }
+                        }
+                    }
+                }
+                return targetBomb.transform;
+            }
+
+            IEnumerable<RectTransform> ESf = ES.GetComponent<Ship>().FindAllFlareFromShip();
+            if (ESb != null && ESf.Count() > 0)
+            {
+                float maxB = 0;
+
+                foreach (RectTransform item in ESf)
+                {
+                    if (item != null && !item.Equals(null))
+                    {
+                        float valueTime = item.GetComponent<Flare>().initializationTime;
+                        if (!offCameraLasser)
+                        {
+                            if (item.transform.position.y < 1100f)
+                            {
+                                if (maxB < valueTime)
+                                {
+                                    maxB = valueTime;
+                                    targetFlare = item.gameObject;
+                                    //findAimnOneMoreTime = false;
+                                }
+                            }
+                        }
+                        if (offCameraLasser)
+                        {
+                            if (item.transform.position.y > 1100f)
+                            {
+                                if (maxB < valueTime)
+                                {
+                                    maxB = valueTime;
+                                    targetFlare = item.gameObject;
+                                    //findAimnOneMoreTime = false;
+                                }
+                            }
+                        }
+                    }
+                }
+                return targetBomb.transform;
+            }
+
+
+            IEnumerable<RectTransform> ESt = ES.GetComponent<Ship>().FindAllRocketromShip();
 
             float maxV = 0;
 
             foreach (RectTransform item in ESt)
             {
-                float valueTime = item.GetComponent<Rocket>().initializationTime;
-                if (!offCameraLasser)
+                if (item != null && !item.Equals(null))
                 {
-                    if (item.transform.position.y < 1100f)
+                    float valueTime = item.GetComponent<Rocket>().initializationTime;
+                    if (!offCameraLasser)
                     {
-                        if (maxV < valueTime)
+                        if (item.transform.position.y < 1100f)
                         {
-                            maxV = valueTime;
-                            RocketCheckTrig = item.gameObject;
-                            //findAimnOneMoreTime = false;
+                            if (maxV < valueTime)
+                            {
+                                maxV = valueTime;
+                                RocketCheckTrig = item.gameObject;
+                                //findAimnOneMoreTime = false;
+                            }
                         }
                     }
-                }
-                if (offCameraLasser)
-                {
-                    if (item.transform.position.y > 1100f)
+                    if (offCameraLasser)
                     {
-                        if (maxV < valueTime)
+                        if (item.transform.position.y > 1100f)
                         {
-                            maxV = valueTime;
-                            RocketCheckTrig = item.gameObject;
-                            //findAimnOneMoreTime = false;
+                            if (maxV < valueTime)
+                            {
+                                maxV = valueTime;
+                                RocketCheckTrig = item.gameObject;
+                                //findAimnOneMoreTime = false;
+                            }
                         }
                     }
                 }
@@ -335,34 +469,115 @@ public class Laser : MonoBehaviour
         if (goParant.name == "Ship-Player-2")
         {
             GameObject PS = GameObject.Find("Ship-Player-1");
-            IEnumerable<RectTransform> PSt = PS.GetComponent<Ship>().AllObjectsFromShip;
 
-            float maxV = 0;
-
-            foreach (RectTransform item in PSt)
+            IEnumerable<RectTransform> ESb = PS.GetComponent<Ship>().FindAllBombFromShip();
+            if (ESb != null && ESb.Count() > 0)
             {
-                float valueTime = item.GetComponent<Rocket>().initializationTime;
-                if (!offCameraLasser)
+                float maxB = 0;
+
+                foreach (RectTransform item in ESb)
                 {
-                    if (item.transform.position.y > 1100f)
+                    if (item != null && !item.Equals(null))
                     {
-                        if (maxV < valueTime)
+                        float valueTime = item.GetComponent<Bomb>().initializationTime;
+                        if (!offCameraLasser)
                         {
-                            maxV = valueTime;
-                            RocketCheckTrig = item.gameObject;
-                            //findAimnOneMoreTime = false;
+                            if (item.transform.position.y > 1100f)
+                            {
+                                if (maxB < valueTime)
+                                {
+                                    maxB = valueTime;
+                                    targetBomb = item.gameObject;
+                                    //findAimnOneMoreTime = false;
+                                }
+                            }
+                        }
+                        if (offCameraLasser)
+                        {
+                            if (item.transform.position.y < 1100f)
+                            {
+                                if (maxB < valueTime)
+                                {
+                                    maxB = valueTime;
+                                    targetBomb = item.gameObject;
+                                    //findAimnOneMoreTime = false;
+                                }
+                            }
                         }
                     }
                 }
-                if (offCameraLasser)
+                return targetBomb.transform;
+            }
+
+            IEnumerable<RectTransform> ESf = PS.GetComponent<Ship>().FindAllFlareFromShip();
+            if (ESb != null && ESf.Count() > 0)
+            {
+                float maxB = 0;
+
+                foreach (RectTransform item in ESf)
                 {
-                    if (item.transform.position.y < 1100f)
+                    if (item != null && !item.Equals(null))
                     {
-                        if (maxV < valueTime)
+                        float valueTime = item.GetComponent<Flare>().initializationTime;
+                        if (!offCameraLasser)
                         {
-                            maxV = valueTime;
-                            RocketCheckTrig = item.gameObject;
-                            //findAimnOneMoreTime = false;
+                            if (item.transform.position.y > 1100f)
+                            {
+                                if (maxB < valueTime)
+                                {
+                                    maxB = valueTime;
+                                    targetBomb = item.gameObject;
+                                    //findAimnOneMoreTime = false;
+                                }
+                            }
+                        }
+                        if (offCameraLasser)
+                        {
+                            if (item.transform.position.y < 1100f)
+                            {
+                                if (maxB < valueTime)
+                                {
+                                    maxB = valueTime;
+                                    targetBomb = item.gameObject;
+                                    //findAimnOneMoreTime = false;
+                                }
+                            }
+                        }
+                    }
+                }
+                return targetBomb.transform;
+            }
+
+
+            IEnumerable<RectTransform> PSt = PS.GetComponent<Ship>().FindAllRocketromShip();
+            float maxV = 0;
+            foreach (RectTransform item in PSt)
+            {
+                if (item != null && !item.Equals(null))
+                {
+                    float valueTime = item.GetComponent<Rocket>().initializationTime;
+                    if (!offCameraLasser)
+                    {
+                        if (item.transform.position.y > 1100f)
+                        {
+                            if (maxV < valueTime)
+                            {
+                                maxV = valueTime;
+                                RocketCheckTrig = item.gameObject;
+                                //findAimnOneMoreTime = false;
+                            }
+                        }
+                    }
+                    if (offCameraLasser)
+                    {
+                        if (item.transform.position.y < 1100f)
+                        {
+                            if (maxV < valueTime)
+                            {
+                                maxV = valueTime;
+                                RocketCheckTrig = item.gameObject;
+                                //findAimnOneMoreTime = false;
+                            }
                         }
                     }
                 }
@@ -379,589 +594,126 @@ public class Laser : MonoBehaviour
     {
         if (goPar.name == "Ship-Player-1")
         {
+            GameObject ES = GameObject.Find("Ship-Player-2");
+            IEnumerable<RectTransform> ESO = ES.GetComponent<Ship>().FindAllObjectsFromShip();
+
+            Debug.Log(ESO.Count());
+            if (ESO.Count()==0)
+            {
+                AttackShip(ShipPlayer2);
+            }
+
             if (offCameraLasser)
             {
                 //allPoints.Add(GameObject.Find("Ship-Enemy").transform);
                 GameObject go = GameObject.Find("Ship-Player-2");
                 Ship ship = go.GetComponent<Ship>();
                 ship.FindAllSlotGunsEmpty();
-                targetEmpty = ship.slotGunsEmpty.ToList()[randomNumber].transform;
-                targetEmpty.transform.position = ship.slotGunsEmpty.ToList()[randomNumber].transform.position;
+                if (ship.slotGunsEmpty.ToList().Count() <= randomNumber)
+                {
+                    randomNumber = ship.slotGunsEmpty.ToList().Count()-1;
+                }
+                try
+                {
+                    targetEmpty = ship.slotGunsEmpty.ToList()[randomNumber].transform;
+                    targetEmpty.transform.position = ship.slotGunsEmpty.ToList()[randomNumber].transform.position;
+                }
+                catch (System.ArgumentOutOfRangeException e)  // CS0168
+                {
+                    Debug.Log(randomNumber + " - " + ship.slotGunsEmpty.ToList().Count());
+                    // Set IndexOutOfRangeException to the new exception's InnerException.
+                    throw new System.ArgumentOutOfRangeException("index parameter is out of range.", e);
+                }
+
+
             }
             else
             {
                 GameObject go = GameObject.Find("Ship-Player-2");
                 Ship ship = go.GetComponent<Ship>();
                 ship.FindAllSlotGunsEmpty();
-                targetEmpty = laserTargetGameObjectSearch.transform;
-                targetEmpty.transform.position = new Vector3(
-                    1080f + ship.slotGunsEmpty.ToList()[randomNumber].transform.position.x,
-                    goPar.transform.position.y,
-                    0f
-                    );
+                if (ship.slotGunsEmpty.ToList().Count() <= randomNumber)
+                {
+                    randomNumber = ship.slotGunsEmpty.ToList().Count() - 1;
+                }
+                try
+                {
+                    targetEmpty = laserTargetGameObjectSearch.transform;
+                    targetEmpty.transform.position = new Vector3(
+                        1080f + ship.slotGunsEmpty.ToList()[randomNumber].transform.position.x,
+                        goPar.transform.position.y,
+                        0f
+                        );
+                }
+                catch (System.ArgumentOutOfRangeException e)  // CS0168
+                {
+                    Debug.Log(randomNumber + " - " + ship.slotGunsEmpty.ToList().Count());
+                    // Set IndexOutOfRangeException to the new exception's InnerException.
+                    throw new System.ArgumentOutOfRangeException("index parameter is out of range.", e);
+                }
             }
         }
         if (goPar.name == "Ship-Player-2")
         {
+            GameObject PS = GameObject.Find("Ship-Player-2");
+            IEnumerable<RectTransform> ESO = PS.GetComponent<Ship>().FindAllObjectsFromShip();
+
+            Debug.Log(ESO.Count());
+            if (ESO.Count() == 0)
+            {
+                AttackShip(ShipPlayer1);
+            }
+
             if (offCameraLasser)
             {
                 //allPoints.Add(GameObject.Find("Ship-Enemy").transform);
                 GameObject go = GameObject.Find("Ship-Player-1");
                 Ship ship = go.GetComponent<Ship>();
                 ship.FindAllSlotGunsEmpty();
-                targetEmpty = ship.slotGunsEmpty.ToList()[randomNumber].transform;
-                targetEmpty.transform.position = ship.slotGunsEmpty.ToList()[randomNumber].transform.position;
+                if (ship.slotGunsEmpty.ToList().Count() <= randomNumber)
+                {
+                    randomNumber = ship.slotGunsEmpty.ToList().Count()-1;
+                }
+                try
+                {
+                    targetEmpty = ship.slotGunsEmpty.ToList()[randomNumber].transform;
+                    targetEmpty.transform.position = ship.slotGunsEmpty.ToList()[randomNumber].transform.position;
+                }
+                catch (System.ArgumentOutOfRangeException e)  // CS0168
+                {
+                    Debug.Log(randomNumber + " - " + ship.slotGunsEmpty.ToList().Count());
+                    // Set IndexOutOfRangeException to the new exception's InnerException.
+                    throw new System.ArgumentOutOfRangeException("index parameter is out of range.", e);
+                }
+
             }
             else
             {
                 GameObject go = GameObject.Find("Ship-Player-1");
                 Ship ship = go.GetComponent<Ship>();
                 ship.FindAllSlotGunsEmpty();
-                targetEmpty = laserTargetGameObjectSearch.transform;
-                targetEmpty.transform.position = new Vector3(
-                    -1080f + ship.slotGunsEmpty.ToList()[randomNumber].transform.position.x,
-                    goPar.transform.position.y,
-                    0f
-                    );
+                if (ship.slotGunsEmpty.ToList().Count() <= randomNumber)
+                {
+                    randomNumber = ship.slotGunsEmpty.ToList().Count()-1;
+                }
+                try
+                {
+                    targetEmpty = laserTargetGameObjectSearch.transform;
+                    targetEmpty.transform.position = new Vector3(
+                        -1080f + ship.slotGunsEmpty.ToList()[randomNumber].transform.position.x,
+                        goPar.transform.position.y,
+                        0f
+                        );
+                }
+                catch (System.ArgumentOutOfRangeException e)  // CS0168
+                {
+                    Debug.Log(randomNumber + " - " + ship.slotGunsEmpty.ToList().Count());
+                    // Set IndexOutOfRangeException to the new exception's InnerException.
+                    throw new System.ArgumentOutOfRangeException("index parameter is out of range.", e);
+                }
+
             }
         }
         return targetEmpty;
     }
-
-    //void Start()
-    //{
-    //    StartCoroutine(DestroyLaserByTime());
-    //    valueHPSystemForLaser = 1f;
-    //    goParant = gameObject.transform.parent.gameObject;
-    //    laserTargetGameObjectSearch = new GameObject("MyLaser", typeof(RectTransform));
-    //    if (offCameraLasser && goParant.name == "Ship-Player-1")
-    //    {
-    //        laserTargetGameObjectSearch.transform.position = ShipPlayer2.transform.position;
-    //    }
-    //    if (offCameraLasser && goParant.name == "Ship-Player-2")
-    //    {
-    //        laserTargetGameObjectSearch.transform.position = ShipPlayer1.transform.position;
-    //    }
-    //    if (!offCameraLasser && goParant.name == "Ship-Player-1")
-    //    {
-    //        laserTargetGameObjectSearch.transform.position = new Vector3(
-    //            1080f + ShipPlayer2.transform.position.x,
-    //            ShipPlayer1.transform.position.y
-    //            );
-    //    }
-    //    if (!offCameraLasser && goParant.name == "Ship-Player-2")
-    //    {
-    //        laserTargetGameObjectSearch.transform.position = new Vector3(
-    //            -1080f + ShipPlayer1.transform.position.x,
-    //            ShipPlayer2.transform.position.y
-    //            );
-    //    }
-
-    //    if (offCameraLasser)
-    //    {
-    //        target = SearchTargetForOffLaser(goParant);
-    //    }
-    //    else
-    //    {
-    //        target = SearchTargetForLaser(goParant);
-    //    }
-
-
-    //}
-
-    //IEnumerator DestroyLaserByTime()
-    //{
-    //    yield return new WaitForSeconds(4.2f);
-    //    Destroy(gameObject);
-    //    Destroy(laserTargetGameObjectSearch);
-    //}
-
-    //public void TakeStartHPBARLaser(Image item)
-    //{
-    //    valueHPSystemForLaser = item.GetComponent<DropZone>().healthBar.bar.fillAmount;
-    //}
-
-    //public void TakeStartPosition(Vector3 pos)
-    //{
-    //    if (!RememberStartPoint)
-    //    {
-    //        firstPosPoint = pos;
-    //        RememberStartPoint = true;
-    //    }
-    //    // LR don't have change size. Take same pos for second point, 
-    //    // because game have some not correct frames from second point in the PREFAB laser.
-    //    LR.Points[0] = pos;
-    //    LR.Points[1] = pos;
-    //}
-    //public void TakeStartPositionOFFLaser(Vector3 pos)
-    //{
-    //    offCameraLasser = true;
-    //    if (pos.y < 1100f)
-    //    {
-    //        LR.Points[0] = new Vector3(
-    //            -1080 + pos.x, 
-    //            ShipPlayer2.transform.position.y + (pos.y - ShipPlayer1.transform.position.y),
-    //            pos.z);
-    //        LR.Points[1] = LR.Points[0];
-    //    }
-    //    if (pos.y > 1100f)
-    //    {
-    //        LR.Points[0] = new Vector3(
-    //            1080 + pos.x, 
-    //            ShipPlayer1.transform.position.y + (pos.y - ShipPlayer2.transform.position.y),
-    //            pos.z);
-    //        LR.Points[1] = LR.Points[0];
-    //    }
-    //    if (!RememberStartPoint)
-    //    {
-    //        firstPosPoint = LR.Points[0];
-    //        RememberStartPoint = true;
-    //    }
-    //}
-
-    //public void TakeSecondPosition(Vector3 GameObjectPos)
-    //{
-    //    if (!RememberSecondPoint)
-    //    {
-    //        SecondPosPoint = GameObjectPos;
-    //        RememberSecondPoint = true;
-    //    }
-    //    secondPoint = GameObjectPos;
-    //    LR.Points[1] = GameObjectPos;
-    //    dist = Vector3.Distance(LR.Points[0], LR.Points[1]);
-    //}
-
-    //IEnumerator WaitStartDrawBack()
-    //{
-    //    yield return new WaitForSeconds(0.1f);
-    //    STARTTHIS = true;
-    //    yield return new WaitForSeconds(0.1f);
-    //    disAppear = true;
-    //}
-
-    ////IEnumerator WaitCycle()
-    ////{
-    ////    yield return new WaitForSeconds(0.2f);
-    ////    SearchTargetInUpdate = true;
-    ////    yield return new WaitForSeconds(0.5f);
-    ////    findShipSystem = true;
-    ////    findAimnOneMoreTime = true;
-    ////    disAppear = false;
-    ////    count = 0;
-    ////    STARTTHIS = false;
-    ////    SearchTargetInUpdate = false;
-    ////}
-
-    //void DrawLine()
-    //{
-    //    if (count < dist)
-    //    {
-    //        if (LR.LineThickness < 150)
-    //        {
-    //            LR.LineThickness += Time.deltaTime * 300;
-    //        }
-    //        count += LineDrawSpeed * Time.deltaTime;
-
-    //        float x = Mathf.Lerp(0, dist, count);
-
-    //        Vector3 pointA = LR.Points[0];
-    //        Vector3 pointB = LR.Points[1];
-
-    //        Vector3 pointALongTime = x * Vector3.Normalize(pointB - pointA) + pointA;
-
-    //        LR.Points[1] = pointALongTime;
-
-    //        if (!oneTimeCor && LR.LineThickness > 110)
-    //        {
-    //            StartCoroutine(WaitStartDrawBack());
-    //            oneTimeCor = true;
-    //        }
-    //    }
-    //}
-
-    //IEnumerator waitSearchAfterBOOM()
-    //{
-    //    Destroy(laserTargetGameObjectSearch);
-    //    yield return new WaitForSeconds(0.1f);
-    //    findAimnOneMoreTime = false;
-    //    SearchTargetInUpdate = true;
-    //    disAppear = true;
-
-    //}
-
-
-    //void Update()
-    //{
-    //    if (goParant.name == "Ship-Player-1")
-    //    {
-    //        go = GameObject.Find("Ship-Player-2");
-    //    }
-    //    if (goParant.name == "Ship-Player-2")
-    //    {
-    //        go = GameObject.Find("Ship-Player-1");
-    //    }
-    //    IEnumerable<RectTransform> listR = go.GetComponents<RectTransform>().Where(a => a.tag == "Rocket" || a.tag == "RocketS");
-    //    foreach (var item in listR)
-    //    {
-    //        if (item.GetComponent<Rocket>().rocketONAttack)
-    //        {
-    //            if (offCameraLasser)
-    //            {
-    //                LR.Points[1] = LR.Points[0];
-    //                Debug.Log("ya mydak ne mogy rewit ety problemy");
-    //            }
-    //        }
-    //    }
-
-    //    if (!SearchTargetInUpdate)
-    //    {
-    //        if (target == RocketCheckTrig)
-    //        {
-    //            findAimnOneMoreTime = true;
-    //        }
-    //        if (!offCameraLasser)
-    //        {
-    //            target = SearchTargetForLaser(goParant);
-    //        }
-    //        if (offCameraLasser)
-    //        {
-    //            target = SearchTargetForOffLaser(goParant);
-    //        }
-    //        if (target != null)
-    //        {
-    //            TakeSecondPosition(target.position);
-    //        }
-    //    }
-
-    //    if (RocketCheckTrig != null)
-    //    {
-    //        Vector2 newVR = new Vector2(RocketCheckTrig.transform.position.x, RocketCheckTrig.transform.position.y);
-    //        if (LR.Points[1] == newVR)
-    //        {
-    //            RocketCheckTrig.GetComponent<Rocket>().HealthRocket -= Time.deltaTime * 200;
-    //            RocketCheckTrig.GetComponent<Rocket>().rocketONAttack = true;
-    //            if (RocketCheckTrig.GetComponent<Rocket>().HealthRocket <= 0)
-    //            {
-    //                SearchTargetInUpdate = true;
-    //                LR.Points[1] = RocketCheckTrig.transform.position;
-    //                RocketCheckTrig.GetComponent<Rocket>().DestroyAndAnimate(gameObject);
-    //                //count = 0;
-
-    //                StartCoroutine(waitSearchAfterBOOM());
-    //            }
-    //        }
-    //        else
-    //        {
-    //            RocketCheckTrig.GetComponent<Rocket>().rocketONAttack = false;
-    //        }
-    //    }
-
-    //    if (!STARTTHIS)
-    //    {
-    //        DrawLine();
-    //    }
-
-    //    if (disAppear)
-    //    {
-    //        if (LR.LineThickness > 0)
-    //        {
-    //            LR.LineThickness -= Time.deltaTime * 350;
-    //        }
-    //        if (LR.LineThickness < 30)
-    //        {
-    //            StartCoroutine(destroyLaser());
-    //        }
-    //    }
-    //    if (oneTimeCor && LR.LineThickness <= 0)
-    //    {
-    //        //StartCoroutine(WaitCycle());
-    //        oneTimeCor = false;
-    //    }
-
-    //    if (valueHPSystemForLaser <= 0)
-    //    {
-    //        disAppear = true;
-    //        STARTTHIS = true;
-    //        STOPTHIS = true;
-    //        StartCoroutine(destroyLaser());
-    //    }
-
-    //    dist = Vector3.Distance(LR.Points[0], LR.Points[1]);
-    //    LR.SetAllDirty();
-    //}
-
-    //Transform SearchTargetForLaser(GameObject goParant)
-    //{
-    //    if (goParant.name == "Ship-Player-1")
-    //    {
-    //        if (laserTargetGameObjectSearch == null)
-    //        {
-    //            return null;
-    //        }
-    //        GameObject ES = GameObject.Find("Ship-Player-2");
-    //        IEnumerable<RectTransform> ESt = ES.GetComponent<Ship>().AllObjectsFromShip;
-    //        float maxV = 0;
-    //        if (ESt.Count() == 0 && findShipSystem)
-    //        {
-    //            laserTargetGameObjectSearch.transform.position = new Vector3(
-    //                1080 + ShipPlayer2.transform.position.x, 
-    //                goParant.transform.position.y, 
-    //                0f);
-    //            findAimnOneMoreTime = false;
-    //            //count = 0;
-    //        }
-
-    //        if (findAimnOneMoreTime)
-    //        {
-    //            findShipSystem = false;
-    //            foreach (RectTransform item in ESt)
-    //            {
-    //                float valueTime = item.GetComponent<Rocket>().initializationTime;
-    //                if (maxV < valueTime)
-    //                {
-    //                    maxV = valueTime;
-    //                    RocketCheckTrig = item.gameObject;
-    //                    //findAimnOneMoreTime = false;
-    //                    //count = 0;
-    //                }
-    //            }
-    //            RocketUnderAttack = RocketCheckTrig;
-    //        }
-
-    //        if (RocketCheckTrig != null)
-    //        {
-    //            if (RocketCheckTrig.transform.position.y > 1100f)
-    //            {
-    //                laserTargetGameObjectSearch.transform.position = new Vector3(
-    //                    1080 + RocketCheckTrig.transform.position.x,
-    //                    goParant.transform.position.y + (RocketCheckTrig.transform.position.y - ES.transform.position.y),
-    //                    0f
-    //                    );
-    //            }
-    //            else
-    //            {
-    //                laserTargetGameObjectSearch.transform.position = RocketCheckTrig.transform.position;
-    //            }
-    //        }
-    //    }
-    //    if (goParant.name == "Ship-Player-2")
-    //    {
-    //        if (laserTargetGameObjectSearch == null)
-    //        {
-    //            return null;
-    //        }
-    //        GameObject PS = GameObject.Find("Ship-Player-1");
-    //        IEnumerable<RectTransform> PSt = PS.GetComponent<Ship>().AllObjectsFromShip;
-    //        if (PSt.Count() == 0 && findShipSystem)
-    //        {
-    //            laserTargetGameObjectSearch.transform.position = new Vector3(
-    //                -1080 + ShipPlayer1.transform.position.x,
-    //                goParant.transform.position.y, 
-    //                0f);
-    //            findAimnOneMoreTime = false;
-    //        }
-    //        float maxV = 0;
-
-    //        if (findAimnOneMoreTime)
-    //        {
-    //            findShipSystem = false;
-    //            foreach (RectTransform item in PSt)
-    //            {
-    //                float valueTime = item.GetComponent<Rocket>().initializationTime;
-    //                if (maxV < valueTime)
-    //                {
-    //                    maxV = valueTime;
-    //                    RocketCheckTrig = item.gameObject;
-    //                    //findAimnOneMoreTime = false;
-    //                    //count = 0;
-    //                }
-    //            }
-    //            RocketUnderAttack = RocketCheckTrig;
-    //        }
-
-    //        if (RocketCheckTrig != null)
-    //        {
-    //            if (RocketCheckTrig.transform.position.y < 1100f)
-    //            {
-    //                laserTargetGameObjectSearch.transform.position = new Vector3(
-    //                    -1080 + RocketCheckTrig.transform.position.x,
-    //                    goParant.transform.position.y + (RocketCheckTrig.transform.position.y - PS.transform.position.y),
-    //                    0f
-    //                    );
-    //            }
-    //            else
-    //            {
-    //                laserTargetGameObjectSearch.transform.position = RocketCheckTrig.transform.position;
-    //            }
-    //        }
-    //    }
-    //    return laserTargetGameObjectSearch.transform;
-    //}
-
-    //Transform SearchTargetForOffLaser(GameObject goParant)
-    //{
-    //    if (goParant.name == "Ship-Player-1")
-    //    {
-    //        if (laserTargetGameObjectSearch == null)
-    //        {
-    //            return null;
-    //        }
-    //        GameObject ES = GameObject.Find("Ship-Player-2");
-    //        IEnumerable<RectTransform> ESt = ES.GetComponent<Ship>().AllObjectsFromShip;
-    //        if (ESt.Count() == 0 && findShipSystem)
-    //        {
-    //            laserTargetGameObjectSearch.transform.position = new Vector3(
-    //                ShipPlayer2.transform.position.x,
-    //                ShipPlayer2.transform.position.y,
-    //                0f);
-    //            findAimnOneMoreTime = false;
-    //        }
-    //        float maxV = 0;
-
-    //        if (findAimnOneMoreTime)
-    //        {
-    //            findShipSystem = false;
-    //            foreach (RectTransform item in ESt)
-    //            {
-    //                float valueTime = item.GetComponent<Rocket>().initializationTime;
-    //                if (item.transform.position.y > 1100f)
-    //                {
-    //                    if (maxV < valueTime)
-    //                    {
-    //                        maxV = valueTime;
-    //                        RocketCheckTrig = item.gameObject;
-    //                        //findAimnOneMoreTime = false;
-    //                        //count = 0;
-    //                    }
-    //                }
-    //            }
-    //            RocketUnderAttack = RocketCheckTrig;
-    //        }
-
-    //        if (RocketCheckTrig != null)
-    //        {
-    //            if (!RocketCheckTrig.GetComponent<Rocket>().triggerIsActived)
-    //            {
-    //                laserTargetGameObjectSearch.transform.position = RocketCheckTrig.transform.position;
-    //            }
-    //            else
-    //            {
-    //                if (RocketCheckTrig.GetComponent<Rocket>().triggerIsActived)
-    //                {
-    //                    LR.Points[1] = laserTargetGameObjectSearch.transform.position;
-    //                }
-    //            }
-    //        }
-    //    }
-    //    if (goParant.name == "Ship-Player-2")
-    //    {
-    //        if (laserTargetGameObjectSearch == null)
-    //        {
-    //            return null;
-    //        }
-    //        GameObject PS = GameObject.Find("Ship-Player-1");
-    //        IEnumerable<RectTransform> PSt = PS.GetComponent<Ship>().AllObjectsFromShip;
-    //        if (PSt.Count() == 0 && findShipSystem)
-    //        {
-    //            laserTargetGameObjectSearch.transform.position = new Vector3(
-    //                ShipPlayer1.transform.position.x,
-    //                ShipPlayer1.transform.position.y,
-    //                0f);
-    //            findAimnOneMoreTime = false;
-    //        }
-    //        float maxV = 0;
-
-    //        if (findAimnOneMoreTime)
-    //        {
-    //            foreach (RectTransform item in PSt)
-    //            {
-    //                findShipSystem = false;
-    //                if (item.transform.position.y < 1100f)
-    //                {
-    //                    float valueTime = item.GetComponent<Rocket>().initializationTime;
-    //                    if (maxV < valueTime)
-    //                    {
-    //                        maxV = valueTime;
-    //                        RocketCheckTrig = item.gameObject;
-    //                        findShipSystem = false;
-    //                        //count = 0;
-    //                    }
-    //                }
-    //            }
-    //            RocketUnderAttack = RocketCheckTrig;
-    //        }
-
-    //        if (RocketCheckTrig != null)
-    //        {
-    //            if (!RocketCheckTrig.GetComponent<Rocket>().triggerIsActived)
-    //            {
-    //                laserTargetGameObjectSearch.transform.position = RocketCheckTrig.transform.position;
-    //            }
-    //            else
-    //            {
-    //                if (RocketCheckTrig.GetComponent<Rocket>().triggerIsActived)
-    //                {
-    //                    LR.Points[1] = laserTargetGameObjectSearch.transform.position;
-    //                }
-    //            }
-    //        }
-    //    }
-    //    return laserTargetGameObjectSearch.transform;
-    //}
-
-    //IEnumerator destroyLaser()
-    //{
-    //    Destroy(laserTargetGameObjectSearch);
-    //    yield return new WaitForSeconds(0.1f);
-    //    Destroy(gameObject);
-
-    //}
-
-    //public Vector3 LerpByDistance(Vector3 A, Vector3 B, float x)
-    //{
-    //    Vector3 P = x * Vector3.Normalize(B - A) + A;
-    //    return P;
-    //}
-
-    //void DrawLineBack()
-    //{
-    //    //if (countBack < dist)
-    //    //{
-    //        //countBack += LineDrawSpeed * Time.deltaTime;
-
-    //        //float x = Mathf.Lerp(0, dist, countBack);
-
-    //    Vector3 pointA = LR.Points[0];
-    //    Vector3 pointB = LR.Points[1];
-
-    //    Vector3 pointALongTime = LerpByDistance(pointA, pointB, 170f);
-
-    //    LR.Points[0] = pointALongTime;
-
-    //    if (oneTimeCor)
-    //    {
-    //        StartCoroutine(WaitCycle());
-    //        oneTimeCor = false;
-    //    }
-
-
-    //    if (goParant.name == "Ship-Player-1")
-    //    {
-    //        if (LR.Points[0].x >= LR.Points[1].x)
-    //        {
-    //            LR.LineThickness = 0;
-    //            //LR.Points[1] = LR.Points[0];
-    //        }
-    //    }
-    //    else
-    //    {
-    //        if (LR.Points[0].x <= LR.Points[1].x)
-    //        {
-    //            LR.LineThickness = 0;
-    //            //LR.Points[1] = LR.Points[0];
-    //        }
-    //    }
-
-    //    //}
-    //}
 }

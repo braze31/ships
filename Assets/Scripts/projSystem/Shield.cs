@@ -28,6 +28,10 @@ public class Shield : MonoBehaviour
         {
             other.GetComponent<Rocket>().ReduceDamageRocket();
         }
+        if (other.tag == "Bomb")
+        {
+            other.GetComponent<Bomb>().ReduceDamageRocket();
+        }
     }
 
     //void OnTriggerExit2D(Collider2D other)

@@ -21,6 +21,8 @@ TagManager:
   - forRocketT
   - RocketS
   - Shield
+  - Bomb
+  - Flare
   layers:
   - Default
   - TransparentFX

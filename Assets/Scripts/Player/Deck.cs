@@ -50,6 +50,14 @@ public class Deck
         {
             nextCard.Cost = 3;
         }
+        if (nextCard.Icon.texture.name == "bomb")
+        {
+            nextCard.Cost = 6;
+        }
+        if (nextCard.Icon.texture.name == "bomb")
+        {
+            nextCard.Cost = 2;
+        }
         hand.Add(nextCard);
         cards.Remove(nextCard);
         nextCard = cards[0];

@@ -19,6 +19,12 @@ public class Ship : MonoBehaviour
     public IEnumerable<RectTransform> slotGunsEmpty;
     [SerializeField]
     public IEnumerable<RectTransform> AllObjectsFromShip;
+    [SerializeField]
+    public IEnumerable<RectTransform> AllRocketsFromShip;
+    [SerializeField]
+    public IEnumerable<RectTransform> AllBombFromShip;
+    [SerializeField]
+    public IEnumerable<RectTransform> AllFlareFromShip;
     public RawImage shieldImage;
     public bool shieldActive = false;
     public Transform ShieldPosforShip;
@@ -43,32 +49,62 @@ public class Ship : MonoBehaviour
     void Update()
     {
         textHP.GetComponent<Text>().text = curHealth.ToString();
-        rt = gameObject.transform.GetComponentsInChildren<RectTransform>().Where(i => i.tag == "SlotGunFull" && i != null);
+        //rt = gameObject.transform.GetComponentsInChildren<RectTransform>().Where(i => i.tag == "SlotGunFull" && i != null);
         //slotGunsEmpty = gameObject.transform.GetComponentsInChildren<RectTransform>().Where(i => i.tag == "SlotGun" && i != null);
-        AllObjectsFromShip = gameObject.transform.GetComponentsInChildren<RectTransform>().Where(
-            a => a.tag == "Rocket" || a.tag == "RocketS" && a != null
-            );
     }
 
-    //public IEnumerable<RectTransform> FindAllSlotGunsFull()
-    //{
-    //    rt = gameObject.transform.GetComponentsInChildren<RectTransform>().Where(i => i.tag == "SlotGunFull" && i != null);
-    //    return rt;
-    //}
+    public IEnumerable<RectTransform> FindAllObjectsFromShip()
+    {
+        AllObjectsFromShip = gameObject.transform.GetComponentsInChildren<RectTransform>().Where(
+            a => a.tag == "Rocket" || a.tag == "RocketS" 
+            || a.tag == "Bomb" || a.tag == "Flare"
+            && a != null && !a.Equals(null)
+            );
+        return AllObjectsFromShip;
+    }
+
+    public IEnumerable<RectTransform> FindAllSlotGunsFull()
+    {
+        rt = gameObject.transform.GetComponentsInChildren<RectTransform>().Where(i => i.tag == "SlotGunFull" && i != null && !i.Equals(null));
+        return rt;
+    }
 
     public IEnumerable<RectTransform> FindAllSlotGunsEmpty()
     {
-        slotGunsEmpty = gameObject.transform.GetComponentsInChildren<RectTransform>().Where(i => i.tag == "SlotGun" && i != null);
+        slotGunsEmpty = gameObject.transform.GetComponentsInChildren<RectTransform>().Where(i => i.tag == "SlotGun" && i != null && !i.Equals(null));
         return slotGunsEmpty;
     }
 
-    //public IEnumerable<RectTransform> FindAllObjectsFromShip()
-    //{
-    //    AllObjectsFromShip = gameObject.transform.GetComponentsInChildren<RectTransform>().Where(
-    //        a => a.tag == "Rocket" || a.tag == "RocketS" && a != null
-    //        );
-    //    return AllObjectsFromShip;
-    //}
+    void FixUpdate()
+    {
+        AllRocketsFromShip = gameObject.transform.GetComponentsInChildren<RectTransform>().Where(
+            a => a.tag == "Rocket" || a.tag == "RocketS" && a != null && !a.Equals(null)
+            );
+    }
+
+    public IEnumerable<RectTransform> FindAllRocketromShip()
+    {
+        AllRocketsFromShip = gameObject.transform.GetComponentsInChildren<RectTransform>().Where(
+            a => a.tag == "Rocket" || a.tag == "RocketS" && a != null && !a.Equals(null)
+            );
+        return AllRocketsFromShip;
+    }
+
+    public IEnumerable<RectTransform> FindAllBombFromShip()
+    {
+        AllBombFromShip = gameObject.transform.GetComponentsInChildren<RectTransform>().Where(
+            a => a.tag == "Bomb" && a != null && !a.Equals(null)
+            );
+        return AllBombFromShip;
+    }
+
+    public IEnumerable<RectTransform> FindAllFlareFromShip()
+    {
+        AllFlareFromShip = gameObject.transform.GetComponentsInChildren<RectTransform>().Where(
+            a => a.tag == "Flare" && a != null && !a.Equals(null) && !a.GetComponent<Flare>().flareONAttack
+            );
+        return AllFlareFromShip;
+    }
 
     //void OnEnable()
     //{

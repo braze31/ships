@@ -2,8 +2,10 @@ ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
     - AnimPoofDeleteObject
+    - Bomb
     - Card
     - DropZone
+    - Flare
     - GameManager
     - HealthBar
     - HealthBarSystem
@@ -89,6 +91,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 54
       Script: {instanceID: 0}
+    - Class: 58
+      Script: {instanceID: 0}
     - Class: 60
       Script: {instanceID: 0}
     - Class: 61
@@ -162,33 +166,37 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 12744}
     - Class: 114
-      Script: {instanceID: 12902}
+      Script: {instanceID: 12808}
     - Class: 114
-      Script: {instanceID: 12948}
+      Script: {instanceID: 12904}
     - Class: 114
-      Script: {instanceID: 12958}
+      Script: {instanceID: 12950}
     - Class: 114
-      Script: {instanceID: 12968}
+      Script: {instanceID: 12960}
     - Class: 114
-      Script: {instanceID: 13120}
+      Script: {instanceID: 12970}
     - Class: 114
-      Script: {instanceID: 13250}
+      Script: {instanceID: 13122}
     - Class: 114
-      Script: {instanceID: 13424}
+      Script: {instanceID: 13252}
     - Class: 114
-      Script: {instanceID: 13454}
+      Script: {instanceID: 13426}
     - Class: 114
-      Script: {instanceID: 13554}
+      Script: {instanceID: 13456}
     - Class: 114
-      Script: {instanceID: 13628}
+      Script: {instanceID: 13474}
     - Class: 114
-      Script: {instanceID: 13640}
+      Script: {instanceID: 13558}
     - Class: 114
-      Script: {instanceID: 13656}
+      Script: {instanceID: 13632}
     - Class: 114
-      Script: {instanceID: 13702}
+      Script: {instanceID: 13644}
     - Class: 114
-      Script: {instanceID: 13710}
+      Script: {instanceID: 13660}
+    - Class: 114
+      Script: {instanceID: 13706}
+    - Class: 114
+      Script: {instanceID: 13714}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -235,6 +243,8 @@ ScriptsOnlyBuild:
     - Class: 48
       Script: {instanceID: 0}
     - Class: 50
+      Script: {instanceID: 0}
+    - Class: 58
       Script: {instanceID: 0}
     - Class: 60
       Script: {instanceID: 0}
@@ -285,27 +295,31 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 12744}
     - Class: 114
-      Script: {instanceID: 12902}
+      Script: {instanceID: 12808}
     - Class: 114
-      Script: {instanceID: 13120}
+      Script: {instanceID: 12904}
     - Class: 114
-      Script: {instanceID: 13250}
+      Script: {instanceID: 13122}
     - Class: 114
-      Script: {instanceID: 13424}
+      Script: {instanceID: 13252}
     - Class: 114
-      Script: {instanceID: 13454}
+      Script: {instanceID: 13426}
     - Class: 114
-      Script: {instanceID: 13532}
+      Script: {instanceID: 13456}
     - Class: 114
-      Script: {instanceID: 13554}
+      Script: {instanceID: 13474}
     - Class: 114
-      Script: {instanceID: 13628}
+      Script: {instanceID: 13536}
     - Class: 114
-      Script: {instanceID: 13640}
+      Script: {instanceID: 13558}
     - Class: 114
-      Script: {instanceID: 13656}
+      Script: {instanceID: 13632}
     - Class: 114
-      Script: {instanceID: 13728}
+      Script: {instanceID: 13644}
+    - Class: 114
+      Script: {instanceID: 13660}
+    - Class: 114
+      Script: {instanceID: 13732}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -1689,7 +1703,7 @@ ScriptsOnlyBuild:
     className: UIFlippable
   - hash:
       serializedVersion: 2
-      Hash: 224c8257bb5204bb0a2488f0b002e29c
+      Hash: 62999daaeaff663ae84e3ab76d93d97f
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PlayerControls
@@ -1807,6 +1821,12 @@ ScriptsOnlyBuild:
     assemblyName: Assembly-CSharp.dll
     namespaceName: UnityEngine.UI.Extensions
     className: CUIImage
+  - hash:
+      serializedVersion: 2
+      Hash: 7fac7e21483815527f352641e409eaef
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Bomb
   - hash:
       serializedVersion: 2
       Hash: 11bdd61587db747672b66c52442395d8
@@ -2299,6 +2319,12 @@ ScriptsOnlyBuild:
     assemblyName: PhotonUnityNetworking.Demos.dll
     namespaceName: Photon.Pun.Demo.PunBasics
     className: GameManager
+  - hash:
+      serializedVersion: 2
+      Hash: 58b6f17a6d5e6ff6abf3b468201640ac
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Flare
   - hash:
       serializedVersion: 2
       Hash: 4c0ebd9e77f5bc0558d19d8313e54bb9
