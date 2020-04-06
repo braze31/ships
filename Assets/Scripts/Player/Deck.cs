@@ -35,9 +35,25 @@ public class Deck
         nextCard = cards[0];
     }
 
+    List<string> NameCard = new List<string>();
+
     public CardStats DrawCard()
     {
         CardStats cs = nextCard;
+
+        //foreach (var item in hand)
+        //{
+        //    GameObject shipShield = GameObject.Find("Ship-Player-1");
+
+        //    if (nextCard.Icon.texture.name == "shield" && shipShield.GetComponent<Ship>().shieldActive)
+        //    {
+        //        if (shipShield != null)
+        //        {
+        //            cards.Remove(nextCard);
+        //            nextCard = cards[0];
+        //        }
+        //    }
+        //}
         if (nextCard.Icon.texture.name == "rocket")
         {
             nextCard.Cost = 5;
@@ -54,10 +70,11 @@ public class Deck
         {
             nextCard.Cost = 6;
         }
-        if (nextCard.Icon.texture.name == "bomb")
+        if (nextCard.Icon.texture.name == "flare")
         {
             nextCard.Cost = 2;
         }
+        //Debug.Log(NameCard.Contains(nextCard));
         hand.Add(nextCard);
         cards.Remove(nextCard);
         nextCard = cards[0];
@@ -76,10 +93,5 @@ public class Deck
                 break;
             }
         }
-    }
-
-    public void RemoveShield(CardStats cs)
-    {
-        hand.Remove(cs);
     }
 }

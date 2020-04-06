@@ -40,6 +40,8 @@ public class Laser : MonoBehaviour
     private Transform targetEmpty;
     private GameObject targetBomb;
     private GameObject targetFlare;
+    private bool findTargetFlare;
+    private bool dontChangeFlare;
 
     void Awake()
     {
@@ -157,7 +159,22 @@ public class Laser : MonoBehaviour
         }
         if (SearchTargetInUpdate)
         {
-            target = SearchTargetForLaser(goParant);
+            if (targetFlare == null)
+            {
+                findTargetFlare = false;
+            }
+            if (findTargetFlare)
+            {
+                target = targetFlare.transform;
+            }
+            else
+            {
+                if (!dontChangeFlare)
+                {
+                    target = SearchTargetForLaser(goParant);
+                }
+            }
+
             if (target!=null)
             {
                 LR.Points[1] = target.position;
@@ -183,6 +200,28 @@ public class Laser : MonoBehaviour
 
         if (target!=null)
         {
+            if (targetFlare != null)
+            {
+                if (targetFlare.tag == "Flare")
+                {
+                    Vector2 newVR = new Vector2(targetFlare.transform.position.x, targetFlare.transform.position.y);
+                    if (LR.Points[1] == newVR)
+                    {
+                        dontChangeFlare = true;
+                        targetFlare.GetComponent<Flare>().HealthRocket -= Time.deltaTime * 400;
+                        targetFlare.GetComponent<Flare>().flareONAttack = true;
+                        if (targetFlare.GetComponent<Flare>().HealthRocket <= 0)
+                        {
+                            SearchTargetInUpdate = false;
+                            STARTTHIS = false;
+                            disAppear = true;
+                            LR.Points[1] = targetFlare.transform.position;
+                            StartCoroutine(waitSearchAfterBOOM());
+                        }
+                    }
+                }
+            }
+
             if (targetBomb != null)
             {
                 if (targetBomb.tag == "Bomb")
@@ -207,28 +246,6 @@ public class Laser : MonoBehaviour
                         targetBomb.GetComponent<Bomb>().rocketONAttack = false;
                     }
                 }
-                if (targetFlare.tag == "Flare")
-                {
-                    Vector2 newVR = new Vector2(targetFlare.transform.position.x, targetFlare.transform.position.y);
-                    if (LR.Points[1] == newVR)
-                    {
-                        targetFlare.GetComponent<Flare>().HealthRocket -= Time.deltaTime * 400;
-                        targetFlare.GetComponent<Flare>().flareONAttack = true;
-                        if (targetFlare.GetComponent<Flare>().HealthRocket <= 0)
-                        {
-                            SearchTargetInUpdate = false;
-                            STARTTHIS = false;
-                            disAppear = true;
-                            LR.Points[1] = targetFlare.transform.position;
-                            StartCoroutine(waitSearchAfterBOOM());
-                        }
-                    }
-                    else
-                    {
-                        targetFlare.GetComponent<Flare>().flareONAttack = false;
-                    }
-                }
-
             }
 
             if (RocketCheckTrig != null)
@@ -351,6 +368,33 @@ public class Laser : MonoBehaviour
         {
             GameObject ES = GameObject.Find("Ship-Player-2");
 
+            IEnumerable<RectTransform> ESf = ES.GetComponent<Ship>().FindAllFlareFromShip();
+            if (ESf != null && ESf.Count() > 0 && !findTargetFlare)
+            {
+                if (!offCameraLasser)
+                {
+                    IEnumerable<RectTransform> ESfdown = ESf.Where(a => a.transform.position.y < 1100f);
+                    if (ESfdown.Count() > 0)
+                    {
+                        targetFlare = ESfdown.First().gameObject;
+                        targetFlare.GetComponent<Flare>().flareONAttack = true;
+                        findTargetFlare = true;
+                        return targetFlare.transform;
+                    }
+                }
+                if (offCameraLasser)
+                {
+                    IEnumerable<RectTransform> ESfdown = ESf.Where(a => a.transform.position.y > 1100f);
+                    if (ESfdown.Count() > 0)
+                    {
+                        targetFlare = ESfdown.First().gameObject;
+                        targetFlare.GetComponent<Flare>().flareONAttack = true;
+                        findTargetFlare = true;
+                        return targetFlare.transform;
+                    }
+                }
+            }
+
             IEnumerable<RectTransform> ESb = ES.GetComponent<Ship>().FindAllBombFromShip();
             if (ESb != null && ESb.Count()>0)
             {
@@ -381,45 +425,6 @@ public class Laser : MonoBehaviour
                                 {
                                     maxB = valueTime;
                                     targetBomb = item.gameObject;
-                                    //findAimnOneMoreTime = false;
-                                }
-                            }
-                        }
-                    }
-                }
-                return targetBomb.transform;
-            }
-
-            IEnumerable<RectTransform> ESf = ES.GetComponent<Ship>().FindAllFlareFromShip();
-            if (ESb != null && ESf.Count() > 0)
-            {
-                float maxB = 0;
-
-                foreach (RectTransform item in ESf)
-                {
-                    if (item != null && !item.Equals(null))
-                    {
-                        float valueTime = item.GetComponent<Flare>().initializationTime;
-                        if (!offCameraLasser)
-                        {
-                            if (item.transform.position.y < 1100f)
-                            {
-                                if (maxB < valueTime)
-                                {
-                                    maxB = valueTime;
-                                    targetFlare = item.gameObject;
-                                    //findAimnOneMoreTime = false;
-                                }
-                            }
-                        }
-                        if (offCameraLasser)
-                        {
-                            if (item.transform.position.y > 1100f)
-                            {
-                                if (maxB < valueTime)
-                                {
-                                    maxB = valueTime;
-                                    targetFlare = item.gameObject;
                                     //findAimnOneMoreTime = false;
                                 }
                             }
@@ -470,6 +475,33 @@ public class Laser : MonoBehaviour
         {
             GameObject PS = GameObject.Find("Ship-Player-1");
 
+            IEnumerable<RectTransform> ESf = PS.GetComponent<Ship>().FindAllFlareFromShip();
+            if (ESf != null && ESf.Count() > 0 && !findTargetFlare)
+            {
+                if (!offCameraLasser)
+                {
+                    IEnumerable<RectTransform> ESfdown = ESf.Where(a => a.transform.position.y > 1100f);
+                    if (ESfdown.Count() > 0)
+                    {
+                        targetFlare = ESfdown.First().gameObject;
+                        targetFlare.GetComponent<Flare>().flareONAttack = true;
+                        findTargetFlare = true;
+                        return targetFlare.transform;
+                    }
+                }
+                if (offCameraLasser)
+                {
+                    IEnumerable<RectTransform> ESfdown = ESf.Where(a => a.transform.position.y < 1100f);
+                    if (ESfdown.Count() > 0)
+                    {
+                        targetFlare = ESfdown.First().gameObject;
+                        targetFlare.GetComponent<Flare>().flareONAttack = true;
+                        findTargetFlare = true;
+                        return targetFlare.transform;
+                    }
+                }
+            }
+
             IEnumerable<RectTransform> ESb = PS.GetComponent<Ship>().FindAllBombFromShip();
             if (ESb != null && ESb.Count() > 0)
             {
@@ -508,46 +540,6 @@ public class Laser : MonoBehaviour
                 }
                 return targetBomb.transform;
             }
-
-            IEnumerable<RectTransform> ESf = PS.GetComponent<Ship>().FindAllFlareFromShip();
-            if (ESb != null && ESf.Count() > 0)
-            {
-                float maxB = 0;
-
-                foreach (RectTransform item in ESf)
-                {
-                    if (item != null && !item.Equals(null))
-                    {
-                        float valueTime = item.GetComponent<Flare>().initializationTime;
-                        if (!offCameraLasser)
-                        {
-                            if (item.transform.position.y > 1100f)
-                            {
-                                if (maxB < valueTime)
-                                {
-                                    maxB = valueTime;
-                                    targetBomb = item.gameObject;
-                                    //findAimnOneMoreTime = false;
-                                }
-                            }
-                        }
-                        if (offCameraLasser)
-                        {
-                            if (item.transform.position.y < 1100f)
-                            {
-                                if (maxB < valueTime)
-                                {
-                                    maxB = valueTime;
-                                    targetBomb = item.gameObject;
-                                    //findAimnOneMoreTime = false;
-                                }
-                            }
-                        }
-                    }
-                }
-                return targetBomb.transform;
-            }
-
 
             IEnumerable<RectTransform> PSt = PS.GetComponent<Ship>().FindAllRocketromShip();
             float maxV = 0;
@@ -596,8 +588,6 @@ public class Laser : MonoBehaviour
         {
             GameObject ES = GameObject.Find("Ship-Player-2");
             IEnumerable<RectTransform> ESO = ES.GetComponent<Ship>().FindAllObjectsFromShip();
-
-            Debug.Log(ESO.Count());
             if (ESO.Count()==0)
             {
                 AttackShip(ShipPlayer2);
@@ -655,10 +645,8 @@ public class Laser : MonoBehaviour
         }
         if (goPar.name == "Ship-Player-2")
         {
-            GameObject PS = GameObject.Find("Ship-Player-2");
+            GameObject PS = GameObject.Find("Ship-Player-1");
             IEnumerable<RectTransform> ESO = PS.GetComponent<Ship>().FindAllObjectsFromShip();
-
-            Debug.Log(ESO.Count());
             if (ESO.Count() == 0)
             {
                 AttackShip(ShipPlayer1);

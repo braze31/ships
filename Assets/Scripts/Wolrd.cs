@@ -156,6 +156,19 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
                 }
 
                 break;
+            case 5:
+                var p5 = photonEvent.Parameters;
+                ExitGames.Client.Photon.Hashtable numberAngle = (ExitGames.Client.Photon.Hashtable)p5[245];
+                //var boolForRandomNumberAndEvent = numberAndbool["boolForRandomNumberAndEvent"];
+
+
+                if (numberAngle["randomNumber"] != null)
+                {
+                    var randomNumber = numberAngle["randomNumber"];
+                    GivePlayersSameAngleFlare((float)randomNumber);
+                }
+
+                break;
         }
     }
 
@@ -245,6 +258,14 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
     }
 
     public void GivePlayersSameRandomNumber(int randomNumber)
+    {
+        foreach (var player in players)
+        {
+            player.TakeRandomNumer(randomNumber);
+        }
+    }
+
+    public void GivePlayersSameAngleFlare(float randomNumber)
     {
         foreach (var player in players)
         {

@@ -22,6 +22,7 @@ public class PlayerControls : MonoBehaviour, IPunObservable
     public int HowMuchRocketInSystem = 3;
 
     private GameObject Target;
+    private bool boolForRandomNumberFlare;
     GameObject playerCanvas;
     private float currResPlayer;
     private Image iconCard;
@@ -38,6 +39,7 @@ public class PlayerControls : MonoBehaviour, IPunObservable
     private int TimeID;
     private int randomNumber;
     private bool boolForRandomNumberAndEvent = false;
+    private float randomAngle;
 
     // PRSPAWN FOR RESET PREFAB ICON CARD
     //private GameObject PRSPAWN;
@@ -147,7 +149,7 @@ public class PlayerControls : MonoBehaviour, IPunObservable
                 {
                     item.transform.parent.tag = "SlotGunFull";
                     StartCoroutine(INSTFlare(item, pShip, timeID));
-                    item.transform.parent.GetComponent<DropZone>().healthBar.EnableImageAndStartReduceHp(3f);
+                    item.transform.parent.GetComponent<DropZone>().healthBar.EnableImageAndStartReduceHp(0.61f);
                     //StartCoroutine(ResetSlotDeleteIcon(item, PRSPAWN.GetComponent<RawImage>()));
                 }
             }
@@ -345,13 +347,13 @@ public class PlayerControls : MonoBehaviour, IPunObservable
                 if (PhotonNetwork.IsMasterClient)
                 {
                     Target = enemyShip;
-                    boolForRandomNumberAndEvent = true;
+                    boolForRandomNumberFlare = true;
                 }
 
-                myNewS.GetComponent<Flare>().TakeRandomNumberForSearch(randomNumber);
-                myNewSOFF.GetComponent<Flare>().TakeRandomNumberForSearch(randomNumber);
+                myNewS.GetComponent<Flare>().TakeRandomNumberForSearch(randomAngle);
+                myNewSOFF.GetComponent<Flare>().TakeRandomNumberForSearch(randomAngle);
 
-                yield return new WaitForSeconds(0.97f);
+                yield return new WaitForSeconds(0.2f);
             }
         }
         //item.transform.parent.Find(nameSlot).tag = "SlotGun";
@@ -381,6 +383,14 @@ public class PlayerControls : MonoBehaviour, IPunObservable
             randomNumber = UnityEngine.Random.Range(0, sortList.Count());
         }
         return randomNumber;
+    }
+
+    public float GiveFlareAngle(GameObject enemyShip)
+    {
+        // if not master first - BUG
+        randomAngle = UnityEngine.Random.Range(-70, 70);
+
+        return randomAngle;
     }
 
 
@@ -456,6 +466,11 @@ public class PlayerControls : MonoBehaviour, IPunObservable
         randomNumber = _randomNuber;
     }
 
+    public void TakeRandomNumer(float _randomNuber)
+    {
+        randomAngle = _randomNuber;
+    }
+
     void SendEventFromPlayer()
     {
         RaiseEventOptions options = new RaiseEventOptions { Receivers = ReceiverGroup.All };
@@ -486,7 +501,18 @@ public class PlayerControls : MonoBehaviour, IPunObservable
         PhotonNetwork.RaiseEvent(4, evData, options, sendOptions);
     }
 
-    // Update is called once per frame
+    void SendEventAngleFlare()
+    {
+        RaiseEventOptions options = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+        SendOptions sendOptions = new SendOptions { Reliability = true };
+        ExitGames.Client.Photon.Hashtable evData = new ExitGames.Client.Photon.Hashtable();
+
+        evData["randomNumber"] = GiveFlareAngle(Target);
+        evData["boolForRandomNumberAndEvent"] = boolForRandomNumberFlare;
+        PhotonNetwork.RaiseEvent(5, evData, options, sendOptions);
+    }
+
+    // Update is called once per frames
     void Update()
     {
         if(photonView.IsMine && image != null)
@@ -514,6 +540,12 @@ public class PlayerControls : MonoBehaviour, IPunObservable
         {
             SendEventNumber();
             boolForRandomNumberAndEvent = false;
+        }
+
+        if (boolForRandomNumberFlare)
+        {
+            SendEventAngleFlare();
+            boolForRandomNumberFlare = false;
         }
 
         yourPing.GetComponent<Text>().text = "Ping: " + PhotonNetwork.GetPing().ToString();

@@ -298,8 +298,7 @@ MonoBehaviour:
   CheckForEvent: 0
   triggerIsActived: 0
   countRSystem: 0
-  SystemRocketDamage: 0.3
-  ShipRocketDamage: 0.1
+  flareInCircle: 0
   ShipAndSystemRocketDamage: 0.05
   initializationTime: 0
   HealthRocket: 100

@@ -36,6 +36,7 @@ public class Rocket : MonoBehaviourPun
     [SerializeField]
     public int countRSystem = 0;
     private bool exploydEvent = false;
+    public bool flareInTarget = false;
 
     float angle;
 
@@ -63,6 +64,8 @@ public class Rocket : MonoBehaviourPun
         goPar = gameObject.transform.parent.gameObject;
         coppyPos = new GameObject("MyGO", typeof(RectTransform));
         coppyPos.transform.SetParent(goPar.transform,true);
+        coppyPos.AddComponent<BoxCollider2D>().isTrigger = true;
+        coppyPos.GetComponent<BoxCollider2D>().size = new Vector2(60f, 60f);
         TargetForRocket = SearchTargetForRocket(goPar);
         if (!trueRocket && goPar.name == "Ship-Player-1")
         {
@@ -90,8 +93,8 @@ public class Rocket : MonoBehaviourPun
         //    gameObject.tag = "RocketS";
         //}
         posXShip = (int)coppyPos.GetComponent<RectTransform>().localPosition.x;
-        Destroy(coppyPos, 1.5f);
-        StartCoroutine(DestroyRocketbyTime(7f));
+        Destroy(coppyPos, 2.5f);
+        StartCoroutine(DestroyRocketbyTime(5f));
     }
 
     //IEnumerator disableCollider()
@@ -124,6 +127,10 @@ public class Rocket : MonoBehaviourPun
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        if (other.name == "MyGO")
+        {
+            Destroy(gameObject);
+        }
         if (targetFlare!=null)
         {
             if (other.tag == "Flare")
@@ -211,31 +218,17 @@ public class Rocket : MonoBehaviourPun
         float timeSinceInitialization = Time.timeSinceLevelLoad - initializationTime;
         gameObject.transform.Translate(userDirection * movespeed * Time.deltaTime);
 
-        if (targetFlare!=null)
-        {
-            gameObject.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, 0f);
-            angle = Vector3.Angle(transform.right, targetFlare.transform.position - transform.position);
-            if (targetFlare.transform.position.y > transform.position.y)
-            {
-                gameObject.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, angle);
-            }
-            else
-            {
-                gameObject.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, -angle);
-            }
-        }
-
         if (TargetForRocket!=null)
         {
-            if (ChangedTargetForRocket!=null)
+            if (!flareInTarget)
             {
-                if (ChangedTargetForRocket != TargetForRocket)
-                {
-                    blockTarget = true;
-                }
+                TargetForRocket = SearchTargetForRocket(goPar);
             }
 
-            ChangedTargetForRocket = TargetForRocket;
+            if (TargetForRocket.gameObject.tag != "Flare")
+            {
+                flareInTarget = false;
+            }
 
             gameObject.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, 0f);
             angle = Vector3.Angle(transform.right, TargetForRocket.transform.position - transform.position);
@@ -268,32 +261,6 @@ public class Rocket : MonoBehaviourPun
 
             GameObject ES = GameObject.Find("Ship-Player-2");
 
-            IEnumerable<RectTransform> ESf = ES.GetComponent<Ship>().FindAllFlareFromShip();
-            if (ESf.Count() > 0)
-            {
-                if (trueRocket)
-                {
-                    IEnumerable<RectTransform> ESfdown = ESf.Where(a => a.transform.position.y < 1100f);
-                    if (ESfdown.Count() > 0)
-                    {
-                        targetFlare = ESfdown.First().gameObject;
-                        targetFlare.GetComponent<Flare>().flareONAttack = true;
-                        return targetFlare.transform;
-                    }
-
-                }
-                if (!trueRocket)
-                {
-                    IEnumerable<RectTransform> ESfdown = ESf.Where(a => a.transform.position.y > 1100f);
-                    if (ESfdown.Count() > 0)
-                    {
-                        targetFlare = ESfdown.First().gameObject;
-                        targetFlare.GetComponent<Flare>().flareONAttack = true;
-                        return targetFlare.transform;
-                    }
-                }
-            }
-
             IEnumerable<RectTransform> ESt = ES.GetComponent<Ship>().FindAllSlotGunsFull();
             foreach (RectTransform item in ESt)
             {
@@ -317,37 +284,40 @@ public class Rocket : MonoBehaviourPun
                     }
                 }
             }
+            if (!flareInTarget)
+            {
+                IEnumerable<RectTransform> ESf = ES.GetComponent<Ship>().FindAllFlareFromShip();
+                if (ESf.Count() > 0)
+                {
+                    if (trueRocket)
+                    {
+                        IEnumerable<RectTransform> ESfdown = ESf.Where(a => a.transform.position.y < 1100f);
+                        if (ESfdown.Count() > 0)
+                        {
+                            targetFlare = ESfdown.First().gameObject;
+                            targetFlare.GetComponent<Flare>().flareONAttack = true;
+                            allPoints.Add(targetFlare.transform);
+                        }
+                    }
+                    if (!trueRocket)
+                    {
+                        IEnumerable<RectTransform> ESfdown = ESf.Where(a => a.transform.position.y > 1100f);
+                        if (ESfdown.Count() > 0)
+                        {
+                            targetFlare = ESfdown.First().gameObject;
+                            targetFlare.GetComponent<Flare>().flareONAttack = true;
+                            allPoints.Add(targetFlare.transform);
+                        }
+                    }
+                }
+                flareInTarget = true;
+            }
         }
         if (goPar.name == "Ship-Player-2")
         {
             allPoints.Add(SearchTargetEmptySystem(goPar));
 
             GameObject PS = GameObject.Find("Ship-Player-1");
-
-            IEnumerable<RectTransform> ESf = PS.GetComponent<Ship>().FindAllFlareFromShip();
-            if (ESf.Count() > 0)
-            {
-                if (!trueRocket)
-                {
-                    IEnumerable<RectTransform> ESfdown = ESf.Where(a => a.transform.position.y < 1100f);
-                    if (ESfdown.Count() > 0)
-                    {
-                        targetFlare = ESfdown.First().gameObject;
-                        targetFlare.GetComponent<Flare>().flareONAttack = true;
-                        return targetFlare.transform;
-                    }
-                }
-                if (trueRocket)
-                {
-                    IEnumerable<RectTransform> ESfdown = ESf.Where(a => a.transform.position.y > 1100f);
-                    if (ESfdown.Count()>0)
-                    {
-                        targetFlare = ESfdown.First().gameObject;
-                        targetFlare.GetComponent<Flare>().flareONAttack = true;
-                        return targetFlare.transform;
-                    }
-                }
-            }
 
             IEnumerable<RectTransform> PSt = PS.GetComponent<Ship>().FindAllSlotGunsFull();
             foreach (RectTransform item in PSt)
@@ -371,7 +341,34 @@ public class Rocket : MonoBehaviourPun
                         findBiggerValueofFillAmountSystem = item.GetComponent<DropZone>().healthBar.bar.fillAmount;
                     }
                 }
-                
+            }
+            if (!flareInTarget)
+            {
+                IEnumerable<RectTransform> ESf = PS.GetComponent<Ship>().FindAllFlareFromShip();
+                if (ESf.Count() > 0)
+                {
+                    if (!trueRocket)
+                    {
+                        IEnumerable<RectTransform> ESfdown = ESf.Where(a => a.transform.position.y < 1100f);
+                        if (ESfdown.Count() > 0)
+                        {
+                            targetFlare = ESfdown.First().gameObject;
+                            targetFlare.GetComponent<Flare>().flareONAttack = true;
+                            allPoints.Add(targetFlare.transform);
+                        }
+                    }
+                    if (trueRocket)
+                    {
+                        IEnumerable<RectTransform> ESfdown = ESf.Where(a => a.transform.position.y > 1100f);
+                        if (ESfdown.Count() > 0)
+                        {
+                            targetFlare = ESfdown.First().gameObject;
+                            targetFlare.GetComponent<Flare>().flareONAttack = true;
+                            allPoints.Add(targetFlare.transform);
+                        }
+                    }
+                }
+                flareInTarget = true;
             }
         }
         if (allPoints.Count==0)

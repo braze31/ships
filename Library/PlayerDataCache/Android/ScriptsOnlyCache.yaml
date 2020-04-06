@@ -33,6 +33,7 @@ ScriptsOnlyBuild:
     - Photon.Pun.Demo.SlotRacer.PlayerControl
     - Photon.Pun.Demo.SlotRacer.Utils.SplineWalker
     PhotonUnityNetworking.Editor.dll:
+    - Photon.Pun.PhotonViewInspector
     - Photon.Pun.PunSceneSettings
     PhotonUnityNetworking.dll:
     - Photon.Pun.PhotonAnimatorView
@@ -2321,7 +2322,7 @@ ScriptsOnlyBuild:
     className: GameManager
   - hash:
       serializedVersion: 2
-      Hash: 58b6f17a6d5e6ff6abf3b468201640ac
+      Hash: da0c6416a924495dfb5a34b3bb88f6e1
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Flare

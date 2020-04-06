@@ -23,6 +23,7 @@ TagManager:
   - Shield
   - Bomb
   - Flare
+  - Destroyer
   layers:
   - Default
   - TransparentFX

@@ -91,6 +91,7 @@ public class PlayerStats : MonoBehaviour
     private GameObject ShipPlayer;
     public GameObject HandOnScreen;
     IEnumerable<RectTransform> allCards;
+    IEnumerable<string> NameCards; 
 
     private void Start()
     {
@@ -145,40 +146,7 @@ public class PlayerStats : MonoBehaviour
         {
             if (allCards.Count() < GameConstants.MAX_HAND_SIZE && !onDragging)
             {
-                int countShield = 0;
-                foreach (var item in allCards)
-                {
-                    // check standart icon in prefab
-                    if (item.gameObject.transform.Find("Icon").GetComponent<Image>().sprite.name != "flame1")
-                    {
-                        if (item.gameObject.transform.Find("Icon").GetComponent<Image>().sprite.name == "shield")
-                        {
-                            countShield++;
-                        }
-                    }
-                }
-                //Debug.Log(countShield);
                 CardStats cs = playerDeck.DrawCard();
-
-                if (ShipPlayer.GetComponent<Ship>().shieldActive)
-                {
-                    while (cs.Icon.texture.name == "shield")
-                    {
-                        cs = playerDeck.DrawCard();
-                    }
-                    playerDeck.RemoveShield(cs);
-                }
-                if (cs.Icon.texture.name == "shield" && countShield >= 1)
-                {
-                    while (cs.Icon.texture.name == "shield")
-                    {
-                        cs = playerDeck.DrawCard();
-                    }
-
-                    playerDeck.RemoveShield(cs);
-                    //Debug.Log(playerDeck.Hand.Count);
-                    //playerDeck.Hand.ToList().ForEach(o => Debug.Log(o.Icon.name));
-                }
                 GameObject go = Instantiate(cardPrefab, handParent);
                 Card c = go.GetComponent<Card>();
                 c.PlayerInfo = this;
@@ -186,7 +154,30 @@ public class PlayerStats : MonoBehaviour
             }
         }
 
-        nextCard.CardInfo = playerDeck.NextCard;
-        nextCard.PlayerInfo = this;
+        //nextCard.CardInfo = playerDeck.NextCard;
+        //nextCard.PlayerInfo = this;
+        //Debug.Log(nextCard.Icon.sprite.name);
+        CheckCardInHand();
+    }
+
+    public void CheckCardInHand()
+    {
+        GameObject lastCard = allCards.Last().gameObject;
+        GameObject shipShield = GameObject.Find("Ship-Player-1");
+        if (allCards.Count() >= 1)
+        {
+            for (int i = 0; i < allCards.Count()-1; i++)
+            {
+                if (allCards.ToArray()[i].gameObject.GetComponent<Card>().CardInfo.Icon.name == lastCard.gameObject.GetComponent<Card>().CardInfo.Icon.name
+                    || (lastCard.gameObject.GetComponent<Card>().CardInfo.Icon.name == "shield" && shipShield.GetComponent<Ship>().shieldActive))
+                {
+                    int t = lastCard.gameObject.GetComponent<Card>().CardInfo.Index;
+                    PlayerDeck.RemoveCard((int)t);
+                    allCards.ToList().Remove(lastCard.GetComponent<RectTransform>());
+                    Destroy(lastCard);
+                    break;
+                }
+            }
+        }
     }
 }
