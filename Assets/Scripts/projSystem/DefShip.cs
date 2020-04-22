@@ -6,10 +6,8 @@ using UnityEngine;
 public class DefShip : MonoBehaviour
 {
     private float speed = 100f;
-    private float waiteTime;
     private float startWaiteTime = 0.1f;
     private float startShipFlyTimeFromMain = 1.4f;
-    private float angle;
     private bool startFlyFromMainShip = true;
     private bool startPatrol = false;
 
@@ -31,7 +29,6 @@ public class DefShip : MonoBehaviour
 
     void Start()
     {
-        waiteTime = startWaiteTime;
         randomSpot = 0;
         GameObject ship = gameObject.transform.parent.gameObject;
         goPar = gameObject.transform.parent.gameObject;
@@ -145,17 +142,6 @@ public class DefShip : MonoBehaviour
                 {
                     randomSpot = 0;
                 }
-                //changePOSAngle = true;
-                waiteTime = 3f;
-            }
-
-            if (changePOSAngle)
-            {
-                if (waiteTime <= 0)
-                {
-                    changePOSAngle = false;
-                }
-                waiteTime -= Time.deltaTime;
             }
 
             if (!changePOSAngle)
@@ -164,6 +150,8 @@ public class DefShip : MonoBehaviour
                 float rotateAmount = Vector3.Cross(dir, transform.up).z;
                 rb.angularVelocity = -rotateAmount * 300f;
                 rb.velocity = transform.up * 400f;
+
+                // another way rotate ship on target
 
                 //float targetAngle = Mathf.Atan2(
                 //    moveSpots[randomSpot].position.y - transform.position.y,
@@ -181,18 +169,6 @@ public class DefShip : MonoBehaviour
                 //    diffAngle = sourceAngle - targetAngle;
                 //}
 
-                //rb.angularVelocity = diffAngle * Time.deltaTime * 440f;
-                //angle = Vector2.Angle(Vector2.right, dir);
-                //transform.rotation = Quaternion.Euler(0, 0, angle);
-
-
-                //Vector3 direction = moveSpots[randomSpot].position - transform.position;
-                //sign = (direction.y >= 0) ? 1 : -1;
-                //offset = (sign >= 0) ? 0 : 360;
-
-                //angle = Vector2.Angle(Vector2.right, direction) * sign + offset;
-
-                //gameObject.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, angle);
             }
 
         }
@@ -286,10 +262,5 @@ public class DefShip : MonoBehaviour
         }
 
         return null;
-    }
-
-    public void GetStartPosFinish(Vector3 pos)
-    {
-        //FinishPos = pos;
     }
 }
