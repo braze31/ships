@@ -101,7 +101,7 @@ public class Ship : MonoBehaviour
     public IEnumerable<RectTransform> FindAllFlareFromShip()
     {
         AllFlareFromShip = gameObject.transform.GetComponentsInChildren<RectTransform>().Where(
-            a => a.tag == "Flare" && a != null && !a.Equals(null) //&& !a.GetComponent<Flare>().flareONAttack
+            a => a.tag == "Flare" && a != null && !a.Equals(null) && !a.GetComponent<Flare>().flareONAttack
             );
         return AllFlareFromShip;
     }

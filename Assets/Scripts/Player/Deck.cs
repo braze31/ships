@@ -35,25 +35,29 @@ public class Deck
         nextCard = cards[0];
     }
 
-    List<string> NameCard = new List<string>();
 
-    public CardStats DrawCard()
+    public CardStats DrawCard(IEnumerable<RectTransform> listCardInHand)
     {
         CardStats cs = nextCard;
+        List<string> listHandStringCards = new List<string>();
+        foreach (var item in listCardInHand)
+        {
+            listHandStringCards.Add(item.gameObject.GetComponent<Card>().CardInfo.Icon.name);
+        }
+        GameObject shipShield = GameObject.Find("Ship-Player-1");
+        while (listHandStringCards.Contains(cs.Icon.name))
+        {
+            var item = cards[0];
+            cards.Remove(nextCard);
+            nextCard = cards[0];
+            cs = nextCard;
+            //Debug.Log(nextCard.Icon.texture.name == "shield");
+            //Debug.Log(shipShield.GetComponent<Ship>().shieldActive);
+            //Debug.Log(nextCard.Icon.texture.name);
+            // add in end list cards idknow why list length same.
+            cards.Add(item);
+        }
 
-        //foreach (var item in hand)
-        //{
-        //    GameObject shipShield = GameObject.Find("Ship-Player-1");
-
-        //    if (nextCard.Icon.texture.name == "shield" && shipShield.GetComponent<Ship>().shieldActive)
-        //    {
-        //        if (shipShield != null)
-        //        {
-        //            cards.Remove(nextCard);
-        //            nextCard = cards[0];
-        //        }
-        //    }
-        //}
         if (nextCard.Icon.texture.name == "rocket")
         {
             nextCard.Cost = 5;
@@ -74,7 +78,11 @@ public class Deck
         {
             nextCard.Cost = 2;
         }
-        //Debug.Log(NameCard.Contains(nextCard));
+        if (nextCard.Icon.texture.name == "def-ship")
+        {
+            nextCard.Cost = 4;
+        }
+
         hand.Add(nextCard);
         cards.Remove(nextCard);
         nextCard = cards[0];

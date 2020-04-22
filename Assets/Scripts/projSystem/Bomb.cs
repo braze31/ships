@@ -176,6 +176,10 @@ public class Bomb : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        if (Vector2.Distance(transform.position, coppyPos.transform.position) < 5f)
+        {
+            Destroy(gameObject);
+        }
         if (HealthRocket <= 0)
         {
             Destroy(gameObject);

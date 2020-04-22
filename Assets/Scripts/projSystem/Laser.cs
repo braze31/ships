@@ -402,7 +402,7 @@ public class Laser : MonoBehaviour
 
                 foreach (RectTransform item in ESb)
                 {
-                    if (item != null && !item.Equals(null))
+                    if (item != null && !item.Equals(null) && item.tag == "Bomb")
                     {
                         float valueTime = item.GetComponent<Bomb>().initializationTime;
                         if (!offCameraLasser)
@@ -509,7 +509,7 @@ public class Laser : MonoBehaviour
 
                 foreach (RectTransform item in ESb)
                 {
-                    if (item != null && !item.Equals(null))
+                    if (item != null && !item.Equals(null) && item.tag == "Bomb")
                     {
                         float valueTime = item.GetComponent<Bomb>().initializationTime;
                         if (!offCameraLasser)

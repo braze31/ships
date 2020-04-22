@@ -37,6 +37,7 @@ public class Rocket : MonoBehaviourPun
     public int countRSystem = 0;
     private bool exploydEvent = false;
     public bool flareInTarget = false;
+    public bool changeTargetAgain = false;
 
     float angle;
 
@@ -127,7 +128,7 @@ public class Rocket : MonoBehaviourPun
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.name == "MyGO")
+        if (other.name == "MyGO" || other.tag == "Destroyer")
         {
             Destroy(gameObject);
         }
@@ -158,7 +159,9 @@ public class Rocket : MonoBehaviourPun
                     go.ShipTakeDamage(ShipAndSystemRocketDamage);
                 }
             }
-            if (other.tag == "SlotGunFull" && other.name == TargetForRocket.name)
+            if (other.tag == "SlotGunFull" && other.name == TargetForRocket.name ||
+                gameObject.tag == "RocketS" && (other.tag == "SlotGun" || other.tag == "SlotGunFull")
+                )
             {
                 gameObject.SetActive(false);
                 GameObject expl = Instantiate(ExplosionAnim, ExplosionTransform.transform.position, Quaternion.Euler(0f, 0f, 0f));
@@ -220,14 +223,28 @@ public class Rocket : MonoBehaviourPun
 
         if (TargetForRocket!=null)
         {
+            if (TargetForRocket.gameObject.tag == "SlotGun")
+            {
+                blockTarget = true;
+            }
+            if (TargetForRocket.gameObject.tag != "Flare")
+            {
+                flareInTarget = false;
+            }
             if (!flareInTarget)
             {
                 TargetForRocket = SearchTargetForRocket(goPar);
             }
-
-            if (TargetForRocket.gameObject.tag != "Flare")
+            if (TargetForRocket.gameObject.tag == "Flare")
             {
-                flareInTarget = false;
+                flareInTarget = true;
+                TargetForRocket.gameObject.GetComponent<Flare>().GetAimedRocket(gameObject);
+            }
+
+            if (changeTargetAgain)
+            {
+                TargetForRocket = SearchTargetEmptySystem(goPar);
+                gameObject.tag = "RocketS";
             }
 
             gameObject.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, 0f);
@@ -248,7 +265,7 @@ public class Rocket : MonoBehaviourPun
             }
         if (HealthRocket <= 0)
         {
-            Destroy(gameObject);
+            EXPLOYD();
         }
     }
 
@@ -260,27 +277,29 @@ public class Rocket : MonoBehaviourPun
             allPoints.Add(SearchTargetEmptySystem(goPar));
 
             GameObject ES = GameObject.Find("Ship-Player-2");
-
-            IEnumerable<RectTransform> ESt = ES.GetComponent<Ship>().FindAllSlotGunsFull();
-            foreach (RectTransform item in ESt)
+            if (!blockTarget)
             {
-                if (findBiggerValueofFillAmountSystem<=item.GetComponent<DropZone>().healthBar.bar.fillAmount)
+                IEnumerable<RectTransform> ESt = ES.GetComponent<Ship>().FindAllSlotGunsFull();
+                foreach (RectTransform item in ESt)
                 {
-                    if (item.tag == "SlotGunFull")
+                    if (findBiggerValueofFillAmountSystem<=item.GetComponent<DropZone>().healthBar.bar.fillAmount)
                     {
-                        if (!trueRocket)
+                        if (item.tag == "SlotGunFull")
                         {
-                            allPoints.Add(item.GetComponent<RectTransform>());
+                            if (!trueRocket)
+                            {
+                                allPoints.Add(item.GetComponent<RectTransform>());
+                            }
+                            else
+                            {
+                                coppyPos.transform.position = new Vector3(
+                                    1080f + item.transform.position.x,
+                                    goPar.transform.position.y - (ES.transform.position.y-item.transform.position.y),
+                                    0f
+                                );
+                            }
+                            findBiggerValueofFillAmountSystem = item.GetComponent<DropZone>().healthBar.bar.fillAmount;
                         }
-                        else
-                        {
-                            coppyPos.transform.position = new Vector3(
-                                1080f + item.transform.position.x,
-                                goPar.transform.position.y - (ES.transform.position.y-item.transform.position.y),
-                                0f
-                            );
-                        }
-                        findBiggerValueofFillAmountSystem = item.GetComponent<DropZone>().healthBar.bar.fillAmount;
                     }
                 }
             }
@@ -318,27 +337,29 @@ public class Rocket : MonoBehaviourPun
             allPoints.Add(SearchTargetEmptySystem(goPar));
 
             GameObject PS = GameObject.Find("Ship-Player-1");
-
-            IEnumerable<RectTransform> PSt = PS.GetComponent<Ship>().FindAllSlotGunsFull();
-            foreach (RectTransform item in PSt)
+            if (!blockTarget)
             {
-                if (findBiggerValueofFillAmountSystem <= item.GetComponent<DropZone>().healthBar.bar.fillAmount)
+                IEnumerable<RectTransform> PSt = PS.GetComponent<Ship>().FindAllSlotGunsFull();
+                foreach (RectTransform item in PSt)
                 {
-                    if (item.tag == "SlotGunFull")
+                    if (findBiggerValueofFillAmountSystem <= item.GetComponent<DropZone>().healthBar.bar.fillAmount)
                     {
-                        if (!trueRocket)
+                        if (item.tag == "SlotGunFull")
                         {
-                            allPoints.Add(item.GetComponent<RectTransform>());
+                            if (!trueRocket)
+                            {
+                                allPoints.Add(item.GetComponent<RectTransform>());
+                            }
+                            else
+                            {
+                                coppyPos.transform.position = new Vector3(
+                                    -1080f + item.transform.position.x,
+                                    goPar.transform.position.y - (PS.transform.position.y - item.transform.position.y),
+                                    0f
+                                );
+                            }
+                            findBiggerValueofFillAmountSystem = item.GetComponent<DropZone>().healthBar.bar.fillAmount;
                         }
-                        else
-                        {
-                            coppyPos.transform.position = new Vector3(
-                                -1080f + item.transform.position.x,
-                                goPar.transform.position.y - (PS.transform.position.y - item.transform.position.y),
-                                0f
-                            );
-                        }
-                        findBiggerValueofFillAmountSystem = item.GetComponent<DropZone>().healthBar.bar.fillAmount;
                     }
                 }
             }

@@ -85,9 +85,11 @@
      <Compile Include="Assets\Scripts\Wolrd.cs" />
      <Compile Include="Assets\Scripts\WorldDrawer.cs" />
      <Compile Include="Assets\Scripts\projSystem\Bomb.cs" />
+     <Compile Include="Assets\Scripts\projSystem\DefShip.cs" />
      <Compile Include="Assets\Scripts\projSystem\Flare.cs" />
      <Compile Include="Assets\Scripts\projSystem\HealthBarSystem.cs" />
      <Compile Include="Assets\Scripts\projSystem\Laser.cs" />
+     <Compile Include="Assets\Scripts\projSystem\LaserDefShip.cs" />
      <Compile Include="Assets\Scripts\projSystem\Rocket.cs" />
      <Compile Include="Assets\Scripts\projSystem\Shield.cs" />
      <Compile Include="Assets\Scripts\quit.cs" />

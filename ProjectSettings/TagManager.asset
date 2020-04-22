@@ -24,6 +24,8 @@ TagManager:
   - Bomb
   - Flare
   - Destroyer
+  - MoveSpot
+  - DefShip
   layers:
   - Default
   - TransparentFX

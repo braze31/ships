@@ -178,6 +178,7 @@ MonoBehaviour:
   typeOfItem: 0
   SlotForCardEmpty: 1
   posForR: {fileID: 63859780683074421}
+  StartForShip: {fileID: 3855519117067841193}
   healthBar: {fileID: 1469736270470862554}
   iconSystem: {fileID: 5293547388343913632}
 --- !u!61 &3596272264934468495
@@ -954,6 +955,7 @@ MonoBehaviour:
   typeOfItem: 0
   SlotForCardEmpty: 1
   posForR: {fileID: 910008742086572904}
+  StartForShip: {fileID: 0}
   healthBar: {fileID: 5424364857625565777}
   iconSystem: {fileID: 0}
 --- !u!1 &410258714765946182
@@ -1079,6 +1081,7 @@ MonoBehaviour:
   typeOfItem: 0
   SlotForCardEmpty: 1
   posForR: {fileID: 2723211538026699763}
+  StartForShip: {fileID: 0}
   healthBar: {fileID: 5955754811465772969}
   iconSystem: {fileID: 0}
 --- !u!1 &410258715617483847
@@ -1131,12 +1134,12 @@ MonoBehaviour:
     cards:
     - index: 0
       name: 
-      icon: {fileID: 21300000, guid: 042052eae5fb4bf4cb801531404b5d80, type: 3}
+      icon: {fileID: 21300000, guid: 501ee1c18b465ca40bb179a9e0d2dde9, type: 3}
       cost: 2
       preFab: {fileID: 0}
     - index: 0
       name: 
-      icon: {fileID: 21300000, guid: 042052eae5fb4bf4cb801531404b5d80, type: 3}
+      icon: {fileID: 21300000, guid: ecfd849b652210e4d92338eb67138fdf, type: 3}
       cost: 1
       preFab: {fileID: 0}
     - index: 0
@@ -1146,7 +1149,7 @@ MonoBehaviour:
       preFab: {fileID: 0}
     - index: 0
       name: 
-      icon: {fileID: 21300000, guid: 2ffa61b40fb621240aaa069f8bcdf789, type: 3}
+      icon: {fileID: 21300000, guid: 501ee1c18b465ca40bb179a9e0d2dde9, type: 3}
       cost: 1
       preFab: {fileID: 0}
     - index: 0
@@ -1156,7 +1159,7 @@ MonoBehaviour:
       preFab: {fileID: 0}
     - index: 0
       name: 
-      icon: {fileID: 21300000, guid: 042052eae5fb4bf4cb801531404b5d80, type: 3}
+      icon: {fileID: 21300000, guid: ecfd849b652210e4d92338eb67138fdf, type: 3}
       cost: 0
       preFab: {fileID: 0}
     - index: 0
@@ -1171,7 +1174,7 @@ MonoBehaviour:
       preFab: {fileID: 0}
     - index: 0
       name: 
-      icon: {fileID: 21300000, guid: 1dcf267bd9994de4fb6f39fa13cab967, type: 3}
+      icon: {fileID: 21300000, guid: ecfd849b652210e4d92338eb67138fdf, type: 3}
       cost: 1
       preFab: {fileID: 0}
     - index: 0
@@ -1481,6 +1484,10 @@ RectTransform:
   - {fileID: 410258714388864722}
   - {fileID: 5440001139313910942}
   - {fileID: 410258714909678336}
+  - {fileID: 2441601448818645409}
+  - {fileID: 3225329859604632311}
+  - {fileID: 1384084261170104268}
+  - {fileID: 1965432421403493452}
   m_Father: {fileID: 2439598627249403901}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1540,7 +1547,7 @@ MonoBehaviour:
   curHealth: 1
   textHP: {fileID: 6382173806437774201}
   DamageDone: 0
-  shieldImage: {fileID: 2009970078037565649}
+  shieldImage: {fileID: 8746512437318207049}
   shieldActive: 0
   ShieldPosforShip: {fileID: 7515621682955303786}
 --- !u!61 &6135134339862327128
@@ -1961,6 +1968,7 @@ MonoBehaviour:
   typeOfItem: 0
   SlotForCardEmpty: 0
   posForR: {fileID: 1948830155170361335}
+  StartForShip: {fileID: 1833916406081710379}
   healthBar: {fileID: 281294307410847988}
   iconSystem: {fileID: 6439494777963548714}
 --- !u!61 &3306894581549799242
@@ -2246,6 +2254,41 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &823572482654402081
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3813617130893388941}
+  m_Layer: 5
+  m_Name: FinishTransformForShip
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &3813617130893388941
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 823572482654402081}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 63859780683074421}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0.4, y: 0}
+  m_SizeDelta: {x: 10, y: 10}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &885900924167005531
 GameObject:
   m_ObjectHideFlags: 0
@@ -2804,7 +2847,7 @@ RectTransform:
   - {fileID: 4501899252714429893}
   - {fileID: 410258715855127843}
   - {fileID: 4521042756065561630}
-  - {fileID: 3015852943366923443}
+  - {fileID: 8746512437318207050}
   - {fileID: 7515621682955303786}
   m_Father: {fileID: 8382082085550835430}
   m_RootOrder: 9
@@ -3105,6 +3148,7 @@ MonoBehaviour:
   typeOfItem: 0
   SlotForCardEmpty: 0
   posForR: {fileID: 1948830155170361335}
+  StartForShip: {fileID: 1833916406081710379}
   healthBar: {fileID: 5368730220105216715}
   iconSystem: {fileID: 62239491041904560}
 --- !u!61 &2069277758803497946
@@ -3385,6 +3429,76 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &1553998062711692665
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3225329859604632311}
+  m_Layer: 5
+  m_Name: MoveSpotsForShips1
+  m_TagString: MoveSpot
+  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &3225329859604632311
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1553998062711692665}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 410258715855127843}
+  m_RootOrder: 16
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.8333067, y: 0.163}
+  m_AnchorMax: {x: 0.8333067, y: 0.163}
+  m_AnchoredPosition: {x: 0.19999695, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1568977508349984256
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4745566600148480492}
+  m_Layer: 5
+  m_Name: MoveSpotsForShips1
+  m_TagString: MoveSpot
+  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &4745566600148480492
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1568977508349984256}
+  m_LocalRotation: {x: -0, y: -0, z: 1, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 7182499878582414612}
+  m_RootOrder: 16
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.83614695, y: 0.9003503}
+  m_AnchorMax: {x: 0.83614695, y: 0.9003503}
+  m_AnchoredPosition: {x: -0.099998474, y: -0.40000153}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1596281007175678438
 GameObject:
   m_ObjectHideFlags: 0
@@ -3478,8 +3592,44 @@ MonoBehaviour:
   typeOfItem: 0
   SlotForCardEmpty: 0
   posForR: {fileID: 4757965342228235659}
+  StartForShip: {fileID: 0}
   healthBar: {fileID: 8640494735075681937}
   iconSystem: {fileID: 0}
+--- !u!1 &1623968064120688069
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1008641372988606495}
+  m_Layer: 5
+  m_Name: MoveSpotsForShips2
+  m_TagString: MoveSpot
+  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1008641372988606495
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1623968064120688069}
+  m_LocalRotation: {x: -0, y: -0, z: 1, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 7182499878582414612}
+  m_RootOrder: 17
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.4442268, y: 0.16070037}
+  m_AnchorMax: {x: 0.4442268, y: 0.16070037}
+  m_AnchoredPosition: {x: 0.03, y: 0.22999954}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1635224556585194866
 GameObject:
   m_ObjectHideFlags: 0
@@ -3544,6 +3694,7 @@ MonoBehaviour:
   typeOfItem: 0
   SlotForCardEmpty: 1
   posForR: {fileID: 63859780683074421}
+  StartForShip: {fileID: 3855519117067841193}
   healthBar: {fileID: 7916654389671084411}
   iconSystem: {fileID: 8410251558506685588}
 --- !u!61 &6053407668580218475
@@ -4051,6 +4202,41 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
+--- !u!1 &1882647224537539964
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1965432421403493452}
+  m_Layer: 5
+  m_Name: MoveSpotsForShips3
+  m_TagString: MoveSpot
+  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1965432421403493452
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1882647224537539964}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 410258715855127843}
+  m_RootOrder: 18
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.44469333, y: 0.163}
+  m_AnchorMax: {x: 0.44469333, y: 0.163}
+  m_AnchoredPosition: {x: 0, y: 0.5}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1884661278963352097
 GameObject:
   m_ObjectHideFlags: 0
@@ -4233,6 +4419,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6111691014514065916}
+  - {fileID: 1833916406081710379}
   m_Father: {fileID: 7182499878582414612}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4279,6 +4466,41 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &1946472865968498449
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5429635467321305215}
+  m_Layer: 5
+  m_Name: StartTransformForShip
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &5429635467321305215
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1946472865968498449}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2769827068297102103}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.263, y: 0.6454576}
+  m_AnchorMax: {x: 0.263, y: 0.6454576}
+  m_AnchoredPosition: {x: -5.01, y: -6.01}
+  m_SizeDelta: {x: 10, y: 12}
+  m_Pivot: {x: 0, y: 0}
 --- !u!1 &1949649346243814572
 GameObject:
   m_ObjectHideFlags: 0
@@ -4721,6 +4943,7 @@ MonoBehaviour:
   typeOfItem: 0
   SlotForCardEmpty: 1
   posForR: {fileID: 2769827068297102103}
+  StartForShip: {fileID: 5429635467321305215}
   healthBar: {fileID: 3852198903106773281}
   iconSystem: {fileID: 2961683027850800910}
 --- !u!61 &1887634515597892016
@@ -5143,6 +5366,7 @@ MonoBehaviour:
   typeOfItem: 0
   SlotForCardEmpty: 0
   posForR: {fileID: 3156465168789063971}
+  StartForShip: {fileID: 3962487194104493190}
   healthBar: {fileID: 2683651450633048237}
   iconSystem: {fileID: 4181287214420912747}
 --- !u!61 &730920659380224221
@@ -6164,6 +6388,7 @@ MonoBehaviour:
   typeOfItem: 0
   SlotForCardEmpty: 1
   posForR: {fileID: 2769827068297102103}
+  StartForShip: {fileID: 5429635467321305215}
   healthBar: {fileID: 1543443006486267468}
   iconSystem: {fileID: 7550854780836093925}
 --- !u!61 &1524331670302348570
@@ -6436,6 +6661,7 @@ MonoBehaviour:
   typeOfItem: 0
   SlotForCardEmpty: 0
   posForR: {fileID: 1948830155170361335}
+  StartForShip: {fileID: 1833916406081710379}
   healthBar: {fileID: 5154706671905684049}
   iconSystem: {fileID: 4381645295959972833}
 --- !u!61 &3693725987714325378
@@ -6524,6 +6750,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8837352266106896859}
+  - {fileID: 3962487194104493190}
   m_Father: {fileID: 7182499878582414612}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6634,6 +6861,7 @@ MonoBehaviour:
   typeOfItem: 0
   SlotForCardEmpty: 1
   posForR: {fileID: 2769827068297102103}
+  StartForShip: {fileID: 5429635467321305215}
   healthBar: {fileID: 5095090056076704241}
   iconSystem: {fileID: 8675884172684448676}
 --- !u!61 &4451316146942201358
@@ -7066,6 +7294,41 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &3455182312340169393
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1537941408673620760}
+  m_Layer: 5
+  m_Name: MoveSpotsForShips3
+  m_TagString: MoveSpot
+  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1537941408673620760
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3455182312340169393}
+  m_LocalRotation: {x: -0, y: -0, z: 1, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 7182499878582414612}
+  m_RootOrder: 18
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.44438663, y: 0.903}
+  m_AnchorMax: {x: 0.44438663, y: 0.903}
+  m_AnchoredPosition: {x: 0, y: -0.31}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &3640339511780948014
 GameObject:
   m_ObjectHideFlags: 0
@@ -7586,6 +7849,7 @@ MonoBehaviour:
   typeOfItem: 0
   SlotForCardEmpty: 1
   posForR: {fileID: 63859780683074421}
+  StartForShip: {fileID: 3855519117067841193}
   healthBar: {fileID: 4173696291956193724}
   iconSystem: {fileID: 6036267136633800933}
 --- !u!61 &1334791956921458383
@@ -7812,8 +8076,44 @@ MonoBehaviour:
   typeOfItem: 0
   SlotForCardEmpty: 1
   posForR: {fileID: 5866857190518808200}
+  StartForShip: {fileID: 0}
   healthBar: {fileID: 1606647864491849498}
   iconSystem: {fileID: 0}
+--- !u!1 &4109741430726139324
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8542148000346671842}
+  m_Layer: 5
+  m_Name: FinishTransformForShip
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8542148000346671842
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4109741430726139324}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2769827068297102103}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.51000005, y: 0.6454576}
+  m_AnchorMax: {x: 0.51000005, y: 0.6454576}
+  m_AnchoredPosition: {x: 0.049999952, y: -0.18999958}
+  m_SizeDelta: {x: 10, y: 10}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &4168181209168959766
 GameObject:
   m_ObjectHideFlags: 0
@@ -8979,6 +9279,7 @@ MonoBehaviour:
   typeOfItem: 0
   SlotForCardEmpty: 0
   posForR: {fileID: 3156465168789063971}
+  StartForShip: {fileID: 3962487194104493190}
   healthBar: {fileID: 6538428479702275217}
   iconSystem: {fileID: 1392699691806987819}
 --- !u!61 &334635646091833825
@@ -9037,6 +9338,41 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &5103514026981331866
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1384084261170104268}
+  m_Layer: 5
+  m_Name: MoveSpotsForShips2
+  m_TagString: MoveSpot
+  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1384084261170104268
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5103514026981331866}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 410258715855127843}
+  m_RootOrder: 17
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.441, y: 0.90268004}
+  m_AnchorMax: {x: 0.441, y: 0.90268004}
+  m_AnchoredPosition: {x: -0.3000002, y: -0.6000004}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &5104127006123689088
 GameObject:
   m_ObjectHideFlags: 0
@@ -9176,6 +9512,7 @@ MonoBehaviour:
   typeOfItem: 0
   SlotForCardEmpty: 1
   posForR: {fileID: 2769827068297102103}
+  StartForShip: {fileID: 5429635467321305215}
   healthBar: {fileID: 3967485148220011837}
   iconSystem: {fileID: 6083956579518413872}
 --- !u!61 &9054882266297897160
@@ -9373,6 +9710,7 @@ MonoBehaviour:
   typeOfItem: 0
   SlotForCardEmpty: 1
   posForR: {fileID: 63859780683074421}
+  StartForShip: {fileID: 3855519117067841193}
   healthBar: {fileID: 11921042731827847}
   iconSystem: {fileID: 5373915885899325255}
 --- !u!61 &8507313233656295357
@@ -9746,6 +10084,7 @@ MonoBehaviour:
   typeOfItem: 0
   SlotForCardEmpty: 0
   posForR: {fileID: 8747092868005460864}
+  StartForShip: {fileID: 0}
   healthBar: {fileID: 6127220540089755700}
   iconSystem: {fileID: 0}
 --- !u!1 &5362913824849399027
@@ -9823,6 +10162,41 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &5379354256349779928
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3636756230832193661}
+  m_Layer: 5
+  m_Name: MoveSpotsForShips0
+  m_TagString: MoveSpot
+  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &3636756230832193661
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5379354256349779928}
+  m_LocalRotation: {x: -0, y: -0, z: 1, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 7182499878582414612}
+  m_RootOrder: 15
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.8363866, y: 0.16064984}
+  m_AnchorMax: {x: 0.8363866, y: 0.16070037}
+  m_AnchoredPosition: {x: 0.19999695, y: 0.5}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &5413679145644365391
 GameObject:
   m_ObjectHideFlags: 0
@@ -9887,6 +10261,7 @@ MonoBehaviour:
   typeOfItem: 0
   SlotForCardEmpty: 1
   posForR: {fileID: 2769827068297102103}
+  StartForShip: {fileID: 5429635467321305215}
   healthBar: {fileID: 6520982908607991061}
   iconSystem: {fileID: 2949013438739715019}
 --- !u!61 &2051396003623848669
@@ -10611,6 +10986,7 @@ MonoBehaviour:
   typeOfItem: 0
   SlotForCardEmpty: 1
   posForR: {fileID: 63859780683074421}
+  StartForShip: {fileID: 3855519117067841193}
   healthBar: {fileID: 4339774460101356846}
   iconSystem: {fileID: 8400604769283563609}
 --- !u!61 &2047780753881480113
@@ -10733,6 +11109,7 @@ MonoBehaviour:
   typeOfItem: 0
   SlotForCardEmpty: 0
   posForR: {fileID: 1948830155170361335}
+  StartForShip: {fileID: 1833916406081710379}
   healthBar: {fileID: 260481737847590283}
   iconSystem: {fileID: 7129606433585964519}
 --- !u!61 &4793523396098680919
@@ -10913,6 +11290,10 @@ RectTransform:
   - {fileID: 5677775958630232069}
   - {fileID: 8329309650415245124}
   - {fileID: 3384991383411688403}
+  - {fileID: 3636756230832193661}
+  - {fileID: 4745566600148480492}
+  - {fileID: 1008641372988606495}
+  - {fileID: 1537941408673620760}
   m_Father: {fileID: 1656469515507795056}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -11264,6 +11645,7 @@ MonoBehaviour:
   typeOfItem: 0
   SlotForCardEmpty: 1
   posForR: {fileID: 4597800050291503205}
+  StartForShip: {fileID: 0}
   healthBar: {fileID: 1971309858319645986}
   iconSystem: {fileID: 0}
 --- !u!1 &6087376322347282800
@@ -11775,6 +12157,7 @@ MonoBehaviour:
   typeOfItem: 0
   SlotForCardEmpty: 0
   posForR: {fileID: 1430996526658144612}
+  StartForShip: {fileID: 0}
   healthBar: {fileID: 9141664002672476544}
   iconSystem: {fileID: 0}
 --- !u!1 &6356694694843166795
@@ -12017,8 +12400,44 @@ MonoBehaviour:
   typeOfItem: 0
   SlotForCardEmpty: 1
   posForR: {fileID: 4572280848049107638}
+  StartForShip: {fileID: 0}
   healthBar: {fileID: 7450181936724003585}
   iconSystem: {fileID: 0}
+--- !u!1 &6417738423678778577
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3962487194104493190}
+  m_Layer: 5
+  m_Name: StartTransformForShip
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &3962487194104493190
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6417738423678778577}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3156465168789063971}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.2, y: 0.5}
+  m_AnchorMax: {x: 0.2, y: 0.5}
+  m_AnchoredPosition: {x: 0.18893814, y: -0.1}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &6430774260974820614
 GameObject:
   m_ObjectHideFlags: 0
@@ -12623,6 +13042,41 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &6655013440297187894
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2441601448818645409}
+  m_Layer: 5
+  m_Name: MoveSpotsForShips0
+  m_TagString: MoveSpot
+  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2441601448818645409
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6655013440297187894}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 410258715855127843}
+  m_RootOrder: 15
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.8333067, y: 0.90268004}
+  m_AnchorMax: {x: 0.8333067, y: 0.90268004}
+  m_AnchoredPosition: {x: 0.19999695, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &6689562253427180450
 GameObject:
   m_ObjectHideFlags: 0
@@ -13034,6 +13488,7 @@ MonoBehaviour:
   typeOfItem: 0
   SlotForCardEmpty: 0
   posForR: {fileID: 1948830155170361335}
+  StartForShip: {fileID: 1833916406081710379}
   healthBar: {fileID: 6232399016071671950}
   iconSystem: {fileID: 427833911789633586}
 --- !u!61 &5205306237368420847
@@ -13410,6 +13865,7 @@ MonoBehaviour:
   typeOfItem: 0
   SlotForCardEmpty: 1
   posForR: {fileID: 1004763618910504279}
+  StartForShip: {fileID: 0}
   healthBar: {fileID: 5826664322629480919}
   iconSystem: {fileID: 0}
 --- !u!1 &7055843101218510486
@@ -13476,6 +13932,7 @@ MonoBehaviour:
   typeOfItem: 0
   SlotForCardEmpty: 0
   posForR: {fileID: 3156465168789063971}
+  StartForShip: {fileID: 3962487194104493190}
   healthBar: {fileID: 2913340160911862407}
   iconSystem: {fileID: 4696018537354573451}
 --- !u!61 &2277614036796154444
@@ -14199,6 +14656,7 @@ MonoBehaviour:
   typeOfItem: 0
   SlotForCardEmpty: 0
   posForR: {fileID: 3156465168789063971}
+  StartForShip: {fileID: 3962487194104493190}
   healthBar: {fileID: 8569195301555905862}
   iconSystem: {fileID: 1287013108609454069}
 --- !u!61 &4234907991374050742
@@ -14484,6 +14942,41 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!1 &7440739954233754932
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3855519117067841193}
+  m_Layer: 5
+  m_Name: StartTransformForShip
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &3855519117067841193
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7440739954233754932}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 63859780683074421}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.26200002, y: 0.5}
+  m_AnchorMax: {x: 0.26200002, y: 0.5}
+  m_AnchoredPosition: {x: -0.8999996, y: 0}
+  m_SizeDelta: {x: 10, y: 10}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &7505383019464156607
 GameObject:
   m_ObjectHideFlags: 0
@@ -14561,6 +15054,41 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!1 &7519739440961985336
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1833916406081710379}
+  m_Layer: 5
+  m_Name: StartTransformForShip
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1833916406081710379
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7519739440961985336}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1948830155170361335}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.2, y: 0.5}
+  m_AnchorMax: {x: 0.2, y: 0.5}
+  m_AnchoredPosition: {x: 0.20000076, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &7544654199251592711
 GameObject:
   m_ObjectHideFlags: 0
@@ -15409,6 +15937,7 @@ MonoBehaviour:
   typeOfItem: 0
   SlotForCardEmpty: 0
   posForR: {fileID: 3156465168789063971}
+  StartForShip: {fileID: 3962487194104493190}
   healthBar: {fileID: 3247039741378773017}
   iconSystem: {fileID: 6724308096138972507}
 --- !u!61 &6105101768145084927
@@ -16207,7 +16736,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8382082086794655118}
-  - {fileID: 4817303668425895949}
+  - {fileID: 8382082085789752232}
   m_Father: {fileID: 8382082086818819437}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -18951,6 +19480,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2769827068297102103}
   - component: {fileID: 4845880563909387351}
+  - component: {fileID: 5535107648517367224}
   m_Layer: 5
   m_Name: SlotBOT
   m_TagString: Untagged
@@ -18970,6 +19500,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8714064885629791865}
+  - {fileID: 5429635467321305215}
+  - {fileID: 8542148000346671842}
   m_Father: {fileID: 410258715855127843}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -18986,6 +19518,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8841910224523002878}
   m_CullTransparentMesh: 0
+--- !u!223 &5535107648517367224
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8841910224523002878}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
 --- !u!1 &8844477247835041927
 GameObject:
   m_ObjectHideFlags: 0
@@ -19079,6 +19632,7 @@ MonoBehaviour:
   typeOfItem: 0
   SlotForCardEmpty: 0
   posForR: {fileID: 4757575765436164356}
+  StartForShip: {fileID: 0}
   healthBar: {fileID: 4032748813041245571}
   iconSystem: {fileID: 0}
 --- !u!1 &8848198108626387262
@@ -19560,6 +20114,7 @@ GameObject:
   m_Component:
   - component: {fileID: 63859780683074421}
   - component: {fileID: 2016422229595985885}
+  - component: {fileID: 3744428575314518457}
   m_Layer: 5
   m_Name: SlotTOP
   m_TagString: Untagged
@@ -19579,6 +20134,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3670045263759301418}
+  - {fileID: 3855519117067841193}
+  - {fileID: 3813617130893388941}
   m_Father: {fileID: 410258715855127843}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -19595,6 +20152,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8990908540065231899}
   m_CullTransparentMesh: 0
+--- !u!223 &3744428575314518457
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8990908540065231899}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
 --- !u!1 &9006378757827648659
 GameObject:
   m_ObjectHideFlags: 0
@@ -20487,7 +21065,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9f6336a4f0539864282c89a83a5e1331, type: 3}
---- !u!224 &4817303668425895949 stripped
+--- !u!224 &8382082085789752232 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3929851468938472367, guid: 9f6336a4f0539864282c89a83a5e1331,
     type: 3}
@@ -20622,13 +21200,7 @@ PrefabInstance:
       objectReference: {fileID: 410258715855127842}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cd04909e662b21342b1d179ac454a5a9, type: 3}
---- !u!224 &3015852943366923443 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 5817433548349563633, guid: cd04909e662b21342b1d179ac454a5a9,
-    type: 3}
-  m_PrefabInstance: {fileID: 8746512437318207042}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2009970078037565649 stripped
+--- !u!114 &8746512437318207049 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7099084349717653139, guid: cd04909e662b21342b1d179ac454a5a9,
     type: 3}
@@ -20640,3 +21212,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &8746512437318207050 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 5817433548349563633, guid: cd04909e662b21342b1d179ac454a5a9,
+    type: 3}
+  m_PrefabInstance: {fileID: 8746512437318207042}
+  m_PrefabAsset: {fileID: 0}

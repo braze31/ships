@@ -430,6 +430,7 @@ MonoBehaviour:
   Shield: {fileID: 8720670855022971880, guid: cd04909e662b21342b1d179ac454a5a9, type: 3}
   Bomb: {fileID: 5682475894612962608, guid: 7a5b80920758dc044a366c7696b814d0, type: 3}
   Flare: {fileID: 5682475894612962608, guid: 0df680fe17ee7904c91721260531c4fb, type: 3}
+  DefShip: {fileID: 5682475894612962608, guid: 397b0006c3027c6429086447dcc0c8e8, type: 3}
   Position: {x: 0, y: 0}
   HowMuchRocketInSystem: 3
   RocketsSystem: []

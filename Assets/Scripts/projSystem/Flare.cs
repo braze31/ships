@@ -13,11 +13,12 @@ public class Flare : MonoBehaviour
     [SerializeField]
     public float HealthRocket = 100f;
     float randomNumber;
-    public static int movespeed = 150;
+    public static int movespeed = 280;
     public Vector3 userDirection = Vector3.right;
     private float SystemRocketDamageOnHPbar = 0.15f;
     public bool flareONAttack;
     public bool onDestoyTime;
+    public GameObject AIMed;
 
     void Start()
     {
@@ -45,21 +46,21 @@ public class Flare : MonoBehaviour
                 0f
                 );
         }
-        StartCoroutine(DestroyFlarebyTime(5f));
+        Invoke("CheckAimed", 1.47f);
+        Destroy(gameObject, 1.5f);
     }
 
     IEnumerator disableCollider()
     {
         gameObject.GetComponent<Collider2D>().enabled = false;
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.03f);
         gameObject.GetComponent<Collider2D>().enabled = true;
     }
 
     IEnumerator DestroyFlarebyTime(float t)
     {
-        yield return new WaitForSeconds(0.05f);
-        onDestoyTime = true;
         yield return new WaitForSeconds(t);
+        onDestoyTime = true;
         Destroy(gameObject);
     }
 
@@ -69,6 +70,10 @@ public class Flare : MonoBehaviour
         return randomNumber;
     }
 
+    public void GetAimedRocket(GameObject go)
+    {
+        AIMed = go;
+    }
 
     void OnTriggerEnter2D(Collider2D other)
     {
@@ -78,7 +83,7 @@ public class Flare : MonoBehaviour
             {
                 gameObject.SetActive(false);
                 HealthRocket = 0;
-                DestroyFlarebyTime(0.1f);
+                DestroyFlarebyTime(0.05f);
             }
             if (other.tag == "SlotGunFull" && other.name == TargetForRocket.name)
             {
@@ -96,7 +101,7 @@ public class Flare : MonoBehaviour
                 }
                 gameObject.SetActive(false);
                 HealthRocket = 0;
-                DestroyFlarebyTime(0.1f);
+                DestroyFlarebyTime(0.05f);
             }
         }
         //if (other.tag == "Rocket")
@@ -105,7 +110,16 @@ public class Flare : MonoBehaviour
         //}
         if (other.tag=="Destroyer")
         {
+            CheckAimed();
             Destroy(gameObject);
+        }
+    }
+
+    void CheckAimed()
+    {
+        if (AIMed != null)
+        {
+            AIMed.GetComponent<Rocket>().changeTargetAgain = true;
         }
     }
 

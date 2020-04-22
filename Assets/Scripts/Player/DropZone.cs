@@ -17,6 +17,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 
     GameObject ParentCanvas;
     public RectTransform posForR;
+    public RectTransform StartForShip;
     [SerializeField]
     public HealthBarSystem healthBar;
     public Image iconSystem;

@@ -255,6 +255,21 @@ public class Wolrd : MonoBehaviour, IOnEventCallback
                 }
             }
         }
+
+        if ((string)icon == "def-ship")
+        {
+            foreach (var player in players.OrderBy(p => p.photonView.Owner.ActorNumber))
+            {
+                if (player.photonView.ViewID != (int)pID)
+                {
+                    player.CreatePreFabForSystemDefShip((string)slot, (int)timeID, "Enemy");
+                }
+                if (player.photonView.ViewID == (int)pID)
+                {
+                    player.CreatePreFabForSystemDefShip((string)slot, (int)timeID, "Player1");
+                }
+            }
+        }
     }
 
     public void GivePlayersSameRandomNumber(int randomNumber)

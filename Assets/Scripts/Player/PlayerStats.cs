@@ -146,11 +146,13 @@ public class PlayerStats : MonoBehaviour
         {
             if (allCards.Count() < GameConstants.MAX_HAND_SIZE && !onDragging)
             {
-                CardStats cs = playerDeck.DrawCard();
+                CardStats cs = playerDeck.DrawCard(allCards);
+
                 GameObject go = Instantiate(cardPrefab, handParent);
                 Card c = go.GetComponent<Card>();
                 c.PlayerInfo = this;
                 c.CardInfo = cs;
+
             }
         }
 
@@ -162,14 +164,13 @@ public class PlayerStats : MonoBehaviour
 
     public void CheckCardInHand()
     {
-        GameObject lastCard = allCards.Last().gameObject;
-        GameObject shipShield = GameObject.Find("Ship-Player-1");
         if (allCards.Count() >= 1)
         {
-            for (int i = 0; i < allCards.Count()-1; i++)
+            GameObject lastCard = allCards.Last().gameObject;
+            GameObject shipShield = GameObject.Find("Ship-Player-1");
+            for (int i = 0; i < allCards.Count(); i++)
             {
-                if (allCards.ToArray()[i].gameObject.GetComponent<Card>().CardInfo.Icon.name == lastCard.gameObject.GetComponent<Card>().CardInfo.Icon.name
-                    || (lastCard.gameObject.GetComponent<Card>().CardInfo.Icon.name == "shield" && shipShield.GetComponent<Ship>().shieldActive))
+                if (lastCard.gameObject.GetComponent<Card>().CardInfo.Icon.name == "shield" && shipShield.GetComponent<Ship>().shieldActive)
                 {
                     int t = lastCard.gameObject.GetComponent<Card>().CardInfo.Index;
                     PlayerDeck.RemoveCard((int)t);

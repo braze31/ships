@@ -18,6 +18,7 @@ public class PlayerControls : MonoBehaviour, IPunObservable
     public GameObject Shield;
     public GameObject Bomb;
     public GameObject Flare;
+    public GameObject DefShip;
     public Vector2Int Position;
     public int HowMuchRocketInSystem = 3;
 
@@ -149,7 +150,26 @@ public class PlayerControls : MonoBehaviour, IPunObservable
                 {
                     item.transform.parent.tag = "SlotGunFull";
                     StartCoroutine(INSTFlare(item, pShip, timeID));
-                    item.transform.parent.GetComponent<DropZone>().healthBar.EnableImageAndStartReduceHp(0.61f);
+                    item.transform.parent.GetComponent<DropZone>().healthBar.EnableImageAndStartReduceHp(0.91f);
+                    //StartCoroutine(ResetSlotDeleteIcon(item, PRSPAWN.GetComponent<RawImage>()));
+                }
+            }
+        }
+    }
+
+    public void CreatePreFabForSystemDefShip(string targetName, int timeID, string playerName)
+    {
+        if (photonView.IsMine)
+        {
+            GameObject pShip = GameObject.FindGameObjectWithTag(playerName);
+            IEnumerable<Image> fALL = pShip.GetComponentsInChildren<Image>().Where(a => a.gameObject.name == "ImageIcon");
+            foreach (var item in fALL)
+            {
+                if (targetName == item.transform.parent.name)
+                {
+                    item.transform.parent.tag = "SlotGunFull";
+                    StartCoroutine(INSTDefShip(item, pShip, timeID));
+                    item.transform.parent.GetComponent<DropZone>().healthBar.EnableImageAndStartReduceHp(9f);
                     //StartCoroutine(ResetSlotDeleteIcon(item, PRSPAWN.GetComponent<RawImage>()));
                 }
             }
@@ -353,7 +373,48 @@ public class PlayerControls : MonoBehaviour, IPunObservable
                 myNewS.GetComponent<Flare>().TakeRandomNumberForSearch(randomAngle);
                 myNewSOFF.GetComponent<Flare>().TakeRandomNumberForSearch(randomAngle);
 
-                yield return new WaitForSeconds(0.2f);
+                yield return new WaitForSeconds(0.3f);
+            }
+        }
+        //item.transform.parent.Find(nameSlot).tag = "SlotGun";
+        item.transform.parent.GetComponent<DropZone>().healthBar.gameObject.GetComponent<Canvas>().enabled = false;
+    }
+
+    IEnumerator INSTDefShip(Image item, GameObject enemyShip, int timeID)
+    {
+        for (int k = 0; k < 1; k++)
+        {
+            if (item.transform.parent.tag == "SlotGun")
+            {
+                StopCoroutine(INSTDefShip(item, enemyShip, timeID));
+                yield return null;
+            }
+            else
+            {
+                GameObject myNewS = Instantiate(DefShip, item.GetComponent<RectTransform>().localPosition, Quaternion.Euler(0f, 0f, 0f));
+                myNewS.transform.SetParent(enemyShip.transform);
+                myNewS.transform.position = item.transform.parent.gameObject.GetComponentInChildren<DropZone>().StartForShip.GetComponent<RectTransform>().position;
+                //Vector3 finishPosStart = item.transform.parent.gameObject.GetComponentInChildren<DropZone>().FinishForShip.GetComponent<RectTransform>().position;
+
+                //myNewS.GetComponent<DefShip>().GetStartPosFinish(finishPosStart);
+
+                Image i = myNewS.GetComponentInChildren<Image>().GetComponent<Image>();
+                RawImage ri = myNewS.GetComponentInChildren<RawImage>().GetComponent<RawImage>();
+
+                DefShip defs = myNewS.GetComponent<DefShip>();
+
+                defs.trueDefship = true;
+
+                item.transform.parent.gameObject.GetComponentInChildren<DropZone>().iconSystem.sprite = i.sprite;
+
+
+                GameObject myNewSOFF = Instantiate(DefShip, item.GetComponent<RectTransform>().localPosition, Quaternion.Euler(0f, 0f, 0f));
+                myNewSOFF.transform.SetParent(enemyShip.transform);
+                myNewSOFF.transform.position = item.transform.parent.gameObject.GetComponentInChildren<DropZone>().StartForShip.GetComponent<RectTransform>().position;
+                //Vector3 finishPosStartOff = item.transform.parent.gameObject.GetComponentInChildren<DropZone>().FinishForShip.GetComponent<RectTransform>().position;
+                //myNewS.GetComponent<DefShip>().GetStartPosFinish(finishPosStartOff);
+
+                yield return new WaitForSeconds(2.9f);
             }
         }
         //item.transform.parent.Find(nameSlot).tag = "SlotGun";
